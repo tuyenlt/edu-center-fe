@@ -1,69 +1,120 @@
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { useUserContext } from "@/providers/authContext";
-import { useNavigate } from "react-router-dom";
-
+import { useState, useEffect } from "react"
+import { useForm } from "react-hook-form"
+import {
+    Form,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormControl,
+    FormMessage
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
+import { useUserContext } from "@/providers/authContext"
+import { useNavigate } from "react-router-dom"
+import LogoSVG from "@/assets/LogoSVG"
 
 export default function Signin() {
     const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const [loading, setLoading] = useState(false);
-    const { login, isAuthenticated } = useUserContext();
+    const form = useForm({
+        defaultValues: {
+            email: "",
+            password: ""
+        }
+    })
+    const [loading, setLoading] = useState(false)
+    const { login, isAuthenticated } = useUserContext()
 
     useEffect(() => {
-        console.log(isAuthenticated)
         if (isAuthenticated) {
-            navigate("/home", { replace: true });
+            navigate("/home", { replace: true })
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, navigate])
 
     const onSubmit = async (data) => {
-        setLoading(true);
+        setLoading(true)
         try {
             await login(data.email, data.password)
         } catch (err) {
-            console.log(err)
+            console.error(err)
+        } finally {
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <Card className="w-96 shadow-lg">
-                <CardHeader>
-                    <CardTitle className="text-center text-xl font-semibold">Login</CardTitle>
+            <Card className="w-full max-w-md p-6 pt-10 pb-10 rounded-lg shadow-md">
+                <CardHeader className="flex flex-col items-center space-y-1 mb-4">
+                    <p className="text-sm text-muted-foreground">Please enter your details</p>
+                    <div className="flex space-x-2 items-center self-center">
+                        <LogoSVG />
+                        <CardTitle className="text-3xl font-bold">Welcome back</CardTitle>
+                    </div>
                 </CardHeader>
+
                 <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        <div>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="Enter your email"
-                                {...register("email", { required: "Email is required" })}
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                rules={{ required: "Email is required" }}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email address</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your email" type="email" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-                        </div>
-                        <div>
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="Enter your password"
-                                {...register("password", { required: "Password is required" })}
+
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                rules={{ required: "Password is required" }}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your password" type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-                        </div>
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Logging in..." : "Login"}
-                        </Button>
-                    </form>
+
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox id="remember" />
+                                    <Label htmlFor="remember" className="text-sm text-muted-foreground">
+                                        Remember for 30 days
+                                    </Label>
+                                </div>
+                                <a href="#" className="text-sm text-blue-600 hover:underline">
+                                    Forgot password?
+                                </a>
+                            </div>
+
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading ? "Logging in..." : "Login"}
+                            </Button>
+
+                            <p className="text-center text-sm text-muted-foreground">
+                                Don't have an account?{" "}
+                                <a href="/signup" className="text-blue-600 hover:underline">
+                                    Sign up
+                                </a>
+                            </p>
+                        </form>
+                    </Form>
                 </CardContent>
             </Card>
         </div>
-    );
+    )
 }

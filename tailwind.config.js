@@ -1,3 +1,4 @@
+import { fontFamily } from "tailwindcss/defaultTheme";
 export default {
   content: [
     "./src/**/*.html",
@@ -11,6 +12,9 @@ export default {
       },
       flexGrow: {
         5: "5",
+      },
+      fontFamily: {
+        sans: ["Poppins", ...fontFamily.sans],
       },
     },
   },

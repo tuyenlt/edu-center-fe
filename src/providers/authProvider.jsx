@@ -9,7 +9,7 @@ export default function AuthContextProvider({ children }) {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [token, setToken] = useState();
+    const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -18,18 +18,26 @@ export default function AuthContextProvider({ children }) {
                 const response = await api.get("/users/me");
                 setUser(response.data);
                 setIsAuthenticated(true);
-                console.log("fetch user success")
+                console.log("fetch user success");
             } catch {
-                console.log("fetch user fail")
+                console.log("fetch user fail");
                 setUser(null);
                 setIsAuthenticated(false);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
         };
 
         fetchUser();
     }, [token]);
+
+    useEffect(() => {
+        console.log("Token changed:", token);
+    }, [token]);
+
+    useEffect(() => {
+        console.log("User authenticated:", isAuthenticated);
+    }, [isAuthenticated]);
 
     useLayoutEffect(() => {
         const authInterceptor = api.interceptors.request.use((config) => {
@@ -51,19 +59,36 @@ export default function AuthContextProvider({ children }) {
             (response) => response, async (error) => {
                 const originalRequest = error.config
 
-                if (error.response?.status === 401) {
+                if (
+                    error.response?.status === 401 &&
+                    !originalRequest._retry &&
+                    originalRequest.url !== "/users/refresh-token"
+                ) {
+                    originalRequest._retry = true;
+
                     try {
-                        const response = await api.post("/users/refresh-token", { withCredentials: true });
+                        const response = await api.post(
+                            "/users/refresh-token",
+                            {},
+                            { withCredentials: true }
+                        );
+                        console.log("refresh token success");
 
-                        setToken(response.data.accessToken)
+                        const newAccessToken = response.data.accessToken;
+                        setToken(newAccessToken);
 
-                        originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`
-                        originalRequest._retry = true
+                        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-                        return api(originalRequest)
+                        return api(originalRequest);
                     } catch (err) {
                         console.error("Refresh token failed:", err);
-                        // logout()
+
+                        setToken(null);
+                        setUser(null);
+                        setIsAuthenticated(false);
+                        navigate("/login", { replace: true });
+
+                        return Promise.reject(err);
                     }
                 }
                 return Promise.reject(error)
@@ -80,7 +105,6 @@ export default function AuthContextProvider({ children }) {
             const accessToken = response.data.accessToken;
             console.log("login success")
             setToken(accessToken);
-            setIsAuthenticated(true);
         } catch (error) {
             console.error("Login failed:", error.response?.data?.message || error.message);
             throw error;

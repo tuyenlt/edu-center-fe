@@ -13,7 +13,7 @@ function App() {
           <Route path="/login" element={<Signin />} />
           {/* Protect dashboard: only accessible if logged in */}
           <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
-          <Route path="*" element={<NotFoundRedirect />} />
+          <Route path="*" element={<PrivateRoute><Home /></PrivateRoute>} />
         </Routes>
       </AuthContextProvider>
     </Router>
