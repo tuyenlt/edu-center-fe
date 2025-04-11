@@ -13,9 +13,11 @@ export default function AuthContextProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true)
         const fetchUser = async () => {
             try {
                 const response = await api.get("/users/me");
+                console.log(response.data)
                 setUser(response.data);
                 setIsAuthenticated(true);
                 console.log("fetch user success");
@@ -105,6 +107,7 @@ export default function AuthContextProvider({ children }) {
             const accessToken = response.data.accessToken;
             console.log("login success")
             setToken(accessToken);
+            setIsAuthenticated(true);
         } catch (error) {
             console.error("Login failed:", error.response?.data?.message || error.message);
             throw error;
@@ -113,7 +116,7 @@ export default function AuthContextProvider({ children }) {
 
     const register = async (userInfo) => {
         try {
-            await api.post("/users/register", userInfo);
+            await api.post("/users", userInfo);
             await login(userInfo.email, userInfo.password);
         } catch (error) {
             console.error("Registration failed:", error.response?.data?.message || error.message);

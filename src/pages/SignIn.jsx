@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useUserContext } from "@/providers/authContext"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import LogoSVG from "@/assets/LogoSVG"
 
 export default function Signin() {
@@ -30,7 +30,7 @@ export default function Signin() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/home", { replace: true })
+            navigate("/", { replace: true })
         }
     }, [isAuthenticated, navigate])
 
@@ -96,9 +96,9 @@ export default function Signin() {
                                         Remember for 30 days
                                     </Label>
                                 </div>
-                                <a href="#" className="text-sm text-blue-600 hover:underline">
+                                <Link href="#" className="text-sm text-blue-600 hover:underline">
                                     Forgot password?
-                                </a>
+                                </Link>
                             </div>
 
                             <Button type="submit" className="w-full" disabled={loading}>
@@ -107,9 +107,9 @@ export default function Signin() {
 
                             <p className="text-center text-sm text-muted-foreground">
                                 Don't have an account?{" "}
-                                <a href="/signup" className="text-blue-600 hover:underline">
+                                <Link to="/signup" className="text-blue-600 hover:underline">
                                     Sign up
-                                </a>
+                                </Link>
                             </p>
                         </form>
                     </Form>

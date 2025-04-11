@@ -1,74 +1,145 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { useUserContext } from "@/providers/authContext";
+import { useState, useEffect } from "react"
+import { useForm } from "react-hook-form"
+import {
+    Form,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormControl,
+    FormMessage,
+} from "@/components/ui/form"
+
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useUserContext } from "@/providers/authContext"
+import { Link, useNavigate } from "react-router-dom"
+import LogoSVG from "@/assets/LogoSVG"
 
 export default function SignUp() {
     const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const [loading, setLoading] = useState(false);
-    const { login, isAuthenticated } = useUserContext();
+    const form = useForm({
+        defaultValues: {
+            email: "",
+            name: "",
+            password: "",
+            passwordConfirm: "",
+            role: "student"
+        }
+    })
+    const password = form.watch("password")
+
+    const [loading, setLoading] = useState(false)
+    const { register, isAuthenticated } = useUserContext()
 
     useEffect(() => {
-        console.log(isAuthenticated)
         if (isAuthenticated) {
-            navigate("/home", { replace: true });
+            navigate("/", { replace: true })
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, navigate])
 
     const onSubmit = async (data) => {
-        setLoading(true);
+        setLoading(true)
         try {
-            await login(data.email, data.password)
+            console.log(data)
+            await register(data)
         } catch (err) {
-            console.log(err)
+            console.error(err)
+        } finally {
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <Card className="w-96 shadow-lg">
-                <CardHeader>
-                    <CardTitle className="text-center text-xl font-semibold">Login</CardTitle>
+            <Card className="w-full max-w-md p-6 pt-10 pb-10 rounded-lg shadow-md">
+                <CardHeader className="flex flex-col items-center space-y-1 mb-4">
+                    <p className="text-sm text-muted-foreground">Please enter your details</p>
+                    <div className="flex space-x-2 items-center self-center">
+                        <LogoSVG />
+                        <CardTitle className="text-3xl font-bold">Welcome</CardTitle>
+                    </div>
                 </CardHeader>
+
                 <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        <div>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="Enter your email"
-                                {...register("email", { required: "Email is required" })}
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                rules={{ required: "Email is required" }}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email address</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your email" type="email" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-                        </div>
-                        <div>
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="Enter your password"
-                                {...register("password", { required: "Password is required" })}
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                rules={{ required: "Name is required" }}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Full Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your name" type="name" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-                        </div>
-                        <div>
-                            <Label htmlFor="password">Confirm Password</Label>
-                            <Input
-                                id="passwordConfirm"
-                                type="password"
-                                placeholder="Confirm your password"
-                            // {...register("password", { required: "Password is required" })}
+
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                rules={{ required: "Password is required" }}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your password" type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-                        </div>
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Logging in..." : "Login"}
-                        </Button>
-                    </form>
+
+                            <FormField
+                                control={form.control}
+                                name="passwordConfirm"
+                                rules={{
+                                    required: "Password is required",
+                                    validate: (value) => value === password || "Passwords do not match"
+                                }}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Confirm Password</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your password" type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading ? "signing in..." : "Sign up"}
+                            </Button>
+
+                            <p className="text-center text-sm text-muted-foreground">
+                                Already have an account?{" "}
+                                <Link to="/login" className="text-blue-600 hover:underline">
+                                    Sign up
+                                </Link>
+                            </p>
+                        </form>
+                    </Form>
                 </CardContent>
             </Card>
         </div>
-    );
+    )
 }
