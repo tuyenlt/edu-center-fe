@@ -19,10 +19,10 @@ export default function TopBar() {
             <div className="flex items-center gap-4">
                 <Avatar className="w-15 h-15">
                     {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                    <AvatarFallback>{user.name[0]}</AvatarFallback>
+                    <AvatarFallback>{user?.name[0] || "a"}</AvatarFallback>
                 </Avatar>
                 <span className="text-md font-medium hidden md:block">
-                    {user.name}
+                    {user?.name}
                 </span>
                 <Button
                     variant="outline"
