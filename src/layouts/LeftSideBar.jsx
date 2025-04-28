@@ -10,6 +10,7 @@ import {
   Settings,
   CreditCard,
   LayoutDashboard,
+  LogOut,
 } from 'lucide-react';
 
 import {
@@ -27,11 +28,11 @@ import { Link } from 'react-router-dom';
 // Menu items.
 const menuByRole = {
   student: [
-    { title: 'Dashboard', url: '#', icon: Home },
+    { title: 'Dashboard', url: '/', icon: Home },
     { title: 'Classes', url: '/class', icon: Users },
     { title: 'Courses', url: '/courses', icon: BookOpen },
-    { title: 'Calendar', url: '#', icon: CalendarDays },
-    { title: 'Assignments', url: '#', icon: ClipboardList },
+    { title: 'Calendar', url: '/calendar', icon: CalendarDays },
+    { title: 'Assignments', url: '/assignments', icon: ClipboardList },
     { title: 'Messages', url: '#', icon: MessageSquare },
     { title: 'Notifications', url: '#', icon: Bell },
   ],
@@ -47,18 +48,21 @@ const menuByRole = {
   manager: [
     { title: 'Dashboard', url: '/', icon: Home },
     { title: 'Courses Manage', url: '/courses', icon: Search },
-    { title: 'Classes Manage', url: '/class', icon: LayoutDashboard },
-    { title: 'Student Manage', url: '/students', icon: Users },
+    { title: 'Classes Manage', url: '/class-manage', icon: LayoutDashboard },
+    { title: 'Student Manage', url: '/students-manage', icon: Users },
     { title: 'Payment Stats', url: '/payment-manage', icon: CreditCard },
     { title: 'Settings', url: '/setting', icon: Settings },
   ],
 };
 
 export function LeftSidebar() {
-  const { user } = useUserContext();
+  const { user, logout } = useUserContext();
+  const location = useLocation();
   const role = user?.role || 'student';
 
   const items = menuByRole[role] || [];
+  const currentPath = location.pathname.split('/')[1];
+  const activeItemStyle = 'text-blue-600 bg-blue-50';
 
   return (
     <div className="group fixed top-24 pt-6 h-[calc(100vh-96px)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 hover:w-64">
