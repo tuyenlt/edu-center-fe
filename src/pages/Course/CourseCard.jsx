@@ -1,8 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { useUserContext } from "@/providers/authContext"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { useUserContext } from "@/providers/authContext";
 
 export default function CourseCard({ course }) {
     const {
@@ -10,78 +9,70 @@ export default function CourseCard({ course }) {
         name,
         goal,
         course_level,
-        sessions_details = [],
-        tags = [],
+        img_url,
         price,
-    } = course
-    const navigate = useNavigate()
-    const { user } = useUserContext()
-    const isManager = user?.role === "manager"
+    } = course;
+    const navigate = useNavigate();
+    const { user } = useUserContext();
+    const isManager = user?.role === "manager";
 
     return (
-        <Card className="w-full rounded-2xl shadow-sm border overflow-hidden">
-            <div className="flex flex-col md:flex-row">
-                {/* Left Side Content */}
-                <div className="md:w-2/3 p-6 space-y-4">
-                    <CardHeader className="p-0">
-                        <CardTitle className="text-2xl font-bold">{name}</CardTitle>
-                        <p className="text-sm text-muted-foreground">{goal}</p>
-                    </CardHeader>
+        <Card className="w-full rounded-sm overflow-hidden hover:shadow-sm transition-all flex flex-col">
 
-                    <div className="text-sm text-gray-700">
-                        <p className="font-medium">Level: <Badge variant="outline">{course_level}</Badge></p>
-                    </div>
+            {/* Top Image */}
+            <div className="h-48 w-full overflow-hidden">
+                <img
+                    src={img_url}
+                    alt={name}
+                    className="object-cover w-full h-full"
+                />
+            </div>
 
-                    <div>
-                        <h4 className="text-sm font-semibold mb-1">Sessions:</h4>
-                        <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
-                            {sessions_details.slice(0, 2).map((session, idx) => (
-                                <li key={idx}>
-                                    <span className="font-medium">{session.title}</span>
-                                    {session.description ? ` — ${session.description}` : ""}
-                                </li>
-                            ))}
-                            {sessions_details.length > 2 && (
-                                <li className="text-xs italic text-muted-foreground">
-                                    + {sessions_details.length - 2} more...
-                                </li>
-                            )}
-                        </ul>
-                    </div>
+            {/* Content */}
+            <div className="flex-1 flex flex-col p-5 space-y-3">
 
-                    <div className="flex flex-wrap gap-2">
-                        {tags.map((tag, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs">
-                                {tag}
-                            </Badge>
-                        ))}
-                    </div>
-                </div>
+                {/* Category */}
+                <Badge variant="outline" className="uppercase text-xs tracking-wider text-purple-600 border-purple-600 bg-purple-50 w-fit">
+                    {course_level}
+                </Badge>
 
-                {/* Right Side Content */}
-                <div className="md:w-1/3 p-6 flex flex-col justify-between">
-                    <div className="text-right">
-                        <span className="text-xl font-bold text-blue-600">${price}</span>
-                    </div>
+                {/* Title */}
+                <h3 className="text-xl font-bold text-gray-900 leading-tight">
+                    {name}
+                </h3>
 
-                    <div className="mt-4 space-y-2">
+                {/* Short Goal Description */}
+                <p className="text-sm text-gray-600 line-clamp-3">
+                    {goal}
+                </p>
+
+                <div className="flex-1" />
+
+                {/* Footer: Button + Price */}
+                <div className="flex items-center justify-between mt-4">
+                    <div className="flex flex-col gap-2">
                         <button
-                            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                            className="bg-green-500 hover:bg-green-600 text-white text-sm px-5 py-2 rounded-full transition"
                             onClick={() => navigate(`/course/${_id}`, { state: { course } })}
                         >
                             View Details
                         </button>
-                        {isManager && (
+                        {isManager &&
                             <button
-                                className="w-full px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition"
-                                onClick={() => navigate(`/course/${_id}/edit`, { state: { course: course } })}
+                                className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-5 py-2 rounded-full transition"
+                                onClick={() => navigate(`/course/${_id}/edit`, { state: { course } })}
                             >
                                 Edit Course
                             </button>
-                        )}
+                        }
                     </div>
+                    <span className="text-md text-gray-800 font-semibold">
+                        {price === 0 ? "Free" : `${price} VND`}
+                    </span>
+
                 </div>
             </div>
+
         </Card>
-    )
+    );
 }

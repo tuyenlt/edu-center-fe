@@ -56,50 +56,77 @@ export default function AuthContextProvider({ children }) {
 
     }, [token])
 
+    let isRefreshing = false;
+    let failedQueue = [];
+
+    const processQueue = (error, token = null) => {
+        failedQueue.forEach(prom => {
+            if (error) {
+                prom.reject(error);
+            } else {
+                prom.resolve(token);
+            }
+        });
+
+        failedQueue = [];
+    };
+
     useLayoutEffect(() => {
         const refreshInterceptor = api.interceptors.response.use(
-            (response) => response, async (error) => {
-                const originalRequest = error.config
+            (response) => response,
+            async (error) => {
+                const originalRequest = error.config;
 
                 if (
                     error.response?.status === 401 &&
                     !originalRequest._retry &&
                     originalRequest.url !== "/users/refresh-token"
                 ) {
+                    if (isRefreshing) {
+                        return new Promise(function (resolve, reject) {
+                            failedQueue.push({ resolve, reject });
+                        })
+                            .then((token) => {
+                                originalRequest.headers.Authorization = `Bearer ${token}`;
+                                return api(originalRequest);
+                            })
+                            .catch((err) => {
+                                return Promise.reject(err);
+                            });
+                    }
+
                     originalRequest._retry = true;
+                    isRefreshing = true;
 
                     try {
-                        const response = await api.post(
-                            "/users/refresh-token",
-                            {},
-                            { withCredentials: true }
-                        );
-                        console.log("refresh token success");
-
+                        const response = await api.post("/users/refresh-token", {}, { withCredentials: true });
                         const newAccessToken = response.data.accessToken;
                         setToken(newAccessToken);
+                        localStorage.setItem("token", newAccessToken); // store new token
+                        api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+                        processQueue(null, newAccessToken);
 
                         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
                         return api(originalRequest);
                     } catch (err) {
-                        console.error("Refresh token failed:", err);
-
+                        processQueue(err, null);
                         setToken(null);
                         setUser(null);
                         setIsAuthenticated(false);
                         navigate("/login", { replace: true });
-
                         return Promise.reject(err);
+                    } finally {
+                        isRefreshing = false;
                     }
                 }
-                return Promise.reject(error)
-            })
+                return Promise.reject(error);
+            }
+        );
 
         return () => {
-            api.interceptors.response.eject(refreshInterceptor)
-        }
-    }, [])
+            api.interceptors.response.eject(refreshInterceptor);
+        };
+    }, []);
 
     const login = async (email, password) => {
         try {
@@ -139,7 +166,8 @@ export default function AuthContextProvider({ children }) {
         login,
         logout,
         register,
-        loading
+        loading,
+        setUser
     }
 
     return (

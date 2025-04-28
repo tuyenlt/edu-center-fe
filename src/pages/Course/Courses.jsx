@@ -12,19 +12,22 @@ export default function Course() {
     const role = user?.role || "student"
 
     const [courses, setCourses] = useState([])
+    const [filteredCourses, setFilteredCourses] = useState([])
 
 
     const getCourses = async () => {
         const result = await getAllCourse()
         setCourses(result)
+        setFilteredCourses(result)
         console.log(courses)
     }
+
 
     useEffect(() => {
         getCourses()
     }, [])
 
-    return (<div className="w-full">
+    return (<div className="w-full max-w-screen-xl m-auto">
         <div className="page-header border-b-1 justify-between pl-4">
             <h1 className="text-3xl font-normal">
                 {role === "manager" ? "Course Manage" : "Courses"}
@@ -33,7 +36,7 @@ export default function Course() {
 
                 {role === "manager" && (
                     <div className="flex justify-between">
-                        <SearchBar onSubmit={(value) => console.log(value)} />
+                        <SearchBar onChange={(value) => setFilteredCourses(courses.filter((course) => (course.name.toLowerCase().search(value.toLowerCase()) !== -1)))} notSubmit={true} />
                         <Button
                             variant="outline"
                             onClick={() => {
@@ -47,9 +50,9 @@ export default function Course() {
             </div>
         </div>
         <div className="flex flex-col w-full mt-6 gap-5">
-            {!courses
+            {!filteredCourses
                 ? "No course found"
-                : courses.map(course => <CourseCard key={course._id} course={course} />)
+                : filteredCourses.map(course => <CourseCard key={course._id} course={course} />)
             }
 
         </div>
