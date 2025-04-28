@@ -1,20 +1,19 @@
-import { fontFamily } from "tailwindcss/defaultTheme";
+import { fontFamily } from 'tailwindcss/defaultTheme';
 export default {
   content: [
-    "./src/**/*.html",
-    "./src/**/*.js",
+    './src/**/*.{js,jsx,ts,tsx}', // Cho phép Tailwind quét toàn bộ file React
   ],
-  darkMode: "class", // 'media' hoặc 'class'
+  darkMode: 'class', // 'media' hoặc 'class'
   theme: {
     extend: {
       zIndex: {
-        "-1": "-1",
+        '-1': '-1',
       },
       flexGrow: {
-        5: "5",
+        5: '5',
       },
       fontFamily: {
-        sans: ["Poppins", ...fontFamily.sans],
+        sans: ['Poppins', ...fontFamily.sans],
       },
     },
   },

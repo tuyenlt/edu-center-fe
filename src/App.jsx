@@ -1,17 +1,82 @@
-import Signin from "./pages/SignIn";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AuthContextProvider from "@/providers/authProvider"
-import PrivateRoute from "./routes/PrivateRoute";
-import Home from "./pages/Dashboard";
-import NotFoundRedirect from "./routes/NotFoundRedirect";
-import SignUp from "./pages/SignUp";
-import RootLayout from "./layouts/RootLayout";
-import Dashboard from "./pages/Dashboard";
-import Course from "./pages/Course/Courses";
-import AddCoursePage from "./pages/Course/AddCourse";
-import CourseDetail from "./pages/Course/CourseDetail";
-import EditCourse from "./pages/Course/EditCourse";
+// import Signin from './pages/SignIn';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import AuthContextProvider from '@/providers/authProvider';
+// import PrivateRoute from './routes/PrivateRoute';
+// import Home from './pages/Dashboard';
+// import NotFoundRedirect from './routes/NotFoundRedirect';
+// import SignUp from './pages/SignUp';
+// import RootLayout from './layouts/RootLayout';
+// import Dashboard from './pages/Dashboard';
+// import Course from './pages/Course/Courses';
+// import AddCoursePage from './pages/Course/AddCourse';
+// import CourseDetail from './pages/Course/CourseDetail';
+// import EditCourse from './pages/Course/EditCourse';
 
+// export const router = createBrowserRouter([
+//   {
+//     path: '/login',
+//     element: <Signin />,
+//   },
+//   {
+//     path: '/signup',
+//     element: <SignUp />,
+//   },
+//   {
+//     path: '/',
+//     element: <RootLayout />,
+//     children: [
+//       {
+//         index: true,
+//         element: <Dashboard />,
+//       },
+//       {
+//         path: 'courses',
+//         element: <Course />,
+//       },
+//       {
+//         path: 'course/:id',
+//         element: <CourseDetail />,
+//       },
+//       {
+//         path: 'course/:id/edit',
+//         element: <EditCourse />,
+//       },
+//       {
+//         path: 'add-course',
+//         element: <AddCoursePage />,
+//       },
+//     ],
+//   },
+// ]);
+
+// function App() {
+//   return (
+//     <AuthContextProvider>
+//       <RouterProvider router={router} />
+//     </AuthContextProvider>
+//   );
+// }
+
+// export default App;
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+import Signin from './pages/SignIn';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AuthContextProvider from '@/providers/authProvider';
+import PrivateRoute from './routes/PrivateRoute';
+import Home from './pages/Dashboard';
+import NotFoundRedirect from './routes/NotFoundRedirect';
+import SignUp from './pages/SignUp';
+import RootLayout from './layouts/RootLayout';
+import Dashboard from './pages/Dashboard';
+import Course from './pages/Course/Courses';
+import AddCoursePage from './pages/Course/AddCourse';
+import CourseDetail from './pages/Course/CourseDetail';
+import EditCourse from './pages/Course/EditCourse';
+import ClassPage from './pages/classes/ClassPage';
+import ClassDetail from './pages/classes/ClassDetail';
+import AssignmentDetail from './pages/classes/AssignmentDetail';
+import Midterm from './pages/classes/MidTerm';
 function App() {
   return (
     <Router>
@@ -26,6 +91,10 @@ function App() {
             <Route path="/course/:id" element={<CourseDetail />} />
             <Route path="/course/:id/edit" element={<EditCourse />} />
             <Route path="/add-course" element={<AddCoursePage />} />
+            <Route path="/class" element={<ClassPage />} />
+            <Route path="/class/:id" element={<ClassDetail />} />
+            <Route path="/class/:id/:id" element={<AssignmentDetail />} />
+            <Route path="/class/:id/:id/:id" element={<Midterm />} />
           </Route>
         </Routes>
       </AuthContextProvider>
