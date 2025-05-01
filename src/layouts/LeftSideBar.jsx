@@ -23,7 +23,8 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useUserContext } from '@/providers/authContext';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 // Menu items.
 const menuByRole = {
@@ -48,7 +49,7 @@ const menuByRole = {
   manager: [
     { title: 'Dashboard', url: '/', icon: Home },
     { title: 'Courses Manage', url: '/courses', icon: Search },
-    { title: 'Classes Manage', url: '/class-manage', icon: LayoutDashboard },
+    { title: 'Classes Manage', url: '/class', icon: LayoutDashboard },
     { title: 'Student Manage', url: '/students-manage', icon: Users },
     { title: 'Payment Stats', url: '/payment-manage', icon: CreditCard },
     { title: 'Settings', url: '/setting', icon: Settings },
@@ -89,6 +90,9 @@ export function LeftSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <Button variant="destructive" onClick={() => logout()}>
+          Logout
+        </Button>
       </SidebarContent>
     </div>
   );
