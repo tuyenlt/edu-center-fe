@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import AssignmentDetail from './AssignmentDetail';
+import AddPeopleToClass from './AddPeopleToClass';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Table,
@@ -56,10 +57,18 @@ import {
   Copy,
   CheckCheck,
   Plus,
+  ClipboardList,
+  ClipboardCheck,
+  HelpCircle,
+  BookMarked,
+  Repeat,
+  FolderOpen,
+  UserRoundPlus,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useUserContext } from '@/providers/authContext';
 import { set } from 'date-fns';
+import NewAssignmentForm from './NewAssignmentForm';
 
 export default function ClassDetail() {
   const { user } = useUserContext();
@@ -244,15 +253,15 @@ export default function ClassDetail() {
     'data-[state=active]:after:-bottom-[1px] data-[state=active]:after:left-0 data-[state=active]:after:right-0 ' +
     'data-[state=active]:after:h-0 data-[state=active]:after:border-t-4 data-[state=active]:after:bg-blue-600 ' +
     'data-[state=active]:after:rounded-t-md';
-  const handleMaximizeCode = () => {
-    console.log('abc');
-  };
   const handleCopyCode = () => {
     setisCopied(true);
-    navigator.clipboard.writeText('ab123c');
+    navigator.clipboard.writeText('tuyendz');
     setTimeout(() => setisCopied(false), 2000); // Tắt sau 2 giây
   };
-  return (
+  const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
+  return isNewAssignmentOpen ? (
+    <NewAssignmentForm onClose={() => setIsNewAssignmentOpen(false)} />
+  ) : (
     <Tabs defaultValue="stream" className="">
       {isCopied && (
         <Alert className="fixed z-1000 bottom-5 left-5 w-50">
@@ -302,7 +311,7 @@ export default function ClassDetail() {
                   <span>ab123c</span>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Maximize onClick={handleMaximizeCode}></Maximize>
+                      <Maximize></Maximize>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-1/3">
                       <DialogHeader>
@@ -414,10 +423,44 @@ export default function ClassDetail() {
               </div>
             )}
             {isTeacher && (
-              <button className="mb-5 rounded-4xl bg-blue-700 text-white ml-auto p-3 flex gap-2 shadow-2xl">
-                <Plus></Plus>
-                <span>New</span>
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="mb-5 rounded-4xl bg-blue-700 text-white ml-auto p-3 flex gap-2 shadow-2xl">
+                    <Plus></Plus>
+                    <span>New</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsNewAssignmentOpen(true);
+                    }}
+                  >
+                    <ClipboardList className="mr-2 h-5 w-5" />
+                    <span>Bài tập</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ClipboardCheck className="mr-2 h-5 w-5" />
+                    <span>Bài kiểm tra</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <HelpCircle className="mr-2 h-5 w-5" />
+                    <span>Câu hỏi</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BookMarked className="mr-2 h-5 w-5" />
+                    <span>Tài liệu</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Repeat className="mr-2 h-5 w-5" />
+                    <span>Sử dụng lại bài đăng</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FolderOpen className="mr-2 h-5 w-5" />
+                    <span>Chủ đề</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
             {/* Cột phải - Thông báo & Danh sách bài tập */}
             <div className="md:col-span-3 space-y-4">
@@ -449,7 +492,18 @@ export default function ClassDetail() {
         <TabsContent value="people" className="w-4/5 mx-auto  mt-5 pt-20">
           <div className="flex justify-between items-center border border-neutral-200 border-t-0 border-x-0 pl-5 pr-5">
             <h2 className="text-3xl font-medium pt-5 pb-5 ">Teacher</h2>
-            <span>2 teachers</span>
+            <div className="flex justify-between w-30">
+              <span>2 teachers</span>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <UserRoundPlus />
+                </DialogTrigger>
+                <DialogContent>
+                  <AddPeopleToClass></AddPeopleToClass>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
           <ul className="mt-10">
@@ -458,7 +512,7 @@ export default function ClassDetail() {
               .map((person) => (
                 <li
                   key={person.id}
-                  className="pb-3 pt-3 border pl-5 border border-neutral-200 border-t-0 border-x-0"
+                  className="pb-3 pt-3  pl-5 border border-neutral-200 border-t-0 border-x-0"
                 >
                   <div className="flex items-center gap-4">
                     <Avatar>
@@ -475,7 +529,17 @@ export default function ClassDetail() {
           </ul>
           <div className="flex justify-between items-center border border-neutral-200 border-t-0 border-x-0 pl-5 pr-5">
             <h2 className="text-3xl font-medium pt-5 pb-5 ">Student</h2>
-            <span>2 students</span>
+            <div className="flex justify-between w-30">
+              <span>2 teachers</span>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <UserRoundPlus />
+                </DialogTrigger>
+                <DialogContent>
+                  <AddPeopleToClass></AddPeopleToClass>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
           {hasStudent.length > 0 ? (
             <ul className="mt-10">

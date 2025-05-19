@@ -180,7 +180,7 @@ export default function TopBar() {
               alt={user.name}
             />
           ) : (
-            <AvatarFallback>{user?.name[0] || 'a'}</AvatarFallback>
+            <AvatarFallback>{user?.name?.[0] || 'A'}</AvatarFallback>
           )}
         </Avatar>
         {/* <span className="text-md font-medium hidden md:block">
