@@ -14,14 +14,16 @@ export default function RootLayout() {
       }}
     >
       <TopBar /> {/* fixed topbar */}
-      <div className="pt-24 flex justify-center w-full bg-gray-50">
-        {/* This container centers the content and bounds the sidebar to it */}
-        <div className="w-full m-auto">
-          {/* Sticky left sidebar inside the centered container */}
-          <LeftSidebar />
+      <div className="pt-15 flex justify-center w-full bg-gray-50">
+        {/* Container chứa sidebar và main sát nhau */}
+        <div className="flex w-full m-auto">
+          {/* Left Sidebar (chiều rộng cố định) */}
+          <div className="w-16">
+            <LeftSidebar />
+          </div>
 
-          {/* Main content with left padding to make space for sidebar */}
-          <main className="pl-[18rem] w-full p-6 min-h-[calc(100vh-96px)]">
+          {/* Main content (chiếm phần còn lại) */}
+          <main className="flex-1 min-h-[calc(100vh-96px)]">
             <Outlet />
           </main>
         </div>

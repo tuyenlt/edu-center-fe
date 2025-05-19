@@ -39,8 +39,8 @@ const menuByRole = {
   ],
   teacher: [
     { title: 'Dashboard', url: '#', icon: Home },
-    { title: 'Classes', url: '#', icon: Users },
-    { title: 'Courses', url: '#', icon: BookOpen },
+    { title: 'Classes', url: '/class', icon: Users },
+    { title: 'Courses', url: '/courses', icon: BookOpen },
     { title: 'Calendar', url: '#', icon: CalendarDays },
     { title: 'Assignments', url: '#', icon: ClipboardList },
     { title: 'Messages', url: '#', icon: MessageSquare },
@@ -66,7 +66,7 @@ export function LeftSidebar() {
   const activeItemStyle = 'text-blue-600 bg-blue-50';
 
   return (
-    <div className="group fixed top-24 pt-6 h-[calc(100vh-96px)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 hover:w-64">
+    <div className="group fixed top-15 pt-6 h-[calc(100vh-96px)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 hover:w-64">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -90,8 +90,12 @@ export function LeftSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <Button variant="destructive" onClick={() => logout()}>
-          Logout
+        <Button
+          variant="destructive"
+          onClick={() => logout()}
+          className="invisible group-hover:visible opacity-0 group-hover:opacity-100"
+        >
+          Log Out
         </Button>
       </SidebarContent>
     </div>

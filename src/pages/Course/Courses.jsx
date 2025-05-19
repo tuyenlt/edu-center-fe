@@ -24,7 +24,7 @@ export default function Course() {
   useEffect(() => {
     getCourses();
   }, []);
-
+  console.log(role)
   return (
     <div className="w-full max-w-screen-xl m-auto">
       <div className="page-header border-b-1 justify-between pl-4">

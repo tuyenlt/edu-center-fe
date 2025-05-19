@@ -14,7 +14,7 @@ export default function P1({ number }) {
       />
 
       <div className="flex gap-3">
-        <span className="flex items-center justify-center w-9 h-9 rounded-full text-blue-800 bg-blue-100">
+        <span className="flex items-center justify-center w-9 h-9 rounded-full text-blue-800 bg-blue-100 font-bold">
           {number}
         </span>
 
