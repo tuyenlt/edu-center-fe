@@ -13,42 +13,7 @@ import ClassPage from './pages/classes/ClassPage';
 import Profile from './pages/profile/Profile';
 import StudentManage from './pages/student-manage/StudentManage';
 
-// export const router = createBrowserRouter([
-//   {
-//     path: '/login',
-//     element: <Signin />,
-//   },
-//   {
-//     path: '/signup',
-//     element: <SignUp />,
-//   },
-//   {
-//     path: '/',
-//     element: <RootLayout />,
-//     children: [
-//       {
-//         index: true,
-//         element: <Dashboard />,
-//       },
-//       {
-//         path: 'courses',
-//         element: <Course />,
-//       },
-//       {
-//         path: 'course/:id',
-//         element: <CourseDetail />,
-//       },
-//       {
-//         path: 'course/:id/edit',
-//         element: <EditCourse />,
-//       },
-//       {
-//         path: 'add-course',
-//         element: <AddCoursePage />,
-//       },
-//     ],
-//   },
-// ]);
+
 
 // function App() {
 //   return (
@@ -63,6 +28,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import ClassDetail from './pages/classes/ClassDetail';
 import AssignmentDetail from './pages/classes/AssignmentDetail';
 import Midterm from './pages/classes/MidTerm';
+import ChatPage from './pages/ChatPage/ChatPage';
 
 function App() {
   return (
@@ -86,6 +52,7 @@ function App() {
             <Route path="/users/:id" element={<Profile />} />
             <Route path="/students-manage" element={<StudentManage />} />
             <Route path="*" element={<Dashboard />} />
+            <Route path="/chat" element={<ChatPage />} />
           </Route>
         </Routes>
       </AuthContextProvider>
