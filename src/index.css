@@ -165,3 +165,11 @@
 button:hover {
   cursor: pointer;
 }
+svg:hover {
+  cursor: pointer;
+}
+div[contenteditable]:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  pointer-events: none;
+}
