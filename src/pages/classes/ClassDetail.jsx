@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import AssignmentDetail from './AssignmentDetail';
 import AddPeopleToClass from './AddPeopleToClass';
+import Comment from './Comment';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Table,
@@ -64,12 +65,16 @@ import {
   Repeat,
   FolderOpen,
   UserRoundPlus,
+  Settings,
+  SendHorizonal,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useUserContext } from '@/providers/authContext';
 import { set } from 'date-fns';
 import NewAssignmentForm from './NewAssignmentForm';
-
+import SettingsForm from './SettingsForm';
+import { Textarea } from '@/components/ui/textarea';
+import RichTextBox from '@/components/shared/RichTextBox';
 export default function ClassDetail() {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
@@ -259,8 +264,12 @@ export default function ClassDetail() {
     setTimeout(() => setisCopied(false), 2000); // Tắt sau 2 giây
   };
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
+  const [isSetting, setIsSetting] = useState(false);
+  const [isRichTextOpen, setIsRichTextOpen] = useState(false);
   return isNewAssignmentOpen ? (
     <NewAssignmentForm onClose={() => setIsNewAssignmentOpen(false)} />
+  ) : isSetting ? (
+    <SettingsForm onClose={() => setIsSetting(false)} />
   ) : (
     <Tabs defaultValue="stream" className="">
       {isCopied && (
@@ -269,7 +278,7 @@ export default function ClassDetail() {
           <AlertTitle>Copied!</AlertTitle>
         </Alert>
       )}
-      <div className="border-b fixed z-10 w-full bg-white flex items-center">
+      <div className="border-b fixed z-10 bg-white flex items-center justify-between w-[calc(100vw-85px)] ">
         <TabsList className="bg-inherit ml-5 h-full flex items-center p-0">
           {Object.entries(subjects).map(([key, value]) => (
             <TabsTrigger
@@ -284,6 +293,7 @@ export default function ClassDetail() {
             </TabsTrigger>
           ))}
         </TabsList>
+        <Settings className="w-5 h-5 mr-5" onClick={() => setIsSetting(true)} />
       </div>
 
       <div className="h-screen">
@@ -341,16 +351,27 @@ export default function ClassDetail() {
               <Card className="gap-0 shadow-lg">
                 <CardContent>
                   <div className="flex items-center gap-4 ">
-                    <Avatar className="w-10 h-10">
-                      <AvatarFallback className="bg-[url(/images/avt1.webp)] bg-cover"></AvatarFallback>
-                    </Avatar>
-                    <p className="text-sm text-gray-400">
-                      Announce something...
-                    </p>
+                    {!isRichTextOpen && (
+                      <>
+                        <Avatar className="w-10 h-10">
+                          <AvatarFallback className="bg-[url(/images/avt1.webp)] bg-cover"></AvatarFallback>
+                        </Avatar>
+                        <button
+                          className="text-sm text-gray-400"
+                          onClick={() => setIsRichTextOpen(true)}
+                        >
+                          Announce something...
+                        </button>
+                      </>
+                    )}
+
+                    {isRichTextOpen && (
+                      <RichTextBox onCancel={() => setIsRichTextOpen(false)} />
+                    )}
                   </div>
                 </CardContent>
               </Card>
-              <Card className="gap-0">
+              <Card className="gap-0 pb-0">
                 <CardHeader>
                   <div className="flex items-center gap-4 ">
                     <Avatar className="w-10 h-10">
@@ -368,7 +389,20 @@ export default function ClassDetail() {
                   <p>Bài tập về nhà buổi 1</p>
                   <p>Làm xong sớm mai tao gọi lên trả lời</p>
                 </CardContent>
-                <CardFooter></CardFooter>
+                <CardFooter className="py-5 gap-x-3">
+                  <Avatar className="w-10 h-10 p-1 bg-[rgba(60,64,67,.08)] rounded-full border-gray-200 dark:border-gray-700 cursor-pointer circle">
+                    {user?.avatar_url ? (
+                      <AvatarImage
+                        className="rounded-full"
+                        src={user.avatar_url}
+                        alt={user.name}
+                      />
+                    ) : (
+                      <AvatarFallback>{user?.name?.[0] || 'A'}</AvatarFallback>
+                    )}
+                  </Avatar>
+                  <Comment></Comment>
+                </CardFooter>
               </Card>
               <Card className="gap-0">
                 <CardHeader>
