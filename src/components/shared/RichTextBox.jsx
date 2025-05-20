@@ -65,30 +65,8 @@ export default function RichTextBox({ onCancel }) {
     }
   };
   return (
-    <div className="w-full rounded p-3 space-y-2 relative">
+    <div className="w-full rounded p-3 space-y-2">
       {/* Toolbar */}
-      <div className="flex gap-2 absolute top-20 left-5">
-        <button
-          onClick={() => formatText('bold')}
-          className="p-1 hover:bg-gray-300 rounded"
-        >
-          <Bold className="w-5 h-5" />
-        </button>
-
-        <button
-          onClick={() => formatText('italic')}
-          className="p-1 hover:bg-gray-300 rounded"
-        >
-          <Italic className="w-5 h-5" />
-        </button>
-
-        <button
-          onClick={() => formatText('underline')}
-          className="p-1 hover:bg-gray-300 rounded"
-        >
-          <Underline className="w-5 h-5" />
-        </button>
-      </div>
 
       {/* Editor */}
       <div
@@ -99,6 +77,30 @@ export default function RichTextBox({ onCancel }) {
         className="min-h-[100px] bg-gray-100 border border-gray-300 p-3 rounded focus:outline-none text-sm pb-10"
         data-placeholder="Annouce something..."
       ></div>
+      <div className="relative">
+        <div className="flex gap-2 absolute bottom-3 left-2">
+          <button
+            onClick={() => formatText('bold')}
+            className="p-1 hover:bg-gray-300 rounded"
+          >
+            <Bold className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={() => formatText('italic')}
+            className="p-1 hover:bg-gray-300 rounded"
+          >
+            <Italic className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={() => formatText('underline')}
+            className="p-1 hover:bg-gray-300 rounded"
+          >
+            <Underline className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
       {link.length > 0 &&
         link.map((url) => {
           return (

@@ -173,3 +173,11 @@ div[contenteditable]:empty::before {
   color: #aaa;
   pointer-events: none;
 }
+.accordion-trigger > svg {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.accordion-trigger {
+  position: relative;
+}

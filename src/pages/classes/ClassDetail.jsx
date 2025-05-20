@@ -67,6 +67,12 @@ import {
   UserRoundPlus,
   Settings,
   SendHorizonal,
+  EllipsisVertical,
+  Pencil,
+  Youtube,
+  LinkIcon,
+  FileText,
+  FileIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useUserContext } from '@/providers/authContext';
@@ -266,6 +272,151 @@ export default function ClassDetail() {
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const [isSetting, setIsSetting] = useState(false);
   const [isRichTextOpen, setIsRichTextOpen] = useState(false);
+  const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
+  const Content = (
+    <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="item-1">
+        <Card
+          className="hover:bg-neutral-200 hover:cursor-pointer w-full py-0 gap-0"
+          asChild
+        >
+          <AccordionTrigger className="relative [&>svg]:hidden">
+            {/* choc vao phan tu cua radixui */}
+            {/* absolute  [&>svg]:top-12  [&>svg]:right-6 [&>svg]:w-6  [&>svg]:h-6 */}
+            <CardHeader className="w-full">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Bài kiểm tra chương 2</CardTitle>
+                  <CardDescription className="mt-2">28 tháng 3</CardDescription>
+                </div>
+                {isTeacher && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <EllipsisVertical />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      <DropdownMenuItem onClick={() => setIsEditMenuOpen(true)}>
+                        <Pencil className="mr-2 h-5 w-5" />
+                        <span>Edit</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <ClipboardCheck className="mr-2 h-5 w-5" />
+                        <span>Delete Assignment</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
+            </CardHeader>
+          </AccordionTrigger>
+          <AccordionContent className="border-t pb-0">
+            <CardContent className="w-full mx-autoborder shadow-sm p-4 bg-white space-y-4">
+              <div className="text-sm text-muted-foreground">
+                Đã đăng vào 19 thg 5 (Đã chỉnh sửa Hôm qua)
+              </div>
+
+              <h2 className="text-lg font-semibold">
+                Review what you learn from DTD
+              </h2>
+
+              {/* File attachments */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <a
+                  href="https://chatgpt.com/c/682939"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border p-3 rounded hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <LinkIcon className="w-4 h-4" />
+                  <span className="text-sm truncate">Just a moment...</span>
+                </a>
+
+                <a
+                  href="https://youtube.com/..."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border p-3 rounded hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <Youtube className="w-4 h-4 text-red-500" />
+                  <span className="text-sm truncate">
+                    Creepy Nuts「Bling-Bang-Bang-Born」
+                  </span>
+                </a>
+
+                <div className="border p-3 rounded flex items-center gap-2">
+                  <FileIcon className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm truncate">backup.pptx</span>
+                </div>
+
+                <div className="border p-3 rounded flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-green-600" />
+                  <span className="text-sm truncate">blind injection.docx</span>
+                </div>
+              </div>
+
+              {/* Submission info */}
+              <div className="flex items-center gap-8 text-sm pt-2">
+                <div>
+                  <span className="text-xl font-semibold">0</span> <br /> Đã nộp
+                </div>
+                <div>
+                  <span className="text-xl font-semibold">1</span> <br /> Đã
+                  giao
+                </div>
+              </div>
+
+              <div>
+                <a href="#" className="text-sm text-blue-600 hover:underline">
+                  Xem hướng dẫn
+                </a>
+              </div>
+            </CardContent>
+          </AccordionContent>
+        </Card>
+      </AccordionItem>
+    </Accordion>
+
+    // <Accordion type="single" collapsible className="w-full">
+    //   <AccordionItem value="item-1">
+    //     <AccordionTrigger>
+    //       <Card
+    //         className="hover:bg-neutral-200 hover:cursor-pointer w-full"
+    //         asChild
+    //       >
+    //         <CardHeader>
+    //           <div className="flex items-center justify-between">
+    //             <div>
+    //               <CardTitle>Bài kiểm tra chương 2</CardTitle>
+    //               <CardDescription className="mt-2">28 tháng 3</CardDescription>
+    //             </div>
+    //             {isTeacher && (
+    //               <DropdownMenu>
+    //                 <DropdownMenuTrigger asChild>
+    //                   <EllipsisVertical />
+    //                 </DropdownMenuTrigger>
+    //                 <DropdownMenuContent className="w-56">
+    //                   <DropdownMenuItem onClick={() => setIsEditMenuOpen(true)}>
+    //                     <Pencil className="mr-2 h-5 w-5" />
+    //                     <span>Edit</span>
+    //                   </DropdownMenuItem>
+    //                   <DropdownMenuItem>
+    //                     <ClipboardCheck className="mr-2 h-5 w-5" />
+    //                     <span>Delete Assignment</span>
+    //                   </DropdownMenuItem>
+    //                 </DropdownMenuContent>
+    //               </DropdownMenu>
+    //             )}
+    //           </div>
+    //         </CardHeader>
+    //       </Card>
+    //     </AccordionTrigger>
+    //     <AccordionContent>
+
+    //     </AccordionContent>
+    //   </AccordionItem>
+    // </Accordion>
+  );
+
   return isNewAssignmentOpen ? (
     <NewAssignmentForm onClose={() => setIsNewAssignmentOpen(false)} />
   ) : isSetting ? (
@@ -296,7 +447,7 @@ export default function ClassDetail() {
         <Settings className="w-5 h-5 mr-5" onClick={() => setIsSetting(true)} />
       </div>
 
-      <div className="h-screen">
+      <div className="h-screen bg-white">
         <TabsContent value="stream" className="w-4/5 mx-auto mt-5 pt-20">
           <Card className="w-full h-[240px] p-0 relative gap-0 bg-[url(/images/img_reachout.jpg)] bg-cover">
             <CardHeader className="text-sm absolute w-full bottom-3 left-5 p-0">
@@ -501,23 +652,12 @@ export default function ClassDetail() {
               {/* Thông báo */}
 
               {/* Danh sách bài tập */}
-              <Card
-                className="hover:bg-neutral-200 hover:cursor-pointer "
-                asChild
-              >
-                <Link to={'/class/testId/AssignmentDetail'}>
-                  <CardHeader>
-                    <CardTitle>Bài kiểm tra chương 2</CardTitle>
-                    <CardDescription>28 tháng 3</CardDescription>
-                  </CardHeader>
-                </Link>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Bài kiểm tra chương 1</CardTitle>
-                  <CardDescription>28 tháng 2</CardDescription>
-                </CardHeader>
-              </Card>
+
+              {isStudent ? (
+                <Link to="/class/testId/AssignmentDetail">{Content}</Link>
+              ) : (
+                Content
+              )}
             </div>
           </div>
         </TabsContent>

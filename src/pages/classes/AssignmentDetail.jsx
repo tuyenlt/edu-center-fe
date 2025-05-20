@@ -1,8 +1,12 @@
 import { Clock, TableOfContents, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useUserContext } from '@/providers/authContext';
 export default function AssignmentDetail() {
-  return (
+  const { user } = useUserContext();
+  const isTeacher = user?.role === 'teacher';
+  const isStudent = user?.role === 'student';
+  return isStudent ? (
     <div className="text-black ml-auto mr-auto max-w-2/3 border border-gray-300 shadow-2xl rounded-2xl pt-10 px-10 pb-20 relative">
       <div className=" border border-neutral-200 border-t-0 border-x-0 pb-5">
         <h1 className="font-semibold text-5xl -ml-1">Midterm Exam</h1>
@@ -44,5 +48,7 @@ export default function AssignmentDetail() {
         <Button className="">Start Test</Button>
       </Link>
     </div>
+  ) : (
+    <div></div>
   );
 }

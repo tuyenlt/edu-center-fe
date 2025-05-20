@@ -13,8 +13,6 @@ import ClassPage from './pages/classes/ClassPage';
 import Profile from './pages/profile/Profile';
 import StudentManage from './pages/student-manage/StudentManage';
 
-
-
 // function App() {
 //   return (
 //     <AuthContextProvider>
@@ -45,9 +43,15 @@ function App() {
             <Route path="/course/:id/edit" element={<EditCourse />} />
             <Route path="/add-course" element={<AddCoursePage />} />
             <Route path="/class" element={<ClassPage />} />
-            <Route path="/class/:id" element={<ClassDetail />} />
-            <Route path="/class/:id/:id" element={<AssignmentDetail />} />
-            <Route path="/class/:id/:id/midterm-test" element={<Midterm />} />
+            <Route path="/class/:classdetail-id" element={<ClassDetail />} />
+            <Route
+              path="/class/:classdetail-id/:assignments-id"
+              element={<AssignmentDetail />}
+            />
+            <Route
+              path="/class/:classdetail-id/:assignments-id/midterm-test"
+              element={<Midterm />}
+            />
             <Route path="/class" element={<ClassPage />} />
             <Route path="/add-class" element={<NewClass />} />
             <Route path="/users/:id" element={<Profile />} />
