@@ -1,14 +1,24 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useUserContext } from '@/providers/authContext';
-import { Badge } from '@/components/ui/badge';
-import { BookOpen, Target, Clock, ListOrdered, Wallet } from 'lucide-react';
-import ReturnButton from '@/components/shared/ReturnButton';
+import React, { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useUserContext } from '@/providers/authContext'
+import { Badge } from '@/components/ui/badge'
+import {
+  BookOpen,
+  Clock,
+  ListOrdered,
+  Wallet,
+  ChevronDown,
+  ChevronRight,
+} from 'lucide-react'
 
 export default function CourseDetail() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { user } = useUserContext();
-  const course = location.state?.course;
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { user } = useUserContext()
+  const course = location.state && location.state.course
+
+  // State để lưu chapter đã mở hay chưa, key là index của chapter
+  const [openChapters, setOpenChapters] = useState({})
 
   if (!course) {
     return (
@@ -21,18 +31,30 @@ export default function CourseDetail() {
           Go Back
         </button>
       </div>
-    );
+    )
   }
 
   const {
     name,
     goal,
     course_level,
-    sessions_details = [],
+    course_programs = [],
     tags = [],
     price,
     img_url,
-  } = course;
+  } = course
+
+  const totalLessons = course_programs.reduce((sum, chap) => {
+    return sum + (Array.isArray(chap.lessons) ? chap.lessons.length : 0)
+  }, 0)
+
+  // Hàm toggle open/close
+  const toggleChapter = idx => {
+    setOpenChapters(prev => ({
+      ...prev,
+      [idx]: !prev[idx],
+    }))
+  }
 
   return (
     <div className="container">
@@ -49,15 +71,15 @@ export default function CourseDetail() {
           </div>
 
           {/* Course Info */}
-          <div className="">
+          <div>
             <h1 className="text-3xl font-bold mb-2">{name}</h1>
             <div className="flex flex-wrap gap-2 mb-4">
               <Badge className="uppercase text-xs tracking-wider text-purple-600 border-purple-600 bg-purple-50 w-fit">
                 {course_level}
               </Badge>
-              {tags.map((tag, index) => (
+              {tags.map((tag, idx) => (
                 <Badge
-                  key={index}
+                  key={idx}
                   className="uppercase text-xs tracking-wider text-purple-600 border-purple-600 bg-purple-50 w-fit"
                 >
                   {tag}
@@ -65,114 +87,140 @@ export default function CourseDetail() {
               ))}
             </div>
             <p className="text-gray-500 mb-4">{goal}</p>
-
-            {/* <div className="text-right">
-                        <p className="text-xl font-bold">{price} VND</p>
-                    </div> */}
           </div>
 
           {/* Description */}
-          <div className="">
+          <div>
             <h2 className="text-2xl font-semibold mb-4">Description</h2>
             <p className="text-gray-600">{goal}</p>
           </div>
 
-          {/* Sessions */}
-          <div className="">
+          {/* Course Contents */}
+          <div>
             <h2 className="text-2xl font-semibold mb-4">Course Contents</h2>
-            <div className="border rounded-md overflow-hidden">
-              {sessions_details.map((session, idx) => (
-                <div
-                  key={idx}
-                  className={`border-t p-4 hover:bg-gray-50 transition ${
-                    idx === 0 ? 'border-t-0' : ''
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1">
-                    <div className="flex items-center gap-2">
-                      {/* Session Icon */}
-                      <BookOpen className="w-5 h-5 text-blue-600" />
+            <div className="space-y-4">
+              {course_programs.map((chapter, chapIdx) => {
+                const isOpen = !!openChapters[chapIdx]
+                return (
+                  <div key={chapIdx} className="border rounded-md overflow-hidden">
+                    {/* Header click để toggle */}
+                    <button
+                      onClick={() => toggleChapter(chapIdx)}
+                      className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition"
+                    >
+                      <div className="flex items-center gap-2">
+                        <ListOrdered className="w-5 h-5 text-green-600" />
+                        <span className="font-semibold">
+                          Chapter {chapIdx + 1}: {chapter.title}
+                        </span>
+                      </div>
+                      {isOpen ? (
+                        <ChevronDown className="w-5 h-5 text-gray-600" />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-gray-600" />
+                      )}
+                    </button>
 
-                      <p>
-                        Session {idx + 1}: {session.title}
-                      </p>
-                    </div>
-
-                    {session.type && (
-                      <span className="px-2 py-1 text-xs uppercase tracking-wider text-blue-600 bg-blue-50 border border-blue-600 rounded-md">
-                        {session.type}
-                      </span>
+                    {/* Nội dung chỉ hiện khi isOpen === true */}
+                    {isOpen && (
+                      <div className="p-4 border-t">
+                        {chapter.description && (
+                          <p className="mb-4 text-gray-600">{chapter.description}</p>
+                        )}
+                        {Array.isArray(chapter.lessons) && (
+                          <ul className="divide-y">
+                            {chapter.lessons.map((lesson, lIdx) => (
+                              <li
+                                key={lIdx}
+                                className="flex items-start gap-3 py-3 hover:bg-gray-50 transition"
+                              >
+                                <BookOpen className="w-5 h-5 text-blue-600 mt-1" />
+                                <div className="flex-1">
+                                  <div className="flex justify-between items-center">
+                                    <p className="font-medium">{lesson.title}</p>
+                                    <Badge className="uppercase text-xs tracking-wider text-blue-600 border-blue-600 bg-blue-50">
+                                      {lesson.type}
+                                    </Badge>
+                                  </div>
+                                  {lesson.description && (
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      {lesson.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
                     )}
                   </div>
-
-                  {session.description && (
-                    <p className="text-sm text-gray-600 pl-7 mt-1">
-                      {session.description}
-                    </p>
-                  )}
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>
 
-        {/* Right Side (Additional info vs action button) */}
+        {/* Right Side */}
         <div className="space-y-4">
           <div className="bg-white p-4 pb-8 shadow-sm">
-            <div className="space-y-4 p-4">
+            <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Clock className="w-5 h-5 text-blue-600" />
                 <span>
                   Expected time: <strong>3 months</strong>
                 </span>
               </div>
-
               <div className="flex items-center gap-3">
                 <ListOrdered className="w-5 h-5 text-blue-600" />
                 <span>
-                  Total sessions: <strong>{sessions_details.length}</strong>
+                  Total chapters: <strong>{course_programs.length}</strong>
                 </span>
               </div>
-
+              <div className="flex items-center gap-3">
+                <BookOpen className="w-5 h-5 text-blue-600" />
+                <span>
+                  Total lessons: <strong>{totalLessons}</strong>
+                </span>
+              </div>
               <div className="flex items-center gap-3">
                 <Wallet className="w-5 h-5 text-blue-600" />
                 <span>
-                  Price: <strong>{price} VND </strong>
+                  Price: <strong>{price} VND</strong>
                 </span>
               </div>
             </div>
-            {/* Buttons */}
-            <div className="flex flex-col gap-4 w-full">
+
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-4 w-full mt-4">
               <button
                 onClick={() => navigate(-1)}
                 className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 w-full max-w-[300px] m-auto"
               >
                 Return
               </button>
-              {user?.role === 'manager' && (
-                <button
-                  onClick={() => navigate('/class/add', { state: { course } })}
-                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 w-full max-w-[300px] m-auto"
-                >
-                  Add new class
-                </button>
-              )}
-              {user?.role === 'manager' && (
-                <button
-                  onClick={() =>
-                    navigate(`/course/${course._id}/edit`, {
-                      state: { course },
-                    })
-                  }
-                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 w-full max-w-[300px] m-auto"
-                >
-                  Edit Course
-                </button>
+              {user && user.role === 'manager' && (
+                <>
+                  <button
+                    onClick={() => navigate('/add-class', { state: { course } })}
+                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 w-full max-w-[300px] m-auto"
+                  >
+                    Add new class
+                  </button>
+                  <button
+                    onClick={() =>
+                      navigate(`/course/${course._id}/edit`, { state: { course } })
+                    }
+                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 w-full max-w-[300px] m-auto"
+                  >
+                    Edit Course
+                  </button>
+                </>
               )}
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

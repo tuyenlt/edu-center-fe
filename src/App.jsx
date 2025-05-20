@@ -49,6 +49,7 @@ function App() {
             <Route path="/class/:id/:id" element={<AssignmentDetail />} />
             <Route path="/class/:id/:id/midterm-test" element={<Midterm />} />
             <Route path="/class" element={<ClassPage />} />
+            <Route path="/add-class" element={<NewClass />} />
             <Route path="/users/:id" element={<Profile />} />
             <Route path="/students-manage" element={<StudentManage />} />
             <Route path="*" element={<Dashboard />} />

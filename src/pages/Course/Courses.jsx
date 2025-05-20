@@ -26,7 +26,7 @@ export default function Course() {
   }, []);
   console.log(role)
   return (
-    <div className="w-full max-w-screen-xl m-auto">
+    <div className="w-full max-w-screen-xl m-auto p-10">
       <div className="page-header border-b-1 justify-between pl-4">
         <h1 className="text-3xl font-normal">
           {role === 'manager' ? 'Course Manage' : 'Courses'}
@@ -63,8 +63,8 @@ export default function Course() {
         {!filteredCourses
           ? 'No course found'
           : filteredCourses.map((course) => (
-              <CourseCard key={course._id} course={course} />
-            ))}
+            <CourseCard key={course._id} course={course} />
+          ))}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import {
     Dialog,
@@ -15,67 +15,100 @@ import {
     SelectContent,
     SelectItem,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { toast } from "sonner";
 
 export default function SessionScheduleDialog({
     session,
     index,
     isOpen,
     setIsOpen,
-    onConfirm, // <-- callback to return session data
+    onConfirm,
 }) {
-    console.log(session)
-    const [date, setDate] = useState(session.start_time ? new Date(session.start_time) : new Date());
+    const [date, setDate] = useState(
+        session.start_time ? new Date(session.start_time) : new Date()
+    );
     const [startHour, setStartHour] = useState(
-        session.start_time ? `${new Date(session.start_time).getHours()}:00` : ""
+        session.start_time
+            ? `${new Date(session.start_time).getHours().toString().padStart(2, "0")}:00`
+            : ""
     );
     const [endHour, setEndHour] = useState(
-        session.end_time ? `${new Date(session.end_time).getHours()}:00` : ""
+        session.end_time
+            ? `${new Date(session.end_time).getHours().toString().padStart(2, "0")}:00`
+            : ""
     );
     const [room, setRoom] = useState(session.room ? session.room.toString() : "");
 
-    const hours = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, "0")}:00`);
+    const hours = useMemo(
+        () =>
+            Array.from({ length: 17 }, (_, i) => {
+                const hour = i + 7;
+                return `${hour.toString().padStart(2, "0")}:00`;
+            }),
+        []
+    );
+
+
+    const filteredEndHours = useMemo(() => {
+        if (!startHour) return hours;
+        return hours.filter((h) => h > startHour);
+    }, [hours, startHour]);
+
+    useEffect(() => {
+        if (endHour && startHour && endHour <= startHour) {
+            setEndHour("");
+        }
+    }, [startHour, endHour]);
 
     const handleConfirm = () => {
-        if (date && startHour && endHour && room.trim() !== "") {
-            const startHourInt = parseInt(startHour.split(":")[0], 10);
-            const endHourInt = parseInt(endHour.split(":")[0], 10);
-
-            // Clone date to avoid mutating original
-            const startDate = new Date(date);
-            const endDate = new Date(date);
-            startDate.setHours(startHourInt, 0, 0, 0);
-            endDate.setHours(endHourInt, 0, 0, 0);
-
-            const start_time = startDate.toISOString();
-            const end_time = endDate.toISOString();
-
-            onConfirm?.({
-                title: session.title,
-                description: session.description,
-                type: session.type,
-                start_time,
-                end_time,
-                room,
-            });
-
-            setIsOpen(false);
-        } else {
-            alert("Please fill out all fields before confirming.");
+        if (!date || !startHour || !endHour || room.trim() === "") {
+            alert("Please fill all information");
+            return;
         }
-    };
+        const startH = +startHour.split(":")[0];
+        const endH = +endHour.split(":")[0];
+        if (startH >= endH) {
+            return;
+        }
 
+        const startDate = new Date(date);
+        startDate.setHours(startH, 0, 0, 0);
+        const endDate = new Date(date);
+        endDate.setHours(endH, 0, 0, 0);
+
+        onConfirm?.({
+            title: session.title,
+            description: session.description,
+            type: session.type,
+            start_time: startDate.toISOString(),
+            end_time: endDate.toISOString(),
+            room,
+        });
+        toast(`choose: ${startDate}`)
+        setIsOpen(false);
+    };
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent >
+            <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Session {index}: {session.title}</DialogTitle>
+                    <DialogTitle>
+                        Session {index}: {session.title}
+                    </DialogTitle>
                 </DialogHeader>
 
-                <div className="flex flex-col items-center gap-4 mt-4">
-                    <Calendar mode="single" selected={date} onSelect={setDate} />
+                <div className="flex flex-col gap-4 mt-4">
+                    {/* DATE PICKER */}
+                    <div className="flex flex-col items-start">
+                        <label className="text-sm mb-1">Date</label>
+                        <Input
+                            type="date"
+                            value={date.toISOString().split("T")[0]}
+                            onChange={(e) => setDate(new Date(e.target.value))}
+                        />
+                    </div>
 
+                    {/* TIME PICKERS */}
                     <div className="flex gap-4">
                         <div className="flex flex-col items-start">
                             <label className="text-sm mb-1">Start Time</label>
@@ -100,7 +133,7 @@ export default function SessionScheduleDialog({
                                     <SelectValue placeholder="End" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {hours.map((hour) => (
+                                    {filteredEndHours.map((hour) => (
                                         <SelectItem key={hour} value={hour}>
                                             {hour}
                                         </SelectItem>
@@ -110,11 +143,17 @@ export default function SessionScheduleDialog({
                         </div>
                     </div>
 
-                    <div className="flex gap-2 items-center w-60 ml-4">
-                        <Input placeholder="Enter a room" value={room} onChange={(e) => setRoom(e.target.value)} />
+                    {/* ROOM INPUT */}
+                    <div className="flex flex-col items-start">
+                        <label className="text-sm mb-1">Room</label>
+                        <Input
+                            placeholder="Enter a room"
+                            value={room}
+                            onChange={(e) => setRoom(e.target.value)}
+                        />
                     </div>
 
-                    <Button type="button" onClick={handleConfirm}>Confirm</Button>
+                    <Button onClick={handleConfirm}>Confirm</Button>
                 </div>
             </DialogContent>
         </Dialog>

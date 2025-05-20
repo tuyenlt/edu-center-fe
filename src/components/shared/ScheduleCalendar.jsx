@@ -19,7 +19,7 @@ export default function ScheduleCalendar({
     const [currentWeek, setCurrentWeek] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     scheduleData = scheduleData.filter((item) => item.start_time);
-    const hours = Array.from({ length: 16 }, (_, i) => i + 7); // 7:00 to 21:00
+    const hours = Array.from({ length: 16 }, (_, i) => i + 7);
 
     const renderHeader = () => (
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
@@ -96,13 +96,13 @@ export default function ScheduleCalendar({
                                         const itemStart = parseISO(item.start_time);
                                         const itemEnd = parseISO(item.end_time);
                                         const duration = (itemEnd - itemStart) / (1000 * 60 * 60);
-                                        const itemDayIndex = itemStart.getDay() === 0 ? 6 : itemStart.getDay() - 1;
+                                        // const itemDayIndex = itemStart.getDay() === 0 ? 6 : itemStart.getDay() - 1;
                                         const itemHour = itemStart.getHours();
 
                                         const uniqueKey = `${item.title}-${item.start_time}-${item.end_time}`;
 
                                         if (
-                                            itemDayIndex === dayIndex &&
+                                            isSameDay(itemStart, day) &&
                                             itemHour === hour &&
                                             !renderedItems.has(uniqueKey)
                                         ) {
