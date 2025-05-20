@@ -27,6 +27,7 @@ import ClassDetail from './pages/classes/ClassDetail';
 import AssignmentDetail from './pages/classes/AssignmentDetail';
 import Midterm from './pages/classes/MidTerm';
 import ChatPage from './pages/ChatPage/ChatPage';
+import StudentContacting from './pages/studentContacting/StudentContacting';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
             <Route path="/students-manage" element={<StudentManage />} />
             <Route path="*" element={<Dashboard />} />
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/student-contacting" element={<StudentContacting />} />
           </Route>
         </Routes>
       </AuthContextProvider>
