@@ -10,15 +10,16 @@ import {
   ChevronDown,
   ChevronRight,
 } from 'lucide-react'
+import api from '@/services/api'
 
 export default function CourseDetail() {
   const location = useLocation()
   const navigate = useNavigate()
   const { user } = useUserContext()
   const course = location.state && location.state.course
-
-  // State để lưu chapter đã mở hay chưa, key là index của chapter
   const [openChapters, setOpenChapters] = useState({})
+  const isCurrentlyRequested = course.requested_students.includes(user?._id);
+  const [requested, setRequested] = useState(isCurrentlyRequested);
 
   if (!course) {
     return (
@@ -48,7 +49,6 @@ export default function CourseDetail() {
     return sum + (Array.isArray(chap.lessons) ? chap.lessons.length : 0)
   }, 0)
 
-  // Hàm toggle open/close
   const toggleChapter = idx => {
     setOpenChapters(prev => ({
       ...prev,
@@ -56,8 +56,17 @@ export default function CourseDetail() {
     }))
   }
 
+  const handleEnroll = async () => {
+    try {
+      await api.post(`/courses/${course._id}/enroll`);
+      setRequested(!requested);
+    } catch (error) {
+      console.error('Error enrolling in course:', error)
+    }
+  }
+
   return (
-    <div className="container">
+    <div className="container m-auto">
       <div className="w-full max-w-screen-2xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8 bg-gray-50">
         {/* Left Side */}
         <div className="lg:col-span-2 space-y-6">
@@ -199,6 +208,14 @@ export default function CourseDetail() {
               >
                 Return
               </button>
+              {user && user.role === 'student' && (
+                <button
+                  onClick={handleEnroll}
+                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 w-full max-w-[300px] m-auto"
+                >
+                  {!requested ? "Request To Enroll" : "Cancel Request"}
+                </button>
+              )}
               {user && user.role === 'manager' && (
                 <>
                   <button
@@ -219,6 +236,27 @@ export default function CourseDetail() {
               )}
             </div>
           </div>
+          {user && user.role === 'manager' && course.requested_students.length > 0 &&
+            <div className="flex flex-col p-5 bg-white shadow-sm">
+              <div className="mt-4 mb-4 text-center text-xl font-bold">Requested Students</div>
+              {course.requested_students.map((student) => (
+                <button
+                  key={student._id}
+                  onClick={() => navigate(`/users/${student._id}`)}
+                  className="flex items-center p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-sm hover:shadow-md transition-shadow duration-200 focus:outline-none"
+                >
+                  <img
+                    src={student.avatar_url}
+                    alt={student.name}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <span className="ml-3 text-gray-800 dark:text-gray-100 font-medium truncate">
+                    {student.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+          }
         </div>
       </div>
     </div>

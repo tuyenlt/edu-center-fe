@@ -34,7 +34,7 @@ const menuByRole = {
     { title: 'Courses', url: '/courses', icon: BookOpen },
     { title: 'Calendar', url: '/calendar', icon: CalendarDays },
     { title: 'Assignments', url: '/assignments', icon: ClipboardList },
-    { title: 'Messages', url: '#', icon: MessageSquare },
+    { title: 'Messages', url: '/chat', icon: MessageSquare },
     { title: 'Notifications', url: '#', icon: Bell },
   ],
   teacher: [
@@ -43,7 +43,7 @@ const menuByRole = {
     { title: 'Courses', url: '/courses', icon: BookOpen },
     { title: 'Calendar', url: '#', icon: CalendarDays },
     { title: 'Assignments', url: '#', icon: ClipboardList },
-    { title: 'Messages', url: '#', icon: MessageSquare },
+    { title: 'Messages', url: '/chat', icon: MessageSquare },
     { title: 'Notifications', url: '#', icon: Bell },
   ],
   manager: [
@@ -54,16 +54,19 @@ const menuByRole = {
     { title: 'Payment Stats', url: '/payment-manage', icon: CreditCard },
     { title: 'Settings', url: '/setting', icon: Settings },
   ],
+  staff: [
+    { title: 'Dashboard', url: '/', icon: Home },
+    { title: 'Student contacting', url: '/student-contacting', icon: Users },
+    { title: 'Messaging', url: '/chat', icon: MessageSquare },
+    { title: 'Notifications', url: '#', icon: Bell },
+  ]
 };
 
 export function LeftSidebar() {
   const { user, logout } = useUserContext();
-  const location = useLocation();
   const role = user?.role || 'student';
 
   const items = menuByRole[role] || [];
-  const currentPath = location.pathname.split('/')[1];
-  const activeItemStyle = 'text-blue-600 bg-blue-50';
 
   return (
     <div className="group fixed top-15 pt-6 h-[calc(100vh-96px)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 hover:w-64">

@@ -10,8 +10,12 @@ export default function AuthContextProvider({ children }) {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [token, setToken] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 	useEffect(() => {
+		if (isLoggingOut) {
+			return;
+		}
 		setLoading(true);
 		const fetchUser = async () => {
 			try {
@@ -95,6 +99,7 @@ export default function AuthContextProvider({ children }) {
 
 					originalRequest._retry = true;
 					isRefreshing = true;
+					console.log('Refreshing token...');
 
 					try {
 						const response = await api.post(
@@ -112,6 +117,7 @@ export default function AuthContextProvider({ children }) {
 						originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 						return api(originalRequest);
 					} catch (err) {
+						console.error('Token refresh failed:', err);
 						processQueue(err, null);
 						setToken(null);
 						setUser(null);
@@ -138,6 +144,7 @@ export default function AuthContextProvider({ children }) {
 			console.log('login success');
 			setToken(accessToken);
 			setIsAuthenticated(true);
+			setIsLoggingOut(false);
 		} catch (error) {
 			console.error(
 				'Login failed:',
@@ -162,6 +169,7 @@ export default function AuthContextProvider({ children }) {
 
 	const logout = async () => {
 		await api.delete('/users/logout');
+		setIsLoggingOut(true);
 		setToken(null);
 		setUser(null);
 		setIsAuthenticated(false);
