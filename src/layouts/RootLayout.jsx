@@ -26,10 +26,7 @@ export default function RootLayout() {
 
           {/* Main content (chiếm phần còn lại) */}
           <main className="flex-1 min-h-[calc(100vh-96px)]">
-            <Outlet
-              onHideRootLayout={() => setIsRootLayoutHidden(true)}
-              onVisibleRootLayout={() => setIsRootLayoutHidden(false)}
-            />
+            <Outlet />
           </main>
         </div>
       </div>

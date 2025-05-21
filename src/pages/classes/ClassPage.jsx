@@ -2,10 +2,12 @@ import { cn } from '@/lib/utils';
 import { useUserContext } from '@/providers/authContext';
 import ClassAssignmentSummary from './ClassAssignmentSummary';
 import { ClassCard } from './ClassCard';
+import { useClassDataContext } from '@/providers/ClassDataProvider';
 export default function ClassPage() {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
+  const { classData } = useClassDataContext();
   return (
     <div className="grid grid-cols-4 items-start gap-y-7 p-6">
       <div
@@ -14,8 +16,8 @@ export default function ClassPage() {
           'col-span-4 grid-cols-4 grid gap-y-12': isTeacher,
         })}
       >
-        {[...Array(4)].map((_, idx) => (
-          <ClassCard key={idx} />
+        {classData?.map((data, idx) => (
+          <ClassCard key={idx} data={data} />
         ))}
       </div>
 

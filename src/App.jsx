@@ -29,6 +29,8 @@ import Midterm from './pages/classes/MidTerm';
 import ChatPage from './pages/ChatPage/ChatPage';
 import StudentContacting from './pages/studentContacting/StudentContacting';
 import { LayoutContextProvider } from './providers/LayoutProvider';
+import { ClassDataProvider } from './providers/ClassDataProvider';
+import ClassWrapper from './pages/classes/ClassWrapper';
 
 function App() {
   return (
@@ -45,17 +47,18 @@ function App() {
               <Route path="/course/:id" element={<CourseDetail />} />
               <Route path="/course/:id/edit" element={<EditCourse />} />
               <Route path="/add-course" element={<AddCoursePage />} />
-              <Route path="/class" element={<ClassPage />} />
-              <Route path="/class/:classdetail-id" element={<ClassDetail />} />
-              <Route
-                path="/class/:classdetail-id/:assignments-id"
-                element={<AssignmentDetail />}
-              />
-              <Route
-                path="/class/:classdetail-id/:assignments-id/midterm-test"
-                element={<Midterm />}
-              />
-              <Route path="/class" element={<ClassPage />} />
+              <Route element={<ClassWrapper />}>
+                <Route path="/class" element={<ClassPage />} />
+                <Route path="/class/:classdetailId" element={<ClassDetail />} />
+                <Route
+                  path="/class/:classdetailId/:assignmentsId"
+                  element={<AssignmentDetail />}
+                />
+                <Route
+                  path="/class/:classdetailId/:assignmentsId/midterm-test"
+                  element={<Midterm />}
+                />
+              </Route>
               <Route path="/add-class" element={<NewClass />} />
               <Route path="/users/:id" element={<Profile />} />
               <Route path="/students-manage" element={<StudentManage />} />

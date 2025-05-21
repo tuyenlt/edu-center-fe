@@ -1,17 +1,26 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardFooter,
-  CardDescription,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ClockIcon, CalendarIcon } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import api from '@/services/api';
+export function ClassCard({ data }) {
+  const [studentsData, setStudentsData] = useState();
+  useEffect(() => {
+    const fetchStudentsData = async () => {
+      try {
+        const response = await api.get(`/students/67da82b09a256d3579eb7fb5`);
+        setStudentsData(response.data);
+        console.log(studentsData);
+      } catch (error) {
+        console.error('Error fetching class data:', error);
+      }
+    };
+    fetchStudentsData();
+  }, []);
 
-export function ClassCard() {
   return (
     <Card
       className="w-75 m-h-25 p-0 rounded-xl text-white relative overflow-hidden border-gray-300 hover:hover:shadow-[0_1px_2px_0_rgba(63,63,70,0.3),_0_2px_6px_2px_rgba(63,63,70,0.15)]
@@ -20,7 +29,7 @@ export function ClassCard() {
       <div className="relative w-full h-24">
         <img
           src="/images/img_reachout.jpg"
-          alt="Lớp học AI"
+          alt={data.name}
           className="object-cover w-full h-full"
         />
         <div
@@ -32,7 +41,9 @@ export function ClassCard() {
         ></div>
 
         <div className="absolute z-10 top-4 left-4">
-          <h3 className="text-2xl  hover:underline text-amber-50">AI – N10</h3>
+          <h3 className="text-2xl  hover:underline text-amber-50">
+            {data.class_code}
+          </h3>
           <p className="text-sm mt-4 text-gray-200 hover:underline">
             Hoai Thu Vu
           </p>
@@ -46,7 +57,7 @@ export function ClassCard() {
 
       <CardContent className="pl-3">
         <h1 className="text-black/80 w-48 text-lg font-semibold mt-3">
-          Another fxxking cool English course
+          {data.class_name}
         </h1>
         <div className="flex items-center gap-6 text-sm mt-3 text-neutral-400">
           <div className="flex items-center gap-1">
@@ -61,11 +72,11 @@ export function ClassCard() {
 
         <Badge className="bg-green-100 text-green-500 relative mt-4">
           <span className="w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></span>
-          <span>Start in 60 minutes</span>
+          <span>{data.status}</span>
         </Badge>
       </CardContent>
       <CardFooter className="m-3 px-0  pt-3 border-t-gray-300 border border-x-0 border-b-0">
-        <Link to="/class/testId">
+        <Link to={`/class/${data._id}`}>
           <Button>View Details</Button>
         </Link>
       </CardFooter>
