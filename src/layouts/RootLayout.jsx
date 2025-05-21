@@ -3,9 +3,11 @@ import TopBar from './TopBar';
 import { LeftSidebar } from './LeftSideBar';
 import { Outlet } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import { useLayoutContext } from '@/providers/LayoutProvider';
 
 export default function RootLayout() {
-  return (
+  const { isRootLayoutHidden } = useLayoutContext();
+  return !isRootLayoutHidden ? (
     <SidebarProvider
       style={{
         '--sidebar-width': '20rem',
@@ -24,11 +26,16 @@ export default function RootLayout() {
 
           {/* Main content (chiếm phần còn lại) */}
           <main className="flex-1 min-h-[calc(100vh-96px)]">
-            <Outlet />
+            <Outlet
+              onHideRootLayout={() => setIsRootLayoutHidden(true)}
+              onVisibleRootLayout={() => setIsRootLayoutHidden(false)}
+            />
           </main>
         </div>
       </div>
       <Toaster />
     </SidebarProvider>
+  ) : (
+    <Outlet />
   );
 }

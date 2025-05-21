@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { LayoutContext, useLayoutContext } from '@/providers/LayoutProvider';
 import AssignmentDetail from './AssignmentDetail';
 import AddPeopleToClass from './AddPeopleToClass';
 import Comment from './Comment';
@@ -74,14 +75,14 @@ import {
   FileText,
   FileIcon,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useUserContext } from '@/providers/authContext';
 import { set } from 'date-fns';
 import NewAssignmentForm from './NewAssignmentForm';
 import SettingsForm from './SettingsForm';
 import { Textarea } from '@/components/ui/textarea';
 import RichTextBox from '@/components/shared/RichTextBox';
-export default function ClassDetail() {
+export default function ClassDetail({}) {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
@@ -416,11 +417,18 @@ export default function ClassDetail() {
     //   </AccordionItem>
     // </Accordion>
   );
+  const handleCloseSettings = () => {
+    setIsSetting(false);
+  };
+
+  const handleOpenSettings = () => {
+    setIsSetting(true);
+  };
 
   return isNewAssignmentOpen ? (
     <NewAssignmentForm onClose={() => setIsNewAssignmentOpen(false)} />
   ) : isSetting ? (
-    <SettingsForm onClose={() => setIsSetting(false)} />
+    <SettingsForm onClose={handleCloseSettings} />
   ) : (
     <Tabs defaultValue="stream" className="">
       {isCopied && (
@@ -444,7 +452,7 @@ export default function ClassDetail() {
             </TabsTrigger>
           ))}
         </TabsList>
-        <Settings className="w-5 h-5 mr-5" onClick={() => setIsSetting(true)} />
+        <Settings className="w-5 h-5 mr-5" onClick={handleOpenSettings} />
       </div>
 
       <div className="h-screen bg-white">

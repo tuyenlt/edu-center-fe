@@ -28,40 +28,46 @@ import AssignmentDetail from './pages/classes/AssignmentDetail';
 import Midterm from './pages/classes/MidTerm';
 import ChatPage from './pages/ChatPage/ChatPage';
 import StudentContacting from './pages/studentContacting/StudentContacting';
+import { LayoutContextProvider } from './providers/LayoutProvider';
 
 function App() {
   return (
     <Router>
       <AuthContextProvider>
-        <Routes>
-          <Route path="/login" element={<Signin />} />
-          <Route path="/signup" element={<SignUp />} />
-          {/* Protect dashboard: only accessible if logged in */}
-          <Route element={<RootLayout />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/courses" element={<Course />} />
-            <Route path="/course/:id" element={<CourseDetail />} />
-            <Route path="/course/:id/edit" element={<EditCourse />} />
-            <Route path="/add-course" element={<AddCoursePage />} />
-            <Route path="/class" element={<ClassPage />} />
-            <Route path="/class/:classdetail-id" element={<ClassDetail />} />
-            <Route
-              path="/class/:classdetail-id/:assignments-id"
-              element={<AssignmentDetail />}
-            />
-            <Route
-              path="/class/:classdetail-id/:assignments-id/midterm-test"
-              element={<Midterm />}
-            />
-            <Route path="/class" element={<ClassPage />} />
-            <Route path="/add-class" element={<NewClass />} />
-            <Route path="/users/:id" element={<Profile />} />
-            <Route path="/students-manage" element={<StudentManage />} />
-            <Route path="*" element={<Dashboard />} />
-            <Route path="/chat" element={<ChatPage />} />
-            <Route path="/student-contacting" element={<StudentContacting />} />
-          </Route>
-        </Routes>
+        <LayoutContextProvider>
+          <Routes>
+            <Route path="/login" element={<Signin />} />
+            <Route path="/signup" element={<SignUp />} />
+            {/* Protect dashboard: only accessible if logged in */}
+            <Route element={<RootLayout />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/courses" element={<Course />} />
+              <Route path="/course/:id" element={<CourseDetail />} />
+              <Route path="/course/:id/edit" element={<EditCourse />} />
+              <Route path="/add-course" element={<AddCoursePage />} />
+              <Route path="/class" element={<ClassPage />} />
+              <Route path="/class/:classdetail-id" element={<ClassDetail />} />
+              <Route
+                path="/class/:classdetail-id/:assignments-id"
+                element={<AssignmentDetail />}
+              />
+              <Route
+                path="/class/:classdetail-id/:assignments-id/midterm-test"
+                element={<Midterm />}
+              />
+              <Route path="/class" element={<ClassPage />} />
+              <Route path="/add-class" element={<NewClass />} />
+              <Route path="/users/:id" element={<Profile />} />
+              <Route path="/students-manage" element={<StudentManage />} />
+              <Route path="*" element={<Dashboard />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route
+                path="/student-contacting"
+                element={<StudentContacting />}
+              />
+            </Route>
+          </Routes>
+        </LayoutContextProvider>
       </AuthContextProvider>
     </Router>
   );

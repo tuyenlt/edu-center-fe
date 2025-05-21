@@ -14,17 +14,16 @@ export default function TopBar() {
       if (!user) {
         return;
       }
-      const response = await api.post("/chatrooms", {
-        type: "student-contacting",
+      const response = await api.post('/chatrooms', {
+        type: 'student-contacting',
         name: `${user.name} Contacting`,
       });
       const chatRoomId = response.data._id;
       navigate(`/chat`, { state: { chatId: chatRoomId } });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
-
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-15 bg-white border-b flex flex-row items-center justify-between px-6 dark:bg-gray-900 dark:border-gray-700">
@@ -37,11 +36,7 @@ export default function TopBar() {
       {/* User section */}
       <div className="flex items-center gap-4">
         {user?.role === 'student' && (
-          <Button
-            onClick={handleStudentContacting}
-          >
-            Contact Us
-          </Button>
+          <Button onClick={handleStudentContacting}>Contact Us</Button>
         )}
         <Avatar
           className="w-10 h-10 p-1 bg-[rgba(60,64,67,.08)] rounded-full border-gray-200 dark:border-gray-700 cursor-pointer circle"
