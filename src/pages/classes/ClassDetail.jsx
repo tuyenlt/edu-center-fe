@@ -75,14 +75,16 @@ import {
   FileText,
   FileIcon,
 } from 'lucide-react';
-import { useContext, useState } from 'react';
+
+import { useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserContext } from '@/providers/authContext';
-import { set } from 'date-fns';
 import NewAssignmentForm from './NewAssignmentForm';
 import SettingsForm from './SettingsForm';
 import { Textarea } from '@/components/ui/textarea';
 import RichTextBox from '@/components/shared/RichTextBox';
-export default function ClassDetail({}) {
+import api from '@/services/api';
+export default function ClassDetail() {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
@@ -268,12 +270,32 @@ export default function ClassDetail({}) {
   const handleCopyCode = () => {
     setisCopied(true);
     navigator.clipboard.writeText('tuyendz');
-    setTimeout(() => setisCopied(false), 2000); // Tắt sau 2 giây
+    setTimeout(() => setisCopied(false), 2000);
   };
+
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const [isSetting, setIsSetting] = useState(false);
   const [isRichTextOpen, setIsRichTextOpen] = useState(false);
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
+
+  const [classData, setClassData] = useState();
+
+  // TODO : display real data
+
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        // const response  = await api.get(`/classes/${id}`);
+        const response = await api.get(`/classes/682c2eeb9e6f67c538f41059`);
+        setClassData(response.data);
+        console.log('Class data:', JSON.stringify(response.data, null, 2));
+      } catch (error) {
+        console.error('Error fetching class data:', error);
+      }
+    };
+    fetchClassData();
+  }, []);
+
   const Content = (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item-1">
