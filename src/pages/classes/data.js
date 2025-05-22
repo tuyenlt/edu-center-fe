@@ -161,8 +161,8 @@ export const headers = [
 ];
 
 export const parts = {
-  stream: 'Bảng tin',
-  assignments: 'Bài tập',
-  people: 'Mọi người',
-  period: 'Period',
+  stream: 'Stream',
+  assignments: 'Assignments',
+  people: 'People',
+  courseInfo: 'Course',
 };

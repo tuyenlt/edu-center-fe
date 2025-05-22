@@ -1,12 +1,12 @@
 import { cn } from '@/lib/utils';
 import { Settings } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '@/providers/authContext';
-import NewAssignmentForm from './NewAssignmentForm';
+import NewAssignmentForm from './detailPart/NewAssignmentForm';
 import SettingsForm from './SettingsForm';
 import api from '@/services/api';
-import Period from './detailPart/Period';
+import CourseInfo from './detailPart/CourseInfo';
 import People from './detailPart/People';
 import { parts } from './data';
 import Stream from './detailPart/Stream';
@@ -30,8 +30,8 @@ export default function ClassDetail() {
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const [isSetting, setIsSetting] = useState(false);
 
-  const { classData } = useClassDataContext();
-  if (classData?.class_name) console.log(classData.class_name);
+  // const { classData } = useClassDataContext();
+  // if (classData?.class_name) console.log(classData.class_name);
   const handleCloseSettings = () => {
     setIsSetting(false);
   };
@@ -40,11 +40,30 @@ export default function ClassDetail() {
     setIsSetting(true);
   };
   const copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
-  const { classdetailId } = useParams();
-  const data = classData?.find((data) => data._id === classdetailId);
+  // const { classdetailId } = useParams();
+  // const data = classData?.find((data) => data._id === classdetailId);
   // console.log(data);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        const response = await api.get(`/classes/682c2eeb9e6f67c538f41059`);
+        setData(response.data);
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching class data:', error);
+      }
+    };
+    fetchClassData();
+  }, []);
+  const class_name = data?.class_name;
+  const class_code = data?.class_code;
   return isNewAssignmentOpen ? (
-    <NewAssignmentForm onClose={() => setIsNewAssignmentOpen(false)} />
+    <NewAssignmentForm
+      onClose={() => setIsNewAssignmentOpen(false)}
+      class_name={class_name}
+    />
   ) : isSetting ? (
     <SettingsForm onClose={handleCloseSettings} />
   ) : (
@@ -68,10 +87,13 @@ export default function ClassDetail() {
       </div>
       <div className="h-screen bg-white">
         <Stream data={data} />
-        <Assignment setIsNewAssignmentOpen={setIsNewAssignmentOpen} />
-        <People />
-        <Period />
-        {isTeacher && <Grade />}
+        <Assignment
+          setIsNewAssignmentOpen={setIsNewAssignmentOpen}
+          data={data}
+        />
+        <People data={data} />
+        <CourseInfo data={data} />
+        {isTeacher && <Grade data={data} />}
       </div>
     </Tabs>
   );

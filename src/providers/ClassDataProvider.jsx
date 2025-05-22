@@ -5,6 +5,24 @@ export const useClassDataContext = () => useContext(classDataContext);
 export function ClassDataProvider({ children }) {
   const [classData, setClassData] = useState([]);
 
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        const response = await api.get(`/classes`);
+        setClassData(response.data);
+        console.log(classData);
+      } catch (error) {
+        console.error('Error fetching class data:', error);
+      }
+    };
+    fetchClassData();
+  }, []);
+  return (
+    <classDataContext.Provider value={{ classData }}>
+      {children}
+    </classDataContext.Provider>
+  );
+
   // useEffect(() => {
   //   const fetchClassData = async () => {
   //     try {
@@ -40,20 +58,4 @@ export function ClassDataProvider({ children }) {
 
   //   fetchClassData();
   // }, []);
-  useEffect(() => {
-    const fetchClassData = async () => {
-      try {
-        const response = await api.get(`/classes`);
-        setClassData(response.data);
-      } catch (error) {
-        console.error('Error fetching class data:', error);
-      }
-    };
-    fetchClassData();
-  }, []);
-  return (
-    <classDataContext.Provider value={{ classData }}>
-      {children}
-    </classDataContext.Provider>
-  );
 }

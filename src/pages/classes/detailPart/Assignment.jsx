@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUserContext } from '@/providers/authContext';
-export default function Assignment({ setIsNewAssignmentOpen }) {
+export default function Assignment({ setIsNewAssignmentOpen, data }) {
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
@@ -172,6 +172,10 @@ export default function Assignment({ setIsNewAssignmentOpen }) {
     //   </AccordionItem>
     // </Accordion>
   );
+  if (!data || Object.keys(data).length === 0) {
+    return <div>Loading...</div>; // Hoặc anh thêm skeleton/loading spinner cũng được
+  }
+
   return (
     <TabsContent value="assignments" className="w-4/5 mx-auto mt-5 pt-20">
       <div

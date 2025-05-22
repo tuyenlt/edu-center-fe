@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -9,61 +8,48 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import {
-  PlusCircle,
-  Upload,
-  Link,
-  Youtube,
-  FileText,
-  FolderOpen,
-  ArrowLeft,
-} from 'lucide-react';
+import { Upload, Link, ArrowLeft } from 'lucide-react';
+import RichTextBox from '@/components/shared/RichTextBox';
+import { useState, useRef } from 'react';
 
-export default function NewAssignmentForm({ onClose }) {
+export default function NewAssignmentForm({ onClose, class_name }) {
+  const [file, setFile] = useState([]);
+  const [link, setLink] = useState([]);
+  const editorRef = useRef(null);
+
   return (
     <div className="flex w-full h-screen bg-gray-50 dark:bg-gray-900 relative">
       {/* Left side */}
       <div className="flex-1 p-6 space-y-6">
         <div className="bg-white dark:bg-gray-800 py-6 px-10 rounded-md shadow border ">
-          <ArrowLeft onClick={onClose} className="absolute top-1 left-1">
-            x
-          </ArrowLeft>
+          <ArrowLeft
+            onClick={onClose}
+            className="absolute top-1 left-1"
+          ></ArrowLeft>
           <Input placeholder="Tiêu đề" className="mb-4 font-medium text-lg" />
-          <Textarea
-            placeholder="Hướng dẫn (không bắt buộc)"
-            className="mb-4 h-32"
+          <RichTextBox
+            placeholder="Description..."
+            className="min-h-[300px]"
+            ref={editorRef}
+            file={file}
+            setFile={setFile}
+            link={link}
+            setLink={setLink}
           />
 
           {/* Toolbar */}
         </div>
 
         {/* Đính kèm */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow border">
-          <Label className="block mb-4 text-md font-medium">Đính kèm</Label>
-          <div className="flex gap-6">
-            <Button
-              variant="ghost"
-              className="flex flex-col items-center gap-1"
-            >
-              <Upload className="w-6 h-6" /> Tải lên
-            </Button>
-            <Button
-              variant="ghost"
-              className="flex flex-col items-center gap-1"
-            >
-              <Link className="w-6 h-6" /> Đường liên kết
-            </Button>
-          </div>
-        </div>
       </div>
 
       {/* Right panel */}
       <div className="w-[300px] border-l bg-white dark:bg-gray-800 p-6 space-y-4 shadow-md">
         <div>
           <Label className="text-sm text-gray-700 dark:text-gray-300">
-            Dành cho
+            Assignment for
           </Label>
-          <Input disabled value="DCMDTD Section2" className="mt-1" />
+          <Input disabled value={class_name} className="mt-1" />
         </div>
         <div>
           <Label className="text-sm text-gray-700 dark:text-gray-300">
@@ -122,7 +108,15 @@ export default function NewAssignmentForm({ onClose }) {
             + Tiêu chí chấm điểm
           </Button>
         </div>
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+        <Button
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          onClick={() => {
+            console.log(editorRef?.current?.getHTML());
+            console.log(link);
+            console.log(file);
+          }}
+          type="button"
+        >
           Giao bài
         </Button>
       </div>

@@ -10,7 +10,11 @@ import {
   TableCell,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-export default function Grade() {
+export default function Grade({ data }) {
+  if (!data || Object.keys(data).length === 0) {
+    return <div>Loading...</div>; // Hoặc anh thêm skeleton/loading spinner cũng được
+  }
+
   return (
     <TabsContent value="grade" className="mx-auto mt-[57px]">
       <div className="w-full overflow-auto min-h-screen bg-white">

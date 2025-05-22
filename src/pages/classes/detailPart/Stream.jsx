@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { TabsContent } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardHeader,
@@ -22,12 +23,12 @@ import { Copy, Maximize, CheckCheck } from 'lucide-react';
 import { useUserContext } from '@/providers/authContext';
 import RichTextBox from '@/components/shared/RichTextBox';
 import Comment from '../Comment';
-import { useClassDataContext } from '@/providers/ClassDataProvider';
-import { useParams } from 'react-router-dom';
 export default function Stream({ data }) {
+  const [file, setFile] = useState([]);
+  const [link, setLink] = useState([]);
   const [isCopied, setisCopied] = useState(false);
   const [isRichTextOpen, setIsRichTextOpen] = useState(false);
-  const { classData } = useClassDataContext();
+  const editorRef = useRef(null);
   const handleCopyCode = () => {
     setisCopied(true);
     navigator.clipboard.writeText(class_code);
@@ -35,8 +36,13 @@ export default function Stream({ data }) {
   };
   const { user } = useUserContext();
   const isTeacher = user?.role === 'teacher';
-  const class_name = data.class_name;
-  const class_code = data.class_code;
+  if (!data) console.log(data);
+  const class_name = data?.class_name;
+  const class_code = data?.class_code;
+  if (!data || Object.keys(data).length === 0) {
+    return <div>Loading...</div>; // Hoặc anh thêm skeleton/loading spinner cũng được
+  }
+
   return (
     <TabsContent value="stream" className="w-4/5 mx-auto mt-5 pt-20">
       {isCopied && (
@@ -83,7 +89,7 @@ export default function Stream({ data }) {
                         ? class_name
                         : `${class_name.slice(0, 7)}...`}
                     </p>
-                    <p className="col-span-1 text-gray-400">Section 2</p>
+                    <p className="col-span-1 text-gray-400">Blank Info</p>
                     <button
                       onClick={handleCopyCode}
                       className="col-start-6 ml-auto flex gap-2"
@@ -101,25 +107,51 @@ export default function Stream({ data }) {
         <div className="flex flex-col flex-1 gap-y-7 col-span-4">
           <Card className="gap-0 shadow-lg">
             <CardContent>
-              <div className="flex items-center gap-4 ">
-                {!isRichTextOpen && (
-                  <>
-                    <Avatar className="w-10 h-10">
-                      <AvatarFallback className="bg-[url(/images/avt1.webp)] bg-cover"></AvatarFallback>
-                    </Avatar>
-                    <button
-                      className="text-sm text-gray-400"
-                      onClick={() => setIsRichTextOpen(true)}
-                    >
-                      Announce something...
-                    </button>
-                  </>
-                )}
+              {!isRichTextOpen && (
+                <div className="flex items-center gap-4 ">
+                  <Avatar className="w-10 h-10">
+                    <AvatarFallback className="bg-[url(/images/avt1.webp)] bg-cover"></AvatarFallback>
+                  </Avatar>
+                  <button
+                    className="text-sm text-gray-400"
+                    onClick={() => setIsRichTextOpen(true)}
+                  >
+                    Announce something...
+                  </button>
+                </div>
+              )}
+              {isRichTextOpen && (
+                <>
+                  <RichTextBox
+                    placeholder="Announce something..."
+                    className="bg-gray-100 min-h-[200px]"
+                    ref={editorRef}
+                    file={file}
+                    setFile={setFile}
+                    link={link}
+                    setLink={setLink}
+                  />
 
-                {isRichTextOpen && (
-                  <RichTextBox onCancel={() => setIsRichTextOpen(false)} />
-                )}
-              </div>
+                  <div className="flex gap-6 justify-end">
+                    <button
+                      onClick={() => setIsRichTextOpen(false)}
+                      className="hover:bg-blue-50 px-3 rounded-sm"
+                    >
+                      Cancel
+                    </button>
+                    <Button
+                      onClick={() => {
+                        console.log(editorRef?.current?.getHTML());
+                        console.log(link);
+                        console.log(file);
+                      }}
+                      type="button"
+                    >
+                      Post
+                    </Button>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
           <Card className="gap-0 pb-0">

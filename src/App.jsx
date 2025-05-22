@@ -47,18 +47,18 @@ function App() {
               <Route path="/course/:id" element={<CourseDetail />} />
               <Route path="/course/:id/edit" element={<EditCourse />} />
               <Route path="/add-course" element={<AddCoursePage />} />
-              <Route element={<ClassWrapper />}>
-                <Route path="/class" element={<ClassPage />} />
-                <Route path="/class/:classdetailId" element={<ClassDetail />} />
-                <Route
-                  path="/class/:classdetailId/:assignmentsId"
-                  element={<AssignmentDetail />}
-                />
-                <Route
-                  path="/class/:classdetailId/:assignmentsId/midterm-test"
-                  element={<Midterm />}
-                />
-              </Route>
+              {/* <Route element={<ClassWrapper />}> */}
+              <Route path="/class" element={<ClassPage />} />
+              <Route path="/class/:classdetailId" element={<ClassDetail />} />
+              <Route
+                path="/class/:classdetailId/:assignmentsId"
+                element={<AssignmentDetail />}
+              />
+              <Route
+                path="/class/:classdetailId/:assignmentsId/midterm-test"
+                element={<Midterm />}
+              />
+              {/* </Route> */}
               <Route path="/add-class" element={<NewClass />} />
               <Route path="/users/:id" element={<Profile />} />
               <Route path="/students-manage" element={<StudentManage />} />

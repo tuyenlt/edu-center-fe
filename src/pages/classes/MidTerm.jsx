@@ -172,7 +172,7 @@ export default function MidTerm() {
           </button>
         </div>
       </div>
-      <div className="border rounded-2xl col-span-1 shadow-xl p-3 sticky text-left">
+      <div className="border rounded-2xl col-span-1 shadow-xl p-3 sticky text-left top-15">
         <p className="text-xl">Time remaining: </p>
         <p className="text-2xl font-bold">102:02</p>
         <button className="border border-blue-900 rounded-md py-3 text-blue-900 w-full mt-5 font-semibold text-xl">

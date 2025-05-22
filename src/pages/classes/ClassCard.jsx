@@ -7,19 +7,19 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
 export function ClassCard({ data }) {
-  const [studentsData, setStudentsData] = useState();
-  useEffect(() => {
-    const fetchStudentsData = async () => {
-      try {
-        const response = await api.get(`/students/67da82b09a256d3579eb7fb5`);
-        setStudentsData(response.data);
-        console.log(studentsData);
-      } catch (error) {
-        console.error('Error fetching class data:', error);
-      }
-    };
-    fetchStudentsData();
-  }, []);
+  // const [studentsData, setStudentsData] = useState();
+  // useEffect(() => {
+  //   const fetchStudentsData = async () => {
+  //     try {
+  //       const response = await api.get(`/students/67da82b09a256d3579eb7fb5`);
+  //       setStudentsData(response.data);
+  //       console.log(studentsData);
+  //     } catch (error) {
+  //       console.error('Error fetching class data:', error);
+  //     }
+  //   };
+  //   fetchStudentsData();
+  // }, []);
 
   return (
     <Card
