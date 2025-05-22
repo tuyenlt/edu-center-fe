@@ -68,7 +68,7 @@ export default function ClassDetail() {
       </div>
       <div className="h-screen bg-white">
         <Stream data={data} />
-        <Assignment />
+        <Assignment setIsNewAssignmentOpen={setIsNewAssignmentOpen} />
         <People />
         <Period />
         {isTeacher && <Grade />}

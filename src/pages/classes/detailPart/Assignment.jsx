@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUserContext } from '@/providers/authContext';
-export default function Assignment() {
+export default function Assignment({ setIsNewAssignmentOpen }) {
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
