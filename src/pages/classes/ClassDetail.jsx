@@ -16,6 +16,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ManageTab from './detailPart/manage/Manage';
 
 export default function ClassDetail() {
+  const { classdetailId } = useParams();
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
@@ -51,7 +52,7 @@ export default function ClassDetail() {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const response = await api.get(`/classes/682c2eeb9e6f67c538f41059`);
+        const response = await api.get(`/classes/${classdetailId}`);
         setData(response.data);
         console.log(data);
       } catch (error) {
