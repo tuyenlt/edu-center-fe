@@ -57,7 +57,9 @@ export default function Assignment({ setIsNewAssignmentOpen, data }) {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle>Bài kiểm tra chương 2</CardTitle>
-                  <CardDescription className="mt-2">28 tháng 3</CardDescription>
+                  <CardDescription className="mt-2 no-underline">
+                    28 tháng 3
+                  </CardDescription>
                 </div>
                 {isTeacher && (
                   <DropdownMenu>

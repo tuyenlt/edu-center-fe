@@ -34,16 +34,16 @@ export default function CourseInfo({ data }) {
 
         {/* Course Card */}
         <Card
-          className="relative overflow-hidden shadow-lg rounded-xl bg-cover bg-center h-64 text-white"
+          className="relative shadow-lg rounded-xl bg-cover bg-center h-64 text-white overflow-hidden"
           style={{
             backgroundImage: `url(${chaptersInfo.img_url})`,
           }}
         >
+          {' '}
+          <div className="absolute bottom-0 left-0 w-full h-2/3 bg-gradient-to-t from-black/80 via-black-50 to-transparent z-10" />
           {/* Overlay tối mờ giúp chữ nổi bật */}
-          <div className="absolute inset-0 bg-black/50" />
-
           {/* Nội dung phía trên overlay */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 h-full items-center">
+          <div className="absolute bottom-0 left-0 z-10 grid grid-cols-1 md:grid-cols-2 items-center">
             <CardContent className="p-6">
               <CardTitle className="text-2xl font-bold">
                 {chaptersInfo.name}

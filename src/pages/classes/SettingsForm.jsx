@@ -70,7 +70,7 @@ export default function SettingsForm({ onClose }) {
 
   useEffect(() => {
     setIsRootLayoutHidden(true);
-    return () => setIsRootLayoutHidden(false);
+    // return () => setIsRootLayoutHidden(false);
   }, []);
 
   return (
@@ -104,7 +104,7 @@ export default function SettingsForm({ onClose }) {
 
           <div className="space-y-1">
             <Label>Chủ đề</Label>
-            <Input value="Xây dựng trang web dăm bơ mẹ DTD" disabled />
+            <Input value="Xây dựng trang web dam bo me DTD" disabled />
           </div>
         </CardContent>
       </Card>

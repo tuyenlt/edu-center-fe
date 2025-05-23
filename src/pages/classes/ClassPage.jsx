@@ -33,11 +33,16 @@ import api from '@/services/api';
 //     </div>
 //   );
 // }
+const fallbackColors = ['red', 'orange', 'purple', 'green', 'gray', 'blue'];
 export default function ClassPage() {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
-  const [classData, setClassData] = useState([]);
+  const [classData, setClassData] = useState();
+  const [fallbackColor, setFallbackColor] = useState();
+  useEffect(() => {
+    setFallbackColor(fallbackColors[Math.floor(Math.random() * 6)]);
+  }, []);
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -51,6 +56,9 @@ export default function ClassPage() {
     };
     fetchClassData();
   }, []);
+  if (!classData || Object.keys(classData).length === 0) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="grid grid-cols-4 items-start gap-y-7 p-6">
@@ -63,7 +71,7 @@ export default function ClassPage() {
         {/* {classData?.map((data, idx) => (
           <ClassCard key={idx} data={data} />
         ))} */}
-        <ClassCard data={classData} />
+        <ClassCard data={classData} fallbackColor={fallbackColor} />
       </div>
 
       {isStudent && (

@@ -40,7 +40,7 @@ export default function Stream({ data }) {
   const class_name = data?.class_name;
   const class_code = data?.class_code;
   if (!data || Object.keys(data).length === 0) {
-    return <div>Loading...</div>; // Hoặc anh thêm skeleton/loading spinner cũng được
+    return <div>Loading...</div>;
   }
 
   return (
@@ -51,8 +51,14 @@ export default function Stream({ data }) {
           <AlertTitle>Copied!</AlertTitle>
         </Alert>
       )}
-      <Card className="w-full h-[240px] p-0 relative gap-0 bg-[url(/images/img_reachout.jpg)] bg-cover">
-        <CardHeader className="text-sm absolute w-full bottom-3 left-5 p-0">
+      <Card
+        className={`w-full h-[240px] p-0 relative gap-0 bg-cover bg-center overflow-hidden`}
+        style={{ backgroundImage: `url(${data.course.img_url})` }}
+      >
+        {/* Overlay đổ bóng nửa dưới */}
+        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
+
+        <CardHeader className="text-sm absolute w-full bottom-3 left-5 p-0 z-20">
           <CardTitle className="text-4xl text-white">{class_name}</CardTitle>
         </CardHeader>
       </Card>

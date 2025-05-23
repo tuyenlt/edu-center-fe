@@ -14,12 +14,13 @@ import Assignment from './detailPart/Assignment';
 import Grade from './detailPart/Grade';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClassDataContext } from '@/providers/ClassDataProvider';
+import { useLayoutContext } from '@/providers/LayoutProvider';
 export default function ClassDetail() {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
   const isManager = user?.role === 'manager';
-
+  const { setIsRootLayoutHidden } = useLayoutContext();
   const activeClass =
     'data-[state=active]:text-blue-600 data-[state=active]:hover:bg-blue-50 ' +
     'data-[state=active]:after:content-[""] data-[state=active]:after:absolute ' +
@@ -34,10 +35,12 @@ export default function ClassDetail() {
   // if (classData?.class_name) console.log(classData.class_name);
   const handleCloseSettings = () => {
     setIsSetting(false);
+    setIsRootLayoutHidden(true);
   };
 
   const handleOpenSettings = () => {
     setIsSetting(true);
+    setIsRootLayoutHidden(false);
   };
   const copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
   // const { classdetailId } = useParams();
@@ -50,7 +53,7 @@ export default function ClassDetail() {
       try {
         const response = await api.get(`/classes/682c2eeb9e6f67c538f41059`);
         setData(response.data);
-        console.log(data);
+        console.log(response.data);
       } catch (error) {
         console.error('Error fetching class data:', error);
       }
