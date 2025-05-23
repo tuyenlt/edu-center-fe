@@ -5,6 +5,7 @@ import SearchBar from '@/components/shared/SearchBar';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getAllCourse } from '@/services/api/courses.api';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
 
 export default function Course() {
   const navigate = useNavigate();
@@ -13,9 +14,12 @@ export default function Course() {
 
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getCourses = async () => {
+    setLoading(true);
     const result = await getAllCourse();
+    setLoading(false);
     setCourses(result);
     setFilteredCourses(result);
     console.log(courses);
@@ -24,7 +28,6 @@ export default function Course() {
   useEffect(() => {
     getCourses();
   }, []);
-  console.log(role)
   return (
     <div className="w-full max-w-screen-xl m-auto p-10">
       <div className="page-header border-b-1 justify-between pl-4">
@@ -59,7 +62,8 @@ export default function Course() {
           )}
         </div>
       </div>
-      <div className="flex flex-col w-full mt-6 gap-5">
+      <div className="flex flex-col w-full mt-6 gap-5 items-center">
+        {loading && <LoadingSpinner />}
         {!filteredCourses
           ? 'No course found'
           : filteredCourses.map((course) => (

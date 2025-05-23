@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import api from '@/services/api'
+import { toast } from 'sonner'
 
 export default function CourseDetail() {
   const location = useLocation()
@@ -61,6 +62,9 @@ export default function CourseDetail() {
       await api.post(`/courses/${course._id}/enroll`);
       setRequested(!requested);
     } catch (error) {
+      if (error.response.status === 400) {
+        toast.error("You have already had a class of this course.");
+      }
       console.error('Error enrolling in course:', error)
     }
   }

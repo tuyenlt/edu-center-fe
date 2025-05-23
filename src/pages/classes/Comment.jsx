@@ -3,7 +3,7 @@ import { SendHorizonal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
-export default function Comment() {
+export default function Comment({ postId, onSubmit }) {
   const [comment, setComment] = useState('');
 
   const isCommentEmpty = comment.trim() === '';
@@ -11,6 +11,7 @@ export default function Comment() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isCommentEmpty) {
+      onSubmit(postId, comment);
       console.log(comment);
       setComment('');
     }

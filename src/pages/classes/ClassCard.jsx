@@ -23,22 +23,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useUserContext } from '@/providers/authContext';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
 export function ClassCard({ data, fallbackColor }) {
-  // const [studentsData, setStudentsData] = useState();
-  // useEffect(() => {
-  //   const fetchStudentsData = async () => {
-  //     try {
-  //       const response = await api.get(`/students/67da82b09a256d3579eb7fb5`);
-  //       setStudentsData(response.data);
-  //       console.log(studentsData);
-  //     } catch (error) {
-  //       console.error('Error fetching class data:', error);
-  //     }
-  //   };
-  //   fetchStudentsData();
-  // }, []);
+
   if (!data || Object.keys(data).length === 0) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
   const { user } = useUserContext();
   const isTeacher = user?.role === 'teacher';

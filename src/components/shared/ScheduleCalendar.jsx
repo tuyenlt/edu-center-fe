@@ -119,7 +119,8 @@ export default function ScheduleCalendar({
                                                         onSelectDate(itemStart);
                                                     }}
                                                 >
-                                                    <div className="font-medium text-blue-900 truncate text-wrap">{item.room} - {item.title}</div>
+                                                    <div className="font-medium text-blue-900 truncate text-wrap">Room {item.room} - {item.class_name || ""}</div>
+                                                    <div className="text-[10px] text-blue-800 truncate">{item.title}</div>
                                                     <div className="text-[10px] text-muted-foreground">
                                                         {format(itemStart, "HH:mm")} - {format(itemEnd, "HH:mm")}
                                                     </div>

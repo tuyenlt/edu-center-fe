@@ -32,6 +32,7 @@ import { LayoutContextProvider } from './providers/LayoutProvider';
 import { ClassDataProvider } from './providers/ClassDataProvider';
 import ClassWrapper from './pages/classes/ClassWrapper';
 import ClassManage from './pages/class-manage/ClassManage';
+import CalendarPage from './pages/Calendar/CalendarPage';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
               <Route path="*" element={<Dashboard />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/class-manage" element={<ClassManage />} />
+              <Route path='/calendar' element={<CalendarPage />} />
               <Route
                 path="/student-contacting"
                 element={<StudentContacting />}

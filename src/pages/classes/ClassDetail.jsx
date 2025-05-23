@@ -17,6 +17,7 @@ import { useClassDataContext } from '@/providers/ClassDataProvider';
 import { useLayoutContext } from '@/providers/LayoutProvider';
 
 import ManageTab from './detailPart/manage/Manage';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
 
 export default function ClassDetail() {
   const { classdetailId } = useParams();
@@ -52,7 +53,7 @@ export default function ClassDetail() {
   // const { classdetailId } = useParams();
   // const data = classData?.find((data) => data._id === classdetailId);
   // console.log(data);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -66,6 +67,11 @@ export default function ClassDetail() {
     };
     fetchClassData();
   }, []);
+
+  if (!data) {
+    return <div className="m-auto"><LoadingSpinner /></div>;
+  }
+
   const class_name = data?.class_name;
   const class_code = data?.class_code;
 

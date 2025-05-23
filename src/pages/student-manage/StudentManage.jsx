@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import StudentManageHeader from "./StudentManageHeader";
+import AvatarUser from "@/components/shared/AvatarUser";
 
 export default function StudentManage() {
     const { user } = useUserContext();
@@ -55,11 +56,7 @@ export default function StudentManage() {
                             {students.map((student) => (
                                 <TableRow key={student._id}>
                                     <TableCell>
-                                        <img
-                                            src={student.avatar_url || "/placeholder-avatar.png"}
-                                            alt={student.name}
-                                            className="w-10 h-10 rounded-full object-cover"
-                                        />
+                                        <AvatarUser user={student} />
                                     </TableCell>
                                     <TableCell className="font-medium">{student.name}</TableCell>
                                     <TableCell>{student.email}</TableCell>
