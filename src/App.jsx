@@ -31,6 +31,7 @@ import StudentContacting from './pages/studentContacting/StudentContacting';
 import { LayoutContextProvider } from './providers/LayoutProvider';
 import { ClassDataProvider } from './providers/ClassDataProvider';
 import ClassWrapper from './pages/classes/ClassWrapper';
+import ClassManage from './pages/class-manage/ClassManage';
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
               <Route path="/students-manage" element={<StudentManage />} />
               <Route path="*" element={<Dashboard />} />
               <Route path="/chat" element={<ChatPage />} />
+              <Route path="/class-manage" element={<ClassManage />} />
               <Route
                 path="/student-contacting"
                 element={<StudentContacting />}

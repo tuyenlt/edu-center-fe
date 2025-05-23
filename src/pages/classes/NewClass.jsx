@@ -9,8 +9,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import ScheduleCalendar from '@/components/shared/ScheduleCalendar'
 import SessionSchedule from './SessionSchedule'
 import SessionInfo from './SessionInfo'
-import { classApi } from '@/services/api/class.api'
 import { toast } from 'sonner'
+import api from '@/services/api'
 
 const NewClass = () => {
 	const navigate = useNavigate()
@@ -74,7 +74,7 @@ const NewClass = () => {
 		}
 		try {
 			console.log(sessionArray)
-			const newClass = await classApi.addNewClass({
+			const newClass = await api.post('/classes', {
 				course_id: course._id,
 				class_name: data.class_name,
 				class_code: data.class_code,
@@ -89,7 +89,7 @@ const NewClass = () => {
 
 			await Promise.all(
 				sessionArray.map(session =>
-					classApi.addSession(newClass._id, {
+					api.post('/class-sessions', {
 						class_id: newClass._id,
 						...session,
 					})

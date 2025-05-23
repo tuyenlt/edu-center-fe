@@ -49,7 +49,7 @@ const menuByRole = {
   manager: [
     { title: 'Dashboard', url: '/', icon: Home },
     { title: 'Courses Manage', url: '/courses', icon: Search },
-    { title: 'Classes Manage', url: '/class', icon: LayoutDashboard },
+    { title: 'Classes Manage', url: '/class-manage', icon: LayoutDashboard },
     { title: 'Student Manage', url: '/students-manage', icon: Users },
     { title: 'Payment Stats', url: '/payment-manage', icon: CreditCard },
     { title: 'Settings', url: '/setting', icon: Settings },

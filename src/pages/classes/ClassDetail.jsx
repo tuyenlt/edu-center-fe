@@ -13,7 +13,8 @@ import Stream from './detailPart/Stream';
 import Assignment from './detailPart/Assignment';
 import Grade from './detailPart/Grade';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useClassDataContext } from '@/providers/ClassDataProvider';
+import ManageTab from './detailPart/manage/Manage';
+
 export default function ClassDetail() {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
@@ -39,7 +40,9 @@ export default function ClassDetail() {
   const handleOpenSettings = () => {
     setIsSetting(true);
   };
-  const copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
+  let copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
+  copyParts = isManager ? { ...parts, manage: 'Manage' } : copyParts;
+
   // const { classdetailId } = useParams();
   // const data = classData?.find((data) => data._id === classdetailId);
   // console.log(data);
@@ -59,6 +62,7 @@ export default function ClassDetail() {
   }, []);
   const class_name = data?.class_name;
   const class_code = data?.class_code;
+
   return isNewAssignmentOpen ? (
     <NewAssignmentForm
       onClose={() => setIsNewAssignmentOpen(false)}
@@ -94,6 +98,7 @@ export default function ClassDetail() {
         <People data={data} />
         <CourseInfo data={data} />
         {isTeacher && <Grade data={data} />}
+        {isManager && <ManageTab classdata={data} />}
       </div>
     </Tabs>
   );
