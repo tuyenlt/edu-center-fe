@@ -11,6 +11,7 @@ import {
   CardFooter,
   CardDescription,
 } from '@/components/ui/card';
+import AvatarUser from '@/components/shared/AvatarUser';
 export default function People({ data }) {
   if (!data || Object.keys(data).length === 0) {
     return <div>Loading...</div>;
@@ -34,7 +35,7 @@ export default function People({ data }) {
                 </button>
               </DialogTrigger>
               <DialogContent>
-                <AddPeopleToClass />
+                <AddPeopleToClass type="teacher" classId={data._id} courseId={data.course._id} />
               </DialogContent>
             </Dialog>
           </div>
@@ -47,15 +48,7 @@ export default function People({ data }) {
               className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition rounded-md"
             >
               <div className="flex items-center gap-4">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage
-                    src={teacher.avatar || 'https://github.com/shadcn.png'}
-                    alt={teacher.name}
-                  />
-                  <AvatarFallback>
-                    {teacher.name?.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <AvatarUser user={teacher} />
                 <div>
                   <p className="text-base font-medium text-gray-800">
                     {teacher.name}
@@ -83,7 +76,7 @@ export default function People({ data }) {
                 </button>
               </DialogTrigger>
               <DialogContent>
-                <AddPeopleToClass />
+                <AddPeopleToClass type="student" classId={data._id} courseId={data.course._id} />
               </DialogContent>
             </Dialog>
           </div>
@@ -97,15 +90,7 @@ export default function People({ data }) {
                 className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition rounded-md"
               >
                 <div className="flex items-center gap-4">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={student.avatar || 'https://github.com/shadcn.png'}
-                      alt={student.name}
-                    />
-                    <AvatarFallback>
-                      {student.name?.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+                  <AvatarUser user={student} />
                   <div>
                     <p className="text-base font-medium text-gray-800">
                       {student.name}

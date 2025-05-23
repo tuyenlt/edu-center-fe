@@ -15,7 +15,11 @@ import Grade from './detailPart/Grade';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClassDataContext } from '@/providers/ClassDataProvider';
 import { useLayoutContext } from '@/providers/LayoutProvider';
+
+import ManageTab from './detailPart/manage/Manage';
+
 export default function ClassDetail() {
+  const { classdetailId } = useParams();
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
@@ -42,7 +46,9 @@ export default function ClassDetail() {
     setIsSetting(true);
     setIsRootLayoutHidden(false);
   };
-  const copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
+  let copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
+  copyParts = isManager ? { ...parts, manage: 'Manage' } : copyParts;
+
   // const { classdetailId } = useParams();
   // const data = classData?.find((data) => data._id === classdetailId);
   // console.log(data);
@@ -51,7 +57,7 @@ export default function ClassDetail() {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const response = await api.get(`/classes/682c2eeb9e6f67c538f41059`);
+        const response = await api.get(`/classes/${classdetailId}`);
         setData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -62,6 +68,7 @@ export default function ClassDetail() {
   }, []);
   const class_name = data?.class_name;
   const class_code = data?.class_code;
+
   return isNewAssignmentOpen ? (
     <NewAssignmentForm
       onClose={() => setIsNewAssignmentOpen(false)}
@@ -97,6 +104,7 @@ export default function ClassDetail() {
         <People data={data} />
         <CourseInfo data={data} />
         {isTeacher && <Grade data={data} />}
+        {isManager && <ManageTab classdata={data} />}
       </div>
     </Tabs>
   );
