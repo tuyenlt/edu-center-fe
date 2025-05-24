@@ -17,7 +17,10 @@ import { useClassDataContext } from '@/providers/ClassDataProvider';
 import { useLayoutContext } from '@/providers/LayoutProvider';
 
 import ManageTab from './detailPart/manage/Manage';
+
 import SessionScheduleDialog from './SessionSchedule';
+
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
 
 export default function ClassDetail() {
   const { classDetailId } = useParams();
@@ -47,7 +50,7 @@ export default function ClassDetail() {
   };
 
   let copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -61,6 +64,15 @@ export default function ClassDetail() {
     };
     fetchClassData();
   }, []);
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   const class_name = data?.class_name;
   const class_code = data?.class_code;
   if (!data || data.length == 0) return <div>Loadingg...</div>;

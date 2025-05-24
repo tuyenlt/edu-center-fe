@@ -26,7 +26,6 @@ const RichTextBox = forwardRef(
       editorRef.current?.focus();
     };
 
-    // ✨ Cho phép cha truy cập các method này qua ref
     useImperativeHandle(ref, () => ({
       focus: () => editorRef.current?.focus(),
       getHTML: () => editorRef.current?.innerHTML,

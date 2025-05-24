@@ -11,12 +11,14 @@ export default function AuthContextProvider({ children }) {
 	const [token, setToken] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
+	const [isLoggedOut, setIsLoggedOut] = useState(false);
 
 	useEffect(() => {
 		if (isLoggingOut) {
 			return;
 		}
 		setLoading(true);
+		if (user) return;
 		const fetchUser = async () => {
 			try {
 				const response = await api.get('/users/me');
@@ -44,19 +46,19 @@ export default function AuthContextProvider({ children }) {
 		console.log('User authenticated:', isAuthenticated);
 	}, [isAuthenticated]);
 
-	useLayoutEffect(() => {
-		const authInterceptor = api.interceptors.request.use((config) => {
-			config.headers.Authorization =
-				!config._retry && token
-					? `Bearer ${token}`
-					: config.headers.Authorization;
-			console.log(`set auth header: Bearer ${token}`);
-			return config;
-		});
-		return () => {
-			api.interceptors.request.eject(authInterceptor);
-		};
-	}, [token]);
+	// useLayoutEffect(() => {
+	// 	const authInterceptor = api.interceptors.request.use((config) => {
+	// 		config.headers.Authorization =
+	// 			!config._retry && token
+	// 				? `Bearer ${token}`
+	// 				: config.headers.Authorization;
+	// 		console.log(`set auth header: Bearer ${token}`);
+	// 		return config;
+	// 	});
+	// 	return () => {
+	// 		api.interceptors.request.eject(authInterceptor);
+	// 	};
+	// }, [token]);
 
 	let isRefreshing = false;
 	let failedQueue = [];
@@ -122,6 +124,7 @@ export default function AuthContextProvider({ children }) {
 						setToken(null);
 						setUser(null);
 						setIsAuthenticated(false);
+						setIsLoggingOut(true);
 						navigate('/login', { replace: true });
 						return Promise.reject(err);
 					} finally {
@@ -170,10 +173,13 @@ export default function AuthContextProvider({ children }) {
 	const logout = async () => {
 		await api.delete('/users/logout');
 		setIsLoggingOut(true);
-		setToken(null);
-		setUser(null);
-		setIsAuthenticated(false);
-		navigate('/login', { replace: true });
+		try {
+			await api.get('/users/test-auth');
+		} catch (error) {
+			if (error.status === 401) {
+				console.log('Logout successful');
+			}
+		}
 	};
 
 	const values = {
@@ -186,6 +192,10 @@ export default function AuthContextProvider({ children }) {
 		loading,
 		setUser,
 	};
+
+	if ((!isAuthenticated && !loading && !isLoggingOut)) {
+		return <div></div>;
+	}
 
 	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }

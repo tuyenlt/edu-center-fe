@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { convertUTC } from '@/utils/dateTimeConvert';
 import { useUserContext } from '@/providers/authContext';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import AvatarUser from '@/components/shared/AvatarUser';
 
 export default function ChatRoom({ id, socket }) {
   const [messages, setMessages] = useState([]);
@@ -41,7 +42,7 @@ export default function ChatRoom({ id, socket }) {
 
   // Scroll to bottom whenever messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView();
   }, [messages.length]);
 
   const sendMessage = () => {
@@ -71,11 +72,7 @@ export default function ChatRoom({ id, socket }) {
                 >
                   <div className="flex">
                     {!isOwn && (
-                      <img
-                        src={msg.author.avatar_url}
-                        alt={msg.author.name}
-                        className="w-10 h-10 rounded-full mr-2 mt-5"
-                      />
+                      <AvatarUser user={msg.author} className="w-12 h-12 mr-2 mt-5" />
                     )}
                     <div className="max-w-xs flex flex-col">
                       {!isOwn && (
@@ -92,12 +89,7 @@ export default function ChatRoom({ id, socket }) {
                       >
                         {msg.content}
                       </div>
-                      <div
-                        className={`text-[10px] mt-1 ml-1 ${isOwn
-                          ? 'text-right text-gray-300'
-                          : 'text-left text-gray-500'
-                          }`}
-                      >
+                      <div className={`text-[10px] mt-1 ml-1 ${isOwn ? 'text-right text-gray-300' : 'text-left text-gray-500'}`}>
                         {convertUTC(msg.createdAt)}
                       </div>
                     </div>

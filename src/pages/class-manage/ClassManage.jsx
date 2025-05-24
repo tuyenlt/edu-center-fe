@@ -10,6 +10,7 @@ import {
     SelectGroup,
     SelectItem,
 } from "@/components/ui/select";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 const statusOptions = ["all", "pending", "scheduling", "ongoing", "finished"];
 const PAGE_SIZE = 5;
@@ -19,15 +20,19 @@ export default function ClassManage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchClasses = async () => {
+            setIsLoading(true);
             try {
                 const response = await api.get("/classes");
                 setClasses(response.data);
             } catch (error) {
                 toast("Something went wrong, please try again.");
                 console.error("Error loading classes:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchClasses();
@@ -89,7 +94,8 @@ export default function ClassManage() {
             </div>
 
             {/* --- Class List --- */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 items-center">
+                {isLoading && <LoadingSpinner />}
                 {paginatedClasses.length > 0 ? (
                     paginatedClasses.map((classData) => (
                         <ClassManageRow key={classData._id} data={classData} />

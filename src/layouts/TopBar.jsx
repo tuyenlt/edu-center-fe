@@ -15,7 +15,7 @@ export default function TopBar() {
         return;
       }
       const response = await api.post('/chatrooms', {
-        type: 'student-contacting',
+        type: 'contact',
         name: `${user.name} Contacting`,
       });
       const chatRoomId = response.data._id;
@@ -26,7 +26,7 @@ export default function TopBar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-15 bg-white border-b flex flex-row items-center justify-between px-6 dark:bg-gray-900 dark:border-gray-700">
+    <header className="fixed top-0 left-0 right-0 z-50 h-20 bg-white border-b flex flex-row items-center justify-between px-6 dark:bg-gray-900 dark:border-gray-700">
       {/* Logo */}
       <a href="/home" className="flex gap-2 items-center">
         <LogoSVG />
@@ -39,7 +39,7 @@ export default function TopBar() {
           <Button onClick={handleStudentContacting}>Contact Us</Button>
         )}
         <Avatar
-          className="w-10 h-10 p-1 bg-[rgba(60,64,67,.08)] rounded-full border-gray-200 dark:border-gray-700 cursor-pointer circle"
+          className="w-12 h-12 p-1 bg-[rgba(60,64,67,.08)] rounded-full border-gray-200 dark:border-gray-700 cursor-pointer circle"
           onClick={() => navigate(`/users/${user?._id}`)}
         >
           {user?.avatar_url ? (

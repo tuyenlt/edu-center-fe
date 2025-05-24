@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import AvatarUser from "@/components/shared/AvatarUser";
 
 export default function StudentContacting() {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ export default function StudentContacting() {
     useEffect(() => {
         const fetchChatRoom = async () => {
             try {
-                const response = await api.get("/student-contacting");
+                const response = await api.get("/chatrooms-contact");
                 console.log(response.data);
                 setChatRooms(response.data);
             } catch (error) {
@@ -22,7 +23,7 @@ export default function StudentContacting() {
 
     const handleAcceptContact = async (roomId) => {
         try {
-            const response = await api.post(`/student-contacting/${roomId}/join`);
+            const response = await api.post(`/chatrooms-contact/${roomId}/join`);
             console.log(response.data);
             setChatRooms((prev) => prev.filter((room) => room._id !== roomId));
             navigate("/chat", { state: { chatId: roomId } });
@@ -39,13 +40,9 @@ export default function StudentContacting() {
                     <div className="flex justify-between items-center p-4 shadow-sm">
                         <div
                             key={room._id}
-                            className="flex gap-2"
+                            className="flex gap-2 items-center"
                         >
-                            <img
-                                src={room.owner.avatar_url}
-                                alt={`${room.owner.name}'s avatar`}
-                                className="w-10 h-10 rounded-full"
-                            />
+                            <AvatarUser user={room.owner} className="w-12 h-12" />
                             <h2 className="text-lg font-semibold">{room.owner.name}</h2>
                         </div>
                         <Button onClick={() => handleAcceptContact(room._id)}>Accept Contact</Button>

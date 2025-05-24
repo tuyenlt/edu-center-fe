@@ -25,7 +25,7 @@ export default function RootLayout() {
           </div>
 
           {/* Main content (chiếm phần còn lại) */}
-          <main className="flex-1 min-h-[calc(100vh-96px)]">
+          <main className="flex-1 mt-5 min-h-[calc(100vh-96px)]">
             <Outlet />
           </main>
         </div>

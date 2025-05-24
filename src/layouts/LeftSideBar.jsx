@@ -41,7 +41,7 @@ const menuByRole = {
     { title: 'Dashboard', url: '#', icon: Home },
     { title: 'Classes', url: '/class', icon: Users },
     { title: 'Courses', url: '/courses', icon: BookOpen },
-    { title: 'Calendar', url: '#', icon: CalendarDays },
+    { title: 'Calendar', url: '/calendar', icon: CalendarDays },
     { title: 'Assignments', url: '#', icon: ClipboardList },
     { title: 'Messages', url: '/chat', icon: MessageSquare },
     { title: 'Notifications', url: '#', icon: Bell },

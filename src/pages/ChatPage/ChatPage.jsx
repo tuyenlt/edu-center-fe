@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import ChatRoom from './ChatRoom';
 import { useLocation } from 'react-router-dom';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function ChatPage() {
 	const location = useLocation();
 	const initialChatId = location.state?.chatId;
-	const { token } = useUserContext();
+	const { token, user } = useUserContext();
 
 	const [socket, setSocket] = useState(null);
 	const [chatRooms, setChatRooms] = useState([]);
@@ -36,20 +38,49 @@ export default function ChatPage() {
 
 	// Fetch chat rooms
 	useEffect(() => {
+		if (!user) return;
 		const fetchChatRoom = async () => {
 			try {
 				const response = await api.get('/chat-of-user');
-				setChatRooms(response.data);
-				// If no room selected, pick first
-				if (!chatRoomId && response.data.length) {
-					setChatRoomId(response.data[0]._id);
+				const chatRooms = response.data.map(room => {
+					if (room.type === 'p2p') {
+						room.name = room.members.find(member => member._id !== room.owner._id).name;
+						room.avatar = room.members.find(member => member._id !== room.owner._id).avatar_url;
+						return room;
+					}
+
+					if (room.type === 'contact') {
+						if (user._id === room.owner._id) {
+							room.name = "English Nest Staff";
+							room.avatar = "images/logo.png";
+							return room;
+						} else {
+							room.name = room.owner.name + " (student) "
+							room.avatar = room.owner.avatar_url;
+						}
+					}
+					return room;
+
+				});
+				chatRooms.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+				setChatRooms(chatRooms);
+				if (!chatRoomId && chatRooms.length) {
+					setChatRoomId(chatRooms[0]._id);
 				}
 			} catch (error) {
 				console.error('Error fetching chat rooms:', error);
 			}
 		};
 		fetchChatRoom();
-	}, []);
+	}, [user]);
+
+	if (!chatRooms || chatRooms.length === 0) {
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<p className="text-gray-500">No chat rooms available</p>
+			</div>
+		);
+	}
 
 	const filteredRooms = chatRooms.filter(room =>
 		room.name.toLowerCase().includes(search.toLowerCase())
@@ -80,9 +111,20 @@ export default function ChatPage() {
 								key={room._id}
 								onClick={() => setChatRoomId(room._id)}
 								className={`flex items-center p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 \
-                  ${room._id === chatRoomId ? 'bg-blue-100 dark:bg-blue-900 text-blue-600' : 'text-gray-800 dark:text-gray-200'}`}
+									${room._id === chatRoomId ? 'bg-blue-100 dark:bg-blue-900 text-blue-600' : 'text-gray-800 dark:text-gray-200'}`}
 							>
-								{room.name}
+								<Avatar className="w-12 h-12 mr-3">
+									{room.avatar ? (
+										<AvatarImage src={room.avatar} alt={room.name} />
+									) : (
+										<AvatarFallback className="bg-gray-300 dark:bg-gray-700">
+											{room.name.charAt(0).toUpperCase()}
+										</AvatarFallback>
+									)}
+								</Avatar>
+								<div className="flex w-full">
+									{room.name}
+								</div>
 							</div>
 						))
 					)}
