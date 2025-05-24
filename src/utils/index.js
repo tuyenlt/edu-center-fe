@@ -32,3 +32,34 @@ export const activeClass =
     'data-[state=active]:after:-bottom-[1px] data-[state=active]:after:left-0 data-[state=active]:after:right-0 ' +
     'data-[state=active]:after:h-0 data-[state=active]:after:border-t-4 data-[state=active]:after:bg-blue-600 ' +
     'data-[state=active]:after:rounded-t-md';
+
+
+
+export function getIntervalTimePosition(checkStart, checkEnd, refTime) {
+    const toMs = t =>
+        t instanceof Date
+            ? t.getTime()
+            : typeof t === 'string'
+                ? Date.parse(t)
+                : Number(t);
+
+    const start = toMs(checkStart);
+    const end = toMs(checkEnd);
+    const ref = toMs(refTime);
+
+    if (start < ref) {
+        return 'before';
+    }
+    if (end > ref) {
+        return 'after';
+    }
+    return 'within';
+}
+
+export function getClassProgress(classData) {
+    const totalSessions = classData.class_sessions.length;
+    const completedSessions = classData.class_sessions.filter(session => getIntervalTimePosition(session.start_time, session.end_time, new Date()) === "before").length;
+
+    if (totalSessions === 0) return 0;
+    return Math.round((completedSessions / totalSessions) * 100);
+}

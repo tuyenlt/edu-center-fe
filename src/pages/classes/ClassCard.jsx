@@ -27,10 +27,10 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import AvatarUser from '@/components/shared/AvatarUser';
 export function ClassCard({ data, fallbackColor }) {
 
+  const { user } = useUserContext();
   if (!data || Object.keys(data).length === 0) {
     return <LoadingSpinner />;
   }
-  const { user } = useUserContext();
   const isTeacher = user?.role === 'teacher';
   const date = new Date(data.createdAt);
 

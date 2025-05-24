@@ -74,6 +74,7 @@ export default function SessionScheduleDialog({
   const handleNextSession = () => {
     if (index < maxIndex - 1) setCustomLessonIndex(index + 1);
   };
+
   const handleDialog = () => {
     setOpen(false);
     setCustomLessonIndex(undefined);

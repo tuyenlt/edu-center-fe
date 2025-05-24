@@ -36,6 +36,7 @@ import ClassManage from './pages/class-manage/ClassManage';
 import ExampleUsage from './pages/classes/ExampleUsage';
 
 import CalendarPage from './pages/Calendar/CalendarPage';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/login" element={<Signin />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/test" element={<ExampleUsage />} />
+            <Route path="*" element={<LandingPage />} />
             {/* Protect dashboard: only accessible if logged in */}
             <Route element={<RootLayout />}>
               <Route path="/" element={<Dashboard />} />
@@ -68,7 +70,6 @@ function App() {
               <Route path="/add-class" element={<NewClass />} />
               <Route path="/users/:id" element={<Profile />} />
               <Route path="/students-manage" element={<StudentManage />} />
-              <Route path="*" element={<Dashboard />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/class-manage" element={<ClassManage />} />
               <Route path="/calendar" element={<CalendarPage />} />
