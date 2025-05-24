@@ -143,11 +143,10 @@ export default function AuthContextProvider({ children }) {
 	const login = async (email, password) => {
 		try {
 			const response = await api.post('/users/login', { email, password });
+			setIsLoggingOut(false);
 			const accessToken = response.data.accessToken;
 			console.log('login success');
 			setToken(accessToken);
-			setIsAuthenticated(true);
-			setIsLoggingOut(false);
 		} catch (error) {
 			console.error(
 				'Login failed:',
@@ -193,7 +192,7 @@ export default function AuthContextProvider({ children }) {
 		setUser,
 	};
 
-	if ((!isAuthenticated && !loading && !isLoggingOut)) {
+	if ((!isAuthenticated && !isLoggingOut)) {
 		return <div></div>;
 	}
 

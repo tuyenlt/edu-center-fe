@@ -13,7 +13,7 @@ export default {
         5: '5',
       },
       fontFamily: {
-        sans: ['Poppins', ...fontFamily.sans],
+        sans: ['Poppins', 'sans-serif'],
       },
     },
   },

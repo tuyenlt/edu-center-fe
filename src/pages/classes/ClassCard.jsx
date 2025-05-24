@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useUserContext } from '@/providers/authContext';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import AvatarUser from '@/components/shared/AvatarUser';
 export function ClassCard({ data, fallbackColor }) {
 
   if (!data || Object.keys(data).length === 0) {
@@ -91,20 +92,12 @@ export function ClassCard({ data, fallbackColor }) {
             )}
           </div>
           <p className="text-sm mt-4 text-gray-200 hover:underline">
-            Hoai Thu Vu
+            {data.teachers[0].name || "Unknown Teacher"}
           </p>
         </div>
       </div>
 
-      <Avatar className="absolute top-16 right-4 size-17 z-10 border-gray-200 border-2">
-        <AvatarImage src="" alt="avatar" />
-        <AvatarFallback
-          className="bg-center bg-cover text-2xl"
-          style={{ backgroundColor: fallbackColor }}
-        >
-          {data.teachers[0].name.slice(0, 2)}
-        </AvatarFallback>
-      </Avatar>
+      <AvatarUser user={data.teachers[0]} className="absolute top-16 right-4 size-17 z-10 border-gray-200 border-2" />
 
       <CardContent className="pl-3">
         <h1 className="text-black/80 w-48 text-lg font-semibold mt-3">

@@ -69,7 +69,7 @@ export function LeftSidebar() {
   const items = menuByRole[role] || [];
 
   return (
-    <div className="group fixed top-15 pt-6 h-[calc(100vh-96px)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 hover:w-64">
+    <div className="group fixed top-15 pt-6 h-[calc(100vh)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 hover:w-64">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
