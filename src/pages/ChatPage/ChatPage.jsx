@@ -74,6 +74,14 @@ export default function ChatPage() {
 		fetchChatRoom();
 	}, [user]);
 
+	if (!chatRooms || chatRooms.length === 0) {
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<p className="text-gray-500">No chat rooms available</p>
+			</div>
+		);
+	}
+
 	const filteredRooms = chatRooms.filter(room =>
 		room.name.toLowerCase().includes(search.toLowerCase())
 	);

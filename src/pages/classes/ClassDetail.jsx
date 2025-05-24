@@ -69,7 +69,11 @@ export default function ClassDetail() {
   }, []);
 
   if (!data) {
-    return <div className="m-auto"><LoadingSpinner /></div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   const class_name = data?.class_name;

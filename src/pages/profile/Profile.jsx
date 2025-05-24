@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit, Star, MessageSquare, Activity } from "lucide-react";
 import { toast } from "sonner";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 export default function Profile() {
     const { id } = useParams();
@@ -33,7 +34,13 @@ export default function Profile() {
         }
     };
 
-    if (!userData) return <div className="text-center py-20">Loading…</div>;
+    if (!userData) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <LoadingSpinner />
+            </div>
+        );
+    }
 
     return (
         <main className="max-w-3xl mx-auto p-6 space-y-8">

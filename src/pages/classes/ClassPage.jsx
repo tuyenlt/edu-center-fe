@@ -42,8 +42,8 @@ export default function ClassPage() {
   return (
     <div className="grid grid-cols-4 items-start gap-y-7 p-6 max-w-screen-xl m-auto">
       {classData?.length === 0 &&
-        <div className="col-span-4">
-          <h1 className="text-3xl font-normal text-center">No classes available</h1>
+        <div className="flex items-center justify-center h-screen">
+          <p className="text-gray-500">No class available</p>
         </div>
       }
       <div
