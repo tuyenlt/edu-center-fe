@@ -6,8 +6,14 @@ import AvatarUser from '@/components/shared/AvatarUser';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DialogClose } from '@radix-ui/react-dialog';
 import api from '@/services/api';
+import MagicInput from '@/components/shared/MagicInput';
 
-export default function AddPeopleToClass({ type, courseId, classId, onSubmit }) {
+export default function AddPeopleToClass({
+  type,
+  courseId,
+  classId,
+  onSubmit,
+}) {
   const [input, setInput] = useState('');
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -34,14 +40,12 @@ export default function AddPeopleToClass({ type, courseId, classId, onSubmit }) 
 
   const toggleSelect = (userId) => {
     if (type === 'teacher') {
-      setSelectedUsers(prev =>
-        prev[0] === userId ? [] : [userId]
-      );
+      setSelectedUsers((prev) => (prev[0] === userId ? [] : [userId]));
     } else {
       // multi‐select logic for students
-      setSelectedUsers(prev =>
+      setSelectedUsers((prev) =>
         prev.includes(userId)
-          ? prev.filter(id => id !== userId)
+          ? prev.filter((id) => id !== userId)
           : [...prev, userId]
       );
     }
@@ -57,10 +61,13 @@ export default function AddPeopleToClass({ type, courseId, classId, onSubmit }) 
         ? `/classes/${classId}/add-students`
         : `/classes/${classId}/add-teacher`;
 
-    api.post(endpoint, payload)
+    api
+      .post(endpoint, payload)
       .then(() => {
         setSelectedUsers([]);
-        console.log(`${type === 'student' ? 'Students' : 'Teacher'} added successfully`);
+        console.log(
+          `${type === 'student' ? 'Students' : 'Teacher'} added successfully`
+        );
         if (onSubmit) {
           onSubmit();
         }
@@ -74,10 +81,10 @@ export default function AddPeopleToClass({ type, courseId, classId, onSubmit }) 
         {type === 'student' ? 'Add Students' : 'Add Teacher'}
       </h2>
 
-      <Input
+      <MagicInput
         placeholder="Enter name or email"
         value={input}
-        onChange={e => setInput(e.target.value)}
+        onChange={(e) => setInput(e.target.value)}
       />
 
       <ScrollArea className="max-h-[200px] space-y-2 my-2">

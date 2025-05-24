@@ -231,8 +231,8 @@ export default function Assignment({ setIsNewAssignmentOpen, data }) {
         {isTeacher && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="mb-5 rounded-4xl bg-blue-700 text-white ml-auto p-3 flex gap-2 shadow-2xl">
-                <Plus></Plus>
+              <button className="mb-5 ml-auto flex items-center gap-2 rounded-2xl bg-blue-600 px-4 py-2 text-white font-medium shadow-md hover:bg-blue-700 transition-colors">
+                <Plus className="w-4 h-4" />
                 <span>New</span>
               </button>
             </DropdownMenuTrigger>

@@ -32,11 +32,9 @@ import { LayoutContextProvider } from './providers/LayoutProvider';
 import { ClassDataProvider } from './providers/ClassDataProvider';
 import ClassWrapper from './pages/classes/ClassWrapper';
 import ClassManage from './pages/class-manage/ClassManage';
-
-import ExampleUsage from './pages/classes/ExampleUsage';
-
 import CalendarPage from './pages/Calendar/CalendarPage';
 import LandingPage from './pages/LandingPage';
+import MagicInput from './components/shared/MagicInput';
 
 function App() {
   return (
@@ -46,7 +44,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Signin />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/test" element={<ExampleUsage />} />
+            <Route path="/test" element={<MagicInput />} />
             <Route path="*" element={<LandingPage />} />
             {/* Protect dashboard: only accessible if logged in */}
             <Route element={<RootLayout />}>

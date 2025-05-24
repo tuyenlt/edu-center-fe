@@ -25,6 +25,7 @@ import api from '@/services/api';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '@/providers/authContext';
 import { Calendar } from '@/components/ui/calendar';
+import MagicInput from '@/components/shared/MagicInput';
 
 export default function NewAssignmentForm({ onClose, class_name, data }) {
   const [selectedAll, setSelectedAll] = useState(true);
@@ -65,10 +66,10 @@ export default function NewAssignmentForm({ onClose, class_name, data }) {
               onClick={onClose}
               className="absolute top-1 left-1"
             ></ArrowLeft>
-            <Input placeholder="Title" className="mb-4 font-medium text-lg" />
+            <MagicInput placeholder="Title" className="font-medium text-lg" />
             <RichTextBox
               placeholder="Description..."
-              className="min-h-[300px]"
+              className="min-h-[300px] mt-4"
               ref={editorRef}
               file={file}
               setFile={setFile}

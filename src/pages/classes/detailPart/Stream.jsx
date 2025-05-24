@@ -27,6 +27,7 @@ import { io } from 'socket.io-client';
 import { convertUTC } from '@/utils/dateTimeConvert';
 import LinkPreview from '@/components/shared/LinkPreview';
 import { Alert, AlertTitle } from '@/components/ui/alert';
+import MagicInput from '@/components/shared/MagicInput';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function Stream({ data }) {
@@ -196,16 +197,15 @@ export default function Stream({ data }) {
                   </div>
                 ) : (
                   <>
-                    <Input
+                    <MagicInput
                       placeholder="Title"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="mb-2"
                     />
                     <RichTextBox
                       ref={editorRef}
                       placeholder="Content..."
-                      className="bg-gray-100 min-h-[200px]"
+                      className="min-h-[200px] mt-2"
                       file={file}
                       setFile={setFile}
                       link={link}
@@ -213,7 +213,7 @@ export default function Stream({ data }) {
                     />
                     <div className="mt-4 flex justify-end gap-4">
                       <Button
-                        variant="outline"
+                        variant="none"
                         onClick={() => setIsRichTextOpen(false)}
                       >
                         Cancel
