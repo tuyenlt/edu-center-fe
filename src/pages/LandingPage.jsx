@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { useNavigate } from 'react-router-dom/dist/index.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
-    const navigate = useNavigate
+    const navigate = useNavigate();
     return (
         <div className="min-h-screen bg-white">
             {/* Navigation */}
