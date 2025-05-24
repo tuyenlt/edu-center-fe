@@ -37,7 +37,7 @@ export default function Stream({ data }) {
   const [posts, setPosts] = useState([]);
   const [isCopied, setIsCopied] = useState(false);
   const [isRichTextOpen, setIsRichTextOpen] = useState(false);
-  const [title, setTitle] = useState('');           // ← title!
+  const [title, setTitle] = useState(''); // ← title!
   const [file, setFile] = useState([]);
   const [link, setLink] = useState([]);
   const editorRef = useRef(null);
@@ -50,13 +50,13 @@ export default function Stream({ data }) {
       s.emit('initClassUpdate', data._id);
     });
 
-    s.on('classPostCreate', newPost => {
-      setPosts(prev => [newPost, ...prev]);
+    s.on('classPostCreate', (newPost) => {
+      setPosts((prev) => [newPost, ...prev]);
     });
 
-    s.on('classPostComment', comment => {
-      setPosts(prev =>
-        prev.map(post =>
+    s.on('classPostComment', (comment) => {
+      setPosts((prev) =>
+        prev.map((post) =>
           post._id === comment.postId
             ? { ...post, comments: [...post.comments, comment] }
             : post
@@ -70,8 +70,11 @@ export default function Stream({ data }) {
 
   useEffect(() => {
     if (Array.isArray(data?.class_posts)) {
-      setPosts(data.class_posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
-
+      setPosts(
+        data.class_posts.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )
+      );
     }
   }, [data.class_posts]);
 
@@ -81,8 +84,9 @@ export default function Stream({ data }) {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
+  const class_name = data?.class_name;
+  const class_code = data?.class_code;
   const addPostHandler = () => {
-
     socket.emit('classPostCreate', {
       classId: data._id,
       title,
@@ -112,7 +116,7 @@ export default function Stream({ data }) {
     });
   };
 
-  if (!data) return <div>Loading…</div>;
+  if (!data || data.length == 0) return <div>Loading…</div>;
 
   return (
     <TabsContent value="stream" className="w-4/5 mx-auto mt-5 pt-20">
@@ -134,7 +138,12 @@ export default function Stream({ data }) {
         </CardHeader>
       </Card>
 
-      <div className={cn('mt-6 grid gap-6', isTeacher ? 'grid-cols-5' : 'grid-cols-1')}>
+      <div
+        className={cn(
+          'mt-6 grid gap-6',
+          isTeacher ? 'grid-cols-5' : 'grid-cols-1'
+        )}
+      >
         {isTeacher && (
           <Card className="h-34">
             <CardHeader>
@@ -157,7 +166,10 @@ export default function Stream({ data }) {
                         ? data.class_name
                         : `${data.class_name.slice(0, 10)}...`}
                     </span>
-                    <button onClick={handleCopyCode} className="flex items-center gap-2">
+                    <button
+                      onClick={handleCopyCode}
+                      className="flex items-center gap-2"
+                    >
                       <Copy /> Copy
                     </button>
                   </div>
@@ -175,7 +187,10 @@ export default function Stream({ data }) {
                 {!isRichTextOpen ? (
                   <div className="flex items-center gap-4">
                     <AvatarUser user={user} className="w-12 h-12" />
-                    <button onClick={() => setIsRichTextOpen(true)} className="text-gray-500">
+                    <button
+                      onClick={() => setIsRichTextOpen(true)}
+                      className="text-gray-500"
+                    >
                       Create announcement...
                     </button>
                   </div>
@@ -184,7 +199,7 @@ export default function Stream({ data }) {
                     <Input
                       placeholder="Title"
                       value={title}
-                      onChange={e => setTitle(e.target.value)}
+                      onChange={(e) => setTitle(e.target.value)}
                       className="mb-2"
                     />
                     <RichTextBox
@@ -197,7 +212,10 @@ export default function Stream({ data }) {
                       setLink={setLink}
                     />
                     <div className="mt-4 flex justify-end gap-4">
-                      <Button variant="outline" onClick={() => setIsRichTextOpen(false)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsRichTextOpen(false)}
+                      >
                         Cancel
                       </Button>
                       <Button onClick={addPostHandler}>Post</Button>
@@ -209,27 +227,30 @@ export default function Stream({ data }) {
           )}
 
           {/* Announcements list */}
-          {posts.map(post => (
+          {posts.map((post) => (
             <Card key={post._id}>
               <CardHeader className="flex items-center gap-4">
                 <AvatarUser user={post.author} className="w-12 h-12" />
                 <div>
-                  <CardTitle>{post.author.name} Announce {post.title}</CardTitle>
+                  <CardTitle>
+                    {post.author.name} Announce {post.title}
+                  </CardTitle>
                   <CardDescription className="text-xs text-gray-500 m-1">
                     {convertUTC(post.createdAt)}
                   </CardDescription>
                 </div>
               </CardHeader>
               <CardContent className="text-gray-800 ml-2">
-                <div className='' dangerouslySetInnerHTML={{ __html: post.content }} />
+                <div
+                  className=""
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
                 {post.links?.map((link, index) => (
                   <LinkPreview url={link} key={index} className="mt-2" />
-                ))
-                }
-
+                ))}
               </CardContent>
               <CardFooter className="flex flex-col gap-3">
-                {post.comments.map(c => (
+                {post.comments.map((c) => (
                   <div key={c._id} className="flex items-start gap-3 w-full">
                     <AvatarUser user={c.author} className="w-8 h-8" />
                     <div>

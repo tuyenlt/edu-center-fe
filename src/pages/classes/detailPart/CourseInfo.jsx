@@ -15,13 +15,22 @@ import {
   CardFooter,
   CardDescription,
 } from '@/components/ui/card';
+import { dateTimeConvert_2 } from '@/utils/dateTimeConvert';
+import { useState } from 'react';
+import SessionScheduleDialog from '../SessionSchedule';
+import { useUserContext } from '@/providers/authContext';
+import { cn } from '@/lib/utils';
 export default function CourseInfo({ data }) {
+  const isManager = useUserContext();
+  const [customLessonIndex, setCustomLessonIndex] = useState();
   if (!data || Object.keys(data).length === 0) {
     return <div>Loading...</div>; // TODO skeleton/loading spinner
   }
 
   const chaptersInfo = data.course;
   const chapters = data.course.course_programs;
+  const sessions = data.class_sessions;
+  let count = 0;
   return (
     <TabsContent value="courseInfo" className="w-4/5 mx-auto mt-5 pt-20">
       <div className="space-y-8">
@@ -77,33 +86,57 @@ export default function CourseInfo({ data }) {
 
               <AccordionContent className="px-6 pb-5">
                 <div className="space-y-3">
-                  {chapter.lessons.map((lesson, lessonIndex) => (
-                    <Card
-                      key={lessonIndex}
-                      className="bg-gray-50 p-4 border border-gray-200 shadow-sm"
-                    >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-                        <div>
-                          <h4 className="font-medium text-gray-800">
-                            {lesson.title}
-                          </h4>
-                          <p className="text-sm text-gray-600 mt-1">
-                            {lesson.description}
-                          </p>
+                  {chapter.lessons.map((l, lessonIndex) => {
+                    const lesson = sessions[count++];
+                    return (
+                      <Card
+                        key={lessonIndex}
+                        className="bg-gray-50 p-4 border border-gray-200 shadow-sm"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+                          <div>
+                            <h4 className="font-medium text-gray-800">
+                              {lesson.title}
+                            </h4>
+                            <p className="text-sm text-gray-600 mt-1">
+                              {`[${lesson.type}] `}
+                              {lesson.description}
+                            </p>
+                          </div>
+                          <div
+                            className={cn(
+                              `flex items-center  px-2 py-1 rounded-sm gap-3  ${
+                                isManager && 'border'
+                              }`
+                            )}
+                          >
+                            <div className="text-gray-600">
+                              <span className="block">
+                                {dateTimeConvert_2(lesson.start_time)}
+                              </span>
+                              <span>{dateTimeConvert_2(lesson.end_time)}</span>
+                            </div>
+                            {isManager && (
+                              <SessionScheduleDialog
+                                session={
+                                  customLessonIndex !== undefined
+                                    ? sessions[customLessonIndex]
+                                    : lesson
+                                }
+                                index={
+                                  customLessonIndex !== undefined
+                                    ? customLessonIndex
+                                    : count - 1
+                                }
+                                setCustomLessonIndex={setCustomLessonIndex}
+                                maxIndex={sessions.length}
+                              />
+                            )}
+                          </div>
                         </div>
-                        <div className="mt-3 sm:mt-0 flex flex-col sm:items-end">
-                          <span className="text-sm text-muted-foreground mb-1">
-                            {lesson.type}
-                          </span>
-                          {lesson.hasResources && (
-                            <Button variant="outline" size="sm">
-                              Tài liệu
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
+                      </Card>
+                    );
+                  })}
                 </div>
               </AccordionContent>
             </AccordionItem>

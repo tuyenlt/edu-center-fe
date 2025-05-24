@@ -17,10 +17,13 @@ import { useClassDataContext } from '@/providers/ClassDataProvider';
 import { useLayoutContext } from '@/providers/LayoutProvider';
 
 import ManageTab from './detailPart/manage/Manage';
+
+import SessionScheduleDialog from './SessionSchedule';
+
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 
 export default function ClassDetail() {
-  const { classdetailId } = useParams();
+  const { classDetailId } = useParams();
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
@@ -35,30 +38,24 @@ export default function ClassDetail() {
 
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const [isSetting, setIsSetting] = useState(false);
-
-  // const { classData } = useClassDataContext();
-  // if (classData?.class_name) console.log(classData.class_name);
+  const [isSessionSchedule, setIsSessionSchedule] = useState(false);
   const handleCloseSettings = () => {
+    // setIsRootLayoutHidden(false);
     setIsSetting(false);
-    setIsRootLayoutHidden(true);
   };
 
   const handleOpenSettings = () => {
+    // setIsRootLayoutHidden(true);
     setIsSetting(true);
-    setIsRootLayoutHidden(false);
   };
-  let copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
-  copyParts = isManager ? { ...parts, manage: 'Manage' } : copyParts;
 
-  // const { classdetailId } = useParams();
-  // const data = classData?.find((data) => data._id === classdetailId);
-  // console.log(data);
+  let copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const response = await api.get(`/classes/${classdetailId}`);
+        const response = await api.get(`/classes/${classDetailId}`);
         setData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -78,44 +75,49 @@ export default function ClassDetail() {
 
   const class_name = data?.class_name;
   const class_code = data?.class_code;
-
+  if (!data || data.length == 0) return <div>Loadingg...</div>;
+  console.log(data);
   return isNewAssignmentOpen ? (
     <NewAssignmentForm
       onClose={() => setIsNewAssignmentOpen(false)}
       class_name={class_name}
     />
   ) : isSetting ? (
-    <SettingsForm onClose={handleCloseSettings} />
+    <SettingsForm setIsSetting={setIsSetting} data={data} />
+  ) : isSessionSchedule ? (
+    <ScheduleSession setIsSessionSchedule={setIsSessionSchedule} />
   ) : (
-    <Tabs defaultValue="stream" className="">
-      <div className="border-b fixed z-10 bg-white flex items-center justify-between w-[calc(100vw-85px)] ">
-        <TabsList className="bg-inherit ml-5 h-full flex items-center p-0">
-          {Object.entries(copyParts).map(([key, value]) => (
-            <TabsTrigger
-              key={key}
-              value={key}
-              className={cn(
-                'px-6 py-4 text-base font-medium relative text-gray-700 rounded-none hover:bg-gray-200 cursor-pointer',
-                activeClass
-              )}
-            >
-              {value}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        <Settings className="w-5 h-5 mr-5" onClick={handleOpenSettings} />
-      </div>
-      <div className="h-screen bg-white">
-        <Stream data={data} />
-        <Assignment
-          setIsNewAssignmentOpen={setIsNewAssignmentOpen}
-          data={data}
-        />
-        <People data={data} />
-        <CourseInfo data={data} />
-        {isTeacher && <Grade data={data} />}
-        {isManager && <ManageTab classdata={data} />}
-      </div>
-    </Tabs>
+    <div className={cn(isSetting ? 'hidden' : '')}>
+      <Tabs defaultValue="stream">
+        <div className="border-b fixed z-10 bg-white flex items-center justify-between w-[calc(100vw-85px)] ">
+          <TabsList className="bg-inherit ml-5 h-full flex items-center p-0 z-1000">
+            {Object.entries(copyParts).map(([key, value]) => (
+              <TabsTrigger
+                key={key}
+                value={key}
+                className={cn(
+                  'px-6 py-4 text-base font-medium relative text-gray-700 rounded-none hover:bg-gray-200 cursor-pointer',
+                  activeClass
+                )}
+              >
+                {value}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <Settings className="w-5 h-5 mr-5" onClick={handleOpenSettings} />
+        </div>
+        <div className="h-screen bg-white">
+          <Stream data={data} />
+          <Assignment
+            setIsNewAssignmentOpen={setIsNewAssignmentOpen}
+            data={data}
+          />
+          <People data={data} />
+          <CourseInfo data={data} />
+          {isTeacher && <Grade data={data} />}
+          {isManager && <ManageTab classdata={data} />}
+        </div>
+      </Tabs>
+    </div>
   );
 }
