@@ -32,6 +32,7 @@ import { LayoutContextProvider } from './providers/LayoutProvider';
 import { ClassDataProvider } from './providers/ClassDataProvider';
 import ClassWrapper from './pages/classes/ClassWrapper';
 import ClassManage from './pages/class-manage/ClassManage';
+import ExampleUsage from './pages/classes/ExampleUsage';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Signin />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/test" element={<ExampleUsage />} />
             {/* Protect dashboard: only accessible if logged in */}
             <Route element={<RootLayout />}>
               <Route path="/" element={<Dashboard />} />
@@ -50,13 +52,13 @@ function App() {
               <Route path="/add-course" element={<AddCoursePage />} />
               {/* <Route element={<ClassWrapper />}> */}
               <Route path="/class" element={<ClassPage />} />
-              <Route path="/class/:classdetailId" element={<ClassDetail />} />
+              <Route path="/class/:classDetailId" element={<ClassDetail />} />
               <Route
-                path="/class/:classdetailId/:assignmentsId"
+                path="/class/:classDetailId/:assignmentsId"
                 element={<AssignmentDetail />}
               />
               <Route
-                path="/class/:classdetailId/:assignmentsId/midterm-test"
+                path="/class/:classDetailId/:assignmentsId/midterm-test"
                 element={<Midterm />}
               />
               {/* </Route> */}

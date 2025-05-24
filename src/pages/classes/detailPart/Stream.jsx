@@ -42,7 +42,7 @@ export default function Stream({ data }) {
   if (!data || Object.keys(data).length === 0) {
     return <div>Loading...</div>;
   }
-
+  console.log(data);
   return (
     <TabsContent value="stream" className="w-4/5 mx-auto mt-5 pt-20">
       {isCopied && (

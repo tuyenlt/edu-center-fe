@@ -102,7 +102,7 @@ export function ClassCard({ data, fallbackColor }) {
             )}
           </div>
           <p className="text-sm mt-4 text-gray-200 hover:underline">
-            Hoai Thu Vu
+            {data.teachers[0].name}
           </p>
         </div>
       </div>
