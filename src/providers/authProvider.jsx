@@ -46,19 +46,19 @@ export default function AuthContextProvider({ children }) {
 		console.log('User authenticated:', isAuthenticated);
 	}, [isAuthenticated]);
 
-	// useLayoutEffect(() => {
-	// 	const authInterceptor = api.interceptors.request.use((config) => {
-	// 		config.headers.Authorization =
-	// 			!config._retry && token
-	// 				? `Bearer ${token}`
-	// 				: config.headers.Authorization;
-	// 		console.log(`set auth header: Bearer ${token}`);
-	// 		return config;
-	// 	});
-	// 	return () => {
-	// 		api.interceptors.request.eject(authInterceptor);
-	// 	};
-	// }, [token]);
+	useLayoutEffect(() => {
+		const authInterceptor = api.interceptors.request.use((config) => {
+			config.headers.Authorization =
+				!config._retry && token
+					? `Bearer ${token}`
+					: config.headers.Authorization;
+			console.log(`set auth header: Bearer ${token}`);
+			return config;
+		});
+		return () => {
+			api.interceptors.request.eject(authInterceptor);
+		};
+	}, [token]);
 
 	let isRefreshing = false;
 	let failedQueue = [];

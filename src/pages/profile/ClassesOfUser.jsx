@@ -3,11 +3,13 @@ import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import AvatarUser from "@/components/shared/AvatarUser";
+import { useNavigate } from "react-router-dom";
 
 
 export default function ClassesOfUser({ userId }) {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         api.get(`/classes-of-user/${userId}`)
@@ -28,13 +30,15 @@ export default function ClassesOfUser({ userId }) {
                     <LoadingSpinner />
                 </div>
             ) : classes.length === 0 ? (
-                <div className="flex items-center justify-center h-screen">
+                <div className="flex items-center justify-center">
                     <p className="text-gray-500">No classes available</p>
                 </div>
             ) : (
                 <div className="flex flex-col gap-y-7 p-6 max-w-screen-xl m-auto">
                     {classes.map((classData, idx) => (
-                        <div className="w-full flex border p-4 rounded-md items-center" key={idx}>
+                        <div className="w-full flex border p-4 rounded-md items-center cursor-pointer" key={idx}
+                            onClick={() => navigate(`/class/${classData._id}`)}
+                        >
                             <AvatarUser user={classData.teachers[0]} />
                             <div className="pl-2">
                                 <div className="">{classData.class_name}</div>

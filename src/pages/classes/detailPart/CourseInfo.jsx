@@ -20,12 +20,22 @@ import { useState } from 'react';
 import SessionScheduleDialog from '../SessionSchedule';
 import { useUserContext } from '@/providers/authContext';
 import { cn } from '@/lib/utils';
+import { getIntervalTimePosition } from '@/utils';
+import { toast } from 'sonner';
 export default function CourseInfo({ data }) {
-  const isManager = useUserContext();
+  const { user } = useUserContext();
+  const isManager = user?.role === 'manager';
   const [customLessonIndex, setCustomLessonIndex] = useState();
-  if (!data || Object.keys(data).length === 0) {
-    return <div>Loading...</div>; // TODO skeleton/loading spinner
-  }
+
+  // const handleChangeSession = (session) => {
+  //   try {
+
+
+  //   } catch (error) {
+  //     console.error('Error updating session:', error);
+  //     toast.error('Failed to update session. Please try again later.');
+  //   }
+  // }
 
   const chaptersInfo = data.course;
   const chapters = data.course.course_programs;
@@ -88,10 +98,16 @@ export default function CourseInfo({ data }) {
                 <div className="space-y-3">
                   {chapter.lessons.map((l, lessonIndex) => {
                     const lesson = sessions[count++];
+                    const timePosition = getIntervalTimePosition(new Date(lesson.start_time), new Date(lesson.end_time), new Date())
                     return (
                       <Card
                         key={lessonIndex}
-                        className="bg-gray-50 p-4 border border-gray-200 shadow-sm"
+                        className={cn(
+                          "bg-gray-50 p-4 border border-gray-200 shadow-sm",
+                          timePosition === 'before'
+                            ? 'opacity-50'
+                            : timePosition === 'within' ? 'bg-blue-50 border-blue-200' : 'bg-white',
+                        )}
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                           <div>
@@ -105,8 +121,7 @@ export default function CourseInfo({ data }) {
                           </div>
                           <div
                             className={cn(
-                              `flex items-center  px-2 py-1 rounded-sm gap-3  ${
-                                isManager && 'border'
+                              `flex items-center  px-2 py-1 rounded-sm gap-3  ${isManager && 'border'
                               }`
                             )}
                           >
@@ -116,7 +131,7 @@ export default function CourseInfo({ data }) {
                               </span>
                               <span>{dateTimeConvert_2(lesson.end_time)}</span>
                             </div>
-                            {isManager && (
+                            {isManager && timePosition === "after" && (
                               <SessionScheduleDialog
                                 session={
                                   customLessonIndex !== undefined
@@ -130,6 +145,7 @@ export default function CourseInfo({ data }) {
                                 }
                                 setCustomLessonIndex={setCustomLessonIndex}
                                 maxIndex={sessions.length}
+                              // onConfirm={handleChangeSession}
                               />
                             )}
                           </div>

@@ -12,8 +12,7 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
 
     const [editing, setEditing] = useState(false);
     const [formData, setFormData] = useState({
-        role: "",
-        email: "",
+        name: "",
         gender: "",
         phone_number: ""
     });
@@ -21,7 +20,7 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
     // Fill form when userData changes
     useEffect(() => {
         setFormData({
-            role: userData.role || "",
+            name: userData.name || "",
             gender: userData.gender || "",
             phone_number: userData.phone_number || ""
         });
@@ -79,19 +78,19 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
             <div className="w-full space-y-4 ml-6 mt-4">
                 {editing ? (
                     <>
+
                         <div>
                             <label className="block text-sm font-medium ">
-                                Role
+                                Name
                             </label>
                             <Input
-                                value={formData.role}
+                                value={formData.name}
                                 onChange={(e) =>
-                                    setFormData({ ...formData, role: e.target.value })
+                                    setFormData({ ...formData, name: e.target.value })
                                 }
                                 className="mt-1 w-full"
                             />
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium ">
                                 Gender
@@ -127,6 +126,10 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
                     </>
                 ) : (
                     <>
+                        <div>
+                            <h3 className="text-sm font-medium text-gray-300">Name</h3>
+                            <p className="mt-1">{userData.name || "—"}</p>
+                        </div>
                         <div>
                             <h3 className="text-sm font-medium text-gray-300">Role</h3>
                             <p className="mt-1">{userData.role || "—"}</p>
