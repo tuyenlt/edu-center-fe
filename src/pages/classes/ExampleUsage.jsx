@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import SessionScheduleDialog from './SessionSchedule';
+import SessionScheduleDialog from './detailPart/manage/SessionSchedule';
 
 export default function ExampleUsage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
