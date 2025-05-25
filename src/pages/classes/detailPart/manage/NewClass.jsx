@@ -195,11 +195,9 @@ const NewClass = () => {
           Create Class
         </Button>
 
-        <SessionSchedule
+        <SessionScheduleDialog
           session={selectedIndex != null ? sessionArray[selectedIndex] : {}}
           index={selectedIndex != null ? selectedIndex + 1 : 0}
-          isOpen={scheduleOpen}
-          setIsOpen={setScheduleOpen}
           onConfirm={handleSetSessionTime}
         />
       </form>
