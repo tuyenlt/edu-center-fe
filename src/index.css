@@ -130,6 +130,9 @@
   .page-header-action {
     @apply p-2;
   }
+  .btn-outline{
+    @apply px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 w-full max-w-[300px] m-auto;
+  }
   body {
     font-family: 'Poppins', sans-serif;
   }

@@ -140,12 +140,12 @@ export default function ScheduleCalendar({
     };
 
     return (
-        <Card className="max-w-6xl mx-auto mt-10 shadow-sm w-full">
+        <div className="max-w-8xl mx-auto mt-10 border shadow-sm w-full min-w-5xl">
             <CardContent className="p-6">
                 {renderHeader()}
                 {renderDays()}
                 {renderWeekCells()}
             </CardContent>
-        </Card>
+        </div>
     );
 }
