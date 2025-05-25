@@ -36,6 +36,7 @@ import CalendarPage from './pages/Calendar/CalendarPage';
 import LandingPage from './pages/LandingPage';
 import TeacherManage from './pages/teacher-manage/TeacherManage';
 import MagicInput from './components/shared/MagicInput';
+import PaymentManage from './pages/payment-manage/PaymentManage';
 
 function App() {
   return (
@@ -70,6 +71,8 @@ function App() {
               <Route path="/students-manage" element={<StudentManage />} />
               <Route path="/teachers-manage" element={<TeacherManage />} />
               <Route path="/class-manage" element={<ClassManage />} />
+              <Route path="/payment-manage" element={<PaymentManage />} />
+
 
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/calendar" element={<CalendarPage />} />

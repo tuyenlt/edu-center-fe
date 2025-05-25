@@ -38,7 +38,7 @@ export default function TeacherInfoRow({ teacher, onClick, onUpdate }) {
     return (
         <>
             <div
-                className="grid grid-cols-4 gap-4 p-4 border-b hover:bg-gray-50 cursor-pointer"
+                className="grid grid-cols-4 gap-4 p-4 border bg-white rounded-sm"
                 onClick={() => onClick ? onClick(teacher) : null}
             >
                 <div className="">

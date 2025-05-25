@@ -22,7 +22,8 @@ export default function TeacherCheckin({ open, onClose, teacherId }) {
         try {
             const response = await api.get(`/users/${teacherId}/schedules`);
             const sessionsData = response.data.filter(session => {
-                return getIntervalTimePosition(session.start_time, session.end_time, new Date()) === "within";
+                // return getIntervalTimePosition(session.start_time, session.end_time, new Date()) === "within";
+                return true;
             })
             setSessions(sessionsData);
             console.log("Fetched sessions:", sessionsData);
@@ -36,7 +37,7 @@ export default function TeacherCheckin({ open, onClose, teacherId }) {
     const handleSessionClick = async (session) => {
         try {
             const response = await api.post(`/teachers/${teacherId}/add-session`, {
-                session_id: session._id,
+                sessionId: session._id,
             })
             if (response.status === 200) {
                 toast.success("Session checked in successfully");
