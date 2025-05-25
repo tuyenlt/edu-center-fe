@@ -109,7 +109,7 @@ export default function SessionScheduleDialog({
   return (
     <Dialog onOpenChange={handleDialog}>
       <DialogTrigger>
-        <Pencil className="w-5 h-5" />
+        <Pencil className="w-5 h-5 absolute top-[42px] right-5" />
       </DialogTrigger>
 
       <DialogContent>

@@ -80,7 +80,7 @@ export default function RemoveOrEdit({ role, name }) {
       <Dialog open={isOpenRemove} onOpenChange={setIsOpenRemove}>
         <DialogContent className="sm:max-w-md flex flex-col gap-5">
           <DialogHeader>
-            <DialogTitle>Remove {role.toUpperCase()}?</DialogTitle>
+            <DialogTitle>Remove {role}?</DialogTitle>
             <DialogDescription>
               Are you sure you want to remove this {role}?
             </DialogDescription>

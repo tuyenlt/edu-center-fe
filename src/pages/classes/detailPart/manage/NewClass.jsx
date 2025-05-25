@@ -8,15 +8,17 @@ import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ScheduleCalendar from '@/components/shared/ScheduleCalendar';
 import SessionScheduleDialog from './SessionSchedule';
-import SessionInfo from '../../SessionInfo';
+// import SessionInfo from '../SessionInfo';
 import { toast } from 'sonner';
 import api from '@/services/api';
+import SessionInfo from '../../SessionInfo';
 
 const NewClass = () => {
+  const [customLessonIndex, setCustomLessonIndex] = useState();
   const navigate = useNavigate();
   const { state } = useLocation();
   const course = state?.course;
-
+  let count = 0;
   const initialSessions = course?.course_programs
     ? course.course_programs.flatMap((chap, chap_idx) =>
         (chap.lessons || []).map((lesson, lesson_idx) => ({
@@ -102,7 +104,6 @@ const NewClass = () => {
       toast.error('An error occurred');
     }
   };
-
   const lessonCounts =
     course?.course_programs.map((chap) => chap.lessons.length) || [];
 
@@ -166,7 +167,6 @@ const NewClass = () => {
               .reduce((a, b) => a + b, 0);
             const end = start + lessonCounts[chapIdx];
             const sessionsOfChapter = sessionArray.slice(start, end);
-
             return (
               <div key={chapIdx} className="border rounded-lg p-4 space-y-2">
                 <h2 className="text-xl font-semibold mb-4">
@@ -175,31 +175,48 @@ const NewClass = () => {
                 {sessionsOfChapter.map((session, idx) => {
                   const globalIdx = start + idx;
                   return (
-                    <SessionInfo
-                      key={globalIdx}
-                      session={session}
-                      index={globalIdx + 1}
-                      onClick={() => {
-                        setSelectedIndex(globalIdx);
-                        setScheduleOpen(true);
-                      }}
-                    />
+                    <div className="flex justify-between items-center relative">
+                      <SessionInfo
+                        key={globalIdx}
+                        session={session}
+                        index={globalIdx + 1}
+                        onClick={() => {
+                          setSelectedIndex(globalIdx);
+                          setScheduleOpen(true);
+                        }}
+                      />
+                      <SessionScheduleDialog
+                        session={
+                          customLessonIndex !== undefined
+                            ? sessionArray[customLessonIndex]
+                            : session
+                        }
+                        index={
+                          customLessonIndex !== undefined
+                            ? customLessonIndex
+                            : globalIdx
+                        }
+                        setCustomLessonIndex={setCustomLessonIndex}
+                        maxIndex={sessionArray.length}
+                        onConfirm={handleSetSessionTime}
+                      />
+                    </div>
                   );
                 })}
               </div>
             );
           })}
+          {/* <SessionInfo
+            chapters={course.course_programs}
+            onConfirm={handleSetSessionTime}
+            isInCourse={true}
+            sessions={sessionArray}
+          /> */}
         </div>
 
         <Button type="submit" className="w-full mt-4">
           Create Class
         </Button>
-
-        <SessionScheduleDialog
-          session={selectedIndex != null ? sessionArray[selectedIndex] : {}}
-          index={selectedIndex != null ? selectedIndex + 1 : 0}
-          onConfirm={handleSetSessionTime}
-        />
       </form>
     </div>
   );
