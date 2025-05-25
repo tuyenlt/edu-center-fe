@@ -86,7 +86,7 @@ export default function ClassDetail() {
   ) : isSessionSchedule ? (
     <ScheduleSession setIsSessionSchedule={setIsSessionSchedule} />
   ) : (
-    <Tabs defaultValue="stream">
+    <Tabs defaultValue="stream" className="pb-20">
       <div className="border-b fixed z-10 bg-white flex items-center justify-between w-[calc(100vw-85px)] ">
         <TabsList className="bg-inherit ml-5 h-full flex items-center p-0 z-1000">
           {Object.entries(copyParts).map(([key, value]) => (

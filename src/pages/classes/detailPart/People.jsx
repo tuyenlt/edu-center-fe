@@ -33,7 +33,10 @@ export default function People({ data }) {
   const teachers = data.teachers;
   const students = data.students;
   return (
-    <TabsContent value="people" className="w-4/5 mx-auto mt-5 pt-20 space-y-12">
+    <TabsContent
+      value="people"
+      className="w-4/5 mx-auto mt-5 py-20  space-y-12"
+    >
       {/* TEACHERS SECTION */}
       <section className="space-y-6">
         <div className="flex items-center justify-between border-b pb-3">
@@ -122,7 +125,7 @@ export default function People({ data }) {
                     </div>
                   </div>
                   {isManager && (
-                    <RemoveOrEdit role="student" name={student.name}/>
+                    <RemoveOrEdit role="student" name={student.name} />
                   )}
                 </li>
               );

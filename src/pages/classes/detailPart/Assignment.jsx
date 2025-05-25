@@ -193,11 +193,11 @@ export default function Assignment({ setIsNewAssignmentOpen, data }) {
     // </Accordion>
   );
   if (!data || Object.keys(data).length === 0) {
-    return <div>Loading...</div>; // Hoặc anh thêm skeleton/loading spinner cũng được
+    return <div>Loading...</div>;
   }
 
   return (
-    <TabsContent value="assignments" className="w-4/5 mx-auto mt-5 pt-20">
+    <TabsContent value="assignments" className="w-4/5 mx-auto mt-5 py-20">
       <div
         className={cn(
           'md:grid-cols-4 gap-4 mt-4 items-start',

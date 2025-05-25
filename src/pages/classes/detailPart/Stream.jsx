@@ -28,6 +28,7 @@ import { convertUTC } from '@/utils/dateTimeConvert';
 import LinkPreview from '@/components/shared/LinkPreview';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import MagicInput from '@/components/shared/MagicInput';
+import CommentList from '../CommentList';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function Stream({ data }) {
@@ -42,7 +43,6 @@ export default function Stream({ data }) {
   const [file, setFile] = useState([]);
   const [link, setLink] = useState([]);
   const editorRef = useRef(null);
-
   useEffect(() => {
     if (!token) return;
     const s = io(API_URL, { auth: { accessToken: token } });
@@ -120,7 +120,7 @@ export default function Stream({ data }) {
   if (!data || data.length == 0) return <div>Loading…</div>;
 
   return (
-    <TabsContent value="stream" className="w-4/5 mx-auto mt-5 pt-20">
+    <TabsContent value="stream" className="w-4/5 mx-auto mt-5 py-20">
       {isCopied && (
         <Alert className="fixed z-1000 bottom-5 left-5 w-50">
           <CheckCheck className="h-4 w-4" />
@@ -252,19 +252,8 @@ export default function Stream({ data }) {
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col gap-5 ">
-                <div className="flex justify-start text-blue-500 font-semibold text-sm gap-2 items-center mr-auto">
-                  <Users className="w-4 h-4 font-semibold text-blue-700" />
-                  <span>{`${post.comments.length} comments`}</span>
-                </div>
-                {post.comments.map((c) => (
-                  <div key={c._id} className="flex items-start gap-3 w-full">
-                    <AvatarUser user={c.author} className="w-8 h-8" />
-                    <div>
-                      <p className="text-sm font-medium">{c.author.name}</p>
-                      <p className="text-sm text-gray-600">{c.content}</p>
-                    </div>
-                  </div>
-                ))}
+                <CommentList commentsParam={post.comments} />
+
                 <div className="flex items-center gap-3 w-full">
                   <AvatarUser user={user} className="w-8 h-8" />
                   <Comment postId={post._id} onSubmit={handleAddComment} />

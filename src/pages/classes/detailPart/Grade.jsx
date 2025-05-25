@@ -12,11 +12,11 @@ import {
 import { cn } from '@/lib/utils';
 export default function Grade({ data }) {
   if (!data || Object.keys(data).length === 0) {
-    return <div>Loading...</div>; // Hoặc anh thêm skeleton/loading spinner cũng được
+    return <div>Loading...</div>;
   }
 
   return (
-    <TabsContent value="grade" className="mx-auto mt-[57px]">
+    <TabsContent value="grade" className="mx-auto py-20">
       <div className="w-full overflow-auto min-h-screen bg-white">
         <Table className="w-full table-fixed border-collapse text-sm">
           <TableHeader>
