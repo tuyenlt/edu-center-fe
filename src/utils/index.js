@@ -59,7 +59,6 @@ export function getIntervalTimePosition(checkStart, checkEnd, refTime) {
 export function getClassProgress(classData) {
     const totalSessions = classData.class_sessions.length;
     const completedSessions = classData.class_sessions.filter(session => getIntervalTimePosition(session.start_time, session.end_time, new Date()) === "before").length;
-
     if (totalSessions === 0) return 0;
     return Math.round((completedSessions / totalSessions) * 100);
 }

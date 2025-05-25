@@ -34,6 +34,7 @@ import ClassWrapper from './pages/classes/ClassWrapper';
 import ClassManage from './pages/class-manage/ClassManage';
 import CalendarPage from './pages/Calendar/CalendarPage';
 import LandingPage from './pages/LandingPage';
+import TeacherManage from './pages/teacher-manage/TeacherManage';
 import MagicInput from './components/shared/MagicInput';
 
 function App() {
@@ -53,7 +54,6 @@ function App() {
               <Route path="/course/:id" element={<CourseDetail />} />
               <Route path="/course/:id/edit" element={<EditCourse />} />
               <Route path="/add-course" element={<AddCoursePage />} />
-              {/* <Route element={<ClassWrapper />}> */}
               <Route path="/class" element={<ClassPage />} />
               <Route path="/class/:classDetailId" element={<ClassDetail />} />
               <Route
@@ -68,8 +68,10 @@ function App() {
               <Route path="/add-class" element={<NewClass />} />
               <Route path="/users/:id" element={<Profile />} />
               <Route path="/students-manage" element={<StudentManage />} />
-              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/teachers-manage" element={<TeacherManage />} />
               <Route path="/class-manage" element={<ClassManage />} />
+
+              <Route path="/chat" element={<ChatPage />} />
               <Route path="/calendar" element={<CalendarPage />} />
               <Route
                 path="/student-contacting"

@@ -1,7 +1,7 @@
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import ClassManageRow from "./ClassManageRow";
+import ClassInfoRow from "@/components/shared/ClassInfoRow";
 import {
     Select,
     SelectTrigger,
@@ -98,7 +98,7 @@ export default function ClassManage() {
                 {isLoading && <LoadingSpinner />}
                 {paginatedClasses.length > 0 ? (
                     paginatedClasses.map((classData) => (
-                        <ClassManageRow key={classData._id} data={classData} />
+                        <ClassInfoRow key={classData._id} data={classData} mode="more" />
                     ))
                 ) : (
                     <div className="text-center text-gray-500">No matching classes found.</div>
