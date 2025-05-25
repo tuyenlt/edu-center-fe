@@ -8,7 +8,7 @@ import Course from './pages/Course/Courses';
 import AddCoursePage from './pages/Course/AddCourse';
 import CourseDetail from './pages/Course/CourseDetail';
 import EditCourse from './pages/Course/EditCourse';
-import NewClass from './pages/classes/NewClass';
+import NewClass from './pages/classes/detailPart/manage/NewClass';
 import ClassPage from './pages/classes/ClassPage';
 import Profile from './pages/profile/Profile';
 import StudentManage from './pages/student-manage/StudentManage';
@@ -32,12 +32,10 @@ import { LayoutContextProvider } from './providers/LayoutProvider';
 import { ClassDataProvider } from './providers/ClassDataProvider';
 import ClassWrapper from './pages/classes/ClassWrapper';
 import ClassManage from './pages/class-manage/ClassManage';
-
-import ExampleUsage from './pages/classes/ExampleUsage';
-
 import CalendarPage from './pages/Calendar/CalendarPage';
 import LandingPage from './pages/LandingPage';
 import TeacherManage from './pages/teacher-manage/TeacherManage';
+import MagicInput from './components/shared/MagicInput';
 
 function App() {
   return (
@@ -47,7 +45,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Signin />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/test" element={<ExampleUsage />} />
+            <Route path="/test" element={<MagicInput />} />
             <Route path="*" element={<LandingPage />} />
             {/* Protect dashboard: only accessible if logged in */}
             <Route element={<RootLayout />}>

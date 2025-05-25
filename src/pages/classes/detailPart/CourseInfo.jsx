@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/card';
 import { dateTimeConvert_2 } from '@/utils/dateTimeConvert';
 import { useState } from 'react';
-import SessionScheduleDialog from '../SessionSchedule';
+import SessionScheduleDialog from './manage/SessionSchedule';
 import { useUserContext } from '@/providers/authContext';
 import { cn } from '@/lib/utils';
 import { getIntervalTimePosition } from '@/utils';

@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input';
 import { SendHorizonal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import MagicInput from '@/components/shared/MagicInput';
 
 export default function Comment({ postId, onSubmit }) {
   const [comment, setComment] = useState('');
@@ -19,7 +20,7 @@ export default function Comment({ postId, onSubmit }) {
 
   return (
     <form className="flex w-full gap-x-3" onSubmit={handleSubmit}>
-      <Input
+      <MagicInput
         placeholder="Write a comment..."
         value={comment}
         onChange={(e) => setComment(e.target.value)}

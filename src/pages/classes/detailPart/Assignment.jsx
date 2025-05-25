@@ -82,30 +82,57 @@ export default function Assignment({ setIsNewAssignmentOpen, data }) {
             </CardHeader>
           </AccordionTrigger>
           <AccordionContent className="border-t pb-0">
-            <CardContent className="w-full mx-autoborder shadow-sm p-4 bg-white space-y-4">
+            <CardContent className="w-full mx-auto border shadow-sm p-4 bg-white dark:bg-gray-900 space-y-4 rounded-md">
               <div className="text-sm text-muted-foreground">
-                Đã đăng vào 19 thg 5 (Đã chỉnh sửa Hôm qua)
+                Đã đăng vào 19 thg 5 (Đã chỉnh sửa 20 thg 5)
               </div>
 
-              <h2 className="text-lg font-semibold">
-                Review what you learn from DTD
-              </h2>
+              <div className="flex items-start justify-between">
+                <h2 className="text-lg font-semibold">
+                  Review what you learn from DTD
+                </h2>
+                <div className="flex items-center gap-8 text-sm pt-2">
+                  <div>
+                    <span className="text-xl font-semibold">0</span>
+                    <br />
+                    Đã nộp
+                  </div>
+                  <div>
+                    <span className="text-xl font-semibold">1</span>
+                    <br />
+                    Đã giao
+                  </div>
+                </div>
+              </div>
+              {/* File & link preview */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Link - ChatGPT */}
+                <a
+                  href="https://chatgpt.com/c/682939"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border p-3 rounded flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  <LinkIcon className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm truncate">Just a moment…</span>
+                </a>
 
-              {/* File attachments */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <LinkIcon className="w-4 h-4" />
-                <span className="text-sm truncate">Just a moment...</span>
+                {/* YouTube Video */}
+                <div className="border p-3 rounded flex items-center gap-2">
+                  <Youtube className="w-4 h-4 text-red-500" />
+                  <span className="text-sm truncate">
+                    Creepy Nuts「Bling-Bang-Bang-Born」
+                    <span className="text-muted-foreground"> · 2 phút</span>
+                  </span>
+                </div>
 
-                <Youtube className="w-4 h-4 text-red-500" />
-                <span className="text-sm truncate">
-                  Creepy Nuts「Bling-Bang-Bang-Born」
-                </span>
-
+                {/* PowerPoint file */}
                 <div className="border p-3 rounded flex items-center gap-2">
                   <FileIcon className="w-4 h-4 text-blue-500" />
                   <span className="text-sm truncate">backup.pptx</span>
                 </div>
 
+                {/* Word file */}
                 <div className="border p-3 rounded flex items-center gap-2">
                   <FileText className="w-4 h-4 text-green-600" />
                   <span className="text-sm truncate">blind injection.docx</span>
@@ -113,15 +140,6 @@ export default function Assignment({ setIsNewAssignmentOpen, data }) {
               </div>
 
               {/* Submission info */}
-              <div className="flex items-center gap-8 text-sm pt-2">
-                <div>
-                  <span className="text-xl font-semibold">0</span> <br /> Đã nộp
-                </div>
-                <div>
-                  <span className="text-xl font-semibold">1</span> <br /> Đã
-                  giao
-                </div>
-              </div>
 
               <div>
                 <a href="#" className="text-sm text-blue-600 hover:underline">
@@ -213,8 +231,8 @@ export default function Assignment({ setIsNewAssignmentOpen, data }) {
         {isTeacher && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="mb-5 rounded-4xl bg-blue-700 text-white ml-auto p-3 flex gap-2 shadow-2xl">
-                <Plus></Plus>
+              <button className="mb-5 ml-auto flex items-center gap-2 rounded-2xl bg-blue-600 px-4 py-2 text-white font-medium shadow-md hover:bg-blue-700 transition-colors">
+                <Plus className="w-4 h-4" />
                 <span>New</span>
               </button>
             </DropdownMenuTrigger>

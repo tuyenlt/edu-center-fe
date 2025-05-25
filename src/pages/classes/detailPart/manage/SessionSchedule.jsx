@@ -1,4 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -113,14 +119,12 @@ export default function SessionScheduleDialog({
               Session {index + 1}: {session?.title}
             </div>
             <div className="col-span-1 flex text-gray-500 space-x-2">
-              <ChevronLeft
-                className="cursor-pointer hover:text-black"
-                onClick={handlePrevSession}
-              />
-              <ChevronRight
-                className="cursor-pointer hover:text-black"
-                onClick={handleNextSession}
-              />
+              <button onClick={handlePrevSession}>
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+              <button onClick={handleNextSession}>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
             </div>
           </DialogTitle>
         </DialogHeader>
