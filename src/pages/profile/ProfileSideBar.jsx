@@ -58,7 +58,7 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
 
             {/* Avatar */}
             <div className="relative">
-                <AvatarUser user={userData} className="w-32 h-32" />
+                <AvatarUser user={userData} className="w-32 h-32" fallbackTextClass="text-5xl" />
                 {isSelf && (
                     <label className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow cursor-pointer">
                         <Edit className="w-5 h-5 text-gray-600" />

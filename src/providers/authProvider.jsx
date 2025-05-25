@@ -11,7 +11,6 @@ export default function AuthContextProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   useEffect(() => {
     if (isLoggingOut) {
