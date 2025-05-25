@@ -12,7 +12,7 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
-          <div className="text-2xl font-bold">Englishnest</div>
+          <div className="text-2xl font-bold">EnglishNest</div>
           <div className="space-x-6 hidden md:flex">
             <a href="#about" className="hover:underline">
               About
