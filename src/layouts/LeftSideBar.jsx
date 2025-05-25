@@ -11,6 +11,8 @@ import {
   CreditCard,
   LayoutDashboard,
   LogOut,
+  UserPen,
+  UserCircle,
 } from 'lucide-react';
 
 import {
@@ -51,6 +53,7 @@ const menuByRole = {
     { title: 'Courses Manage', url: '/courses', icon: Search },
     { title: 'Classes Manage', url: '/class-manage', icon: LayoutDashboard },
     { title: 'Student Manage', url: '/students-manage', icon: Users },
+    { title: 'Teacher Manage', url: '/teachers-manage', icon: UserCircle },
     { title: 'Payment Stats', url: '/payment-manage', icon: CreditCard },
     { title: 'Settings', url: '/setting', icon: Settings },
   ],
