@@ -62,13 +62,13 @@ export default function Course() {
           )}
         </div>
       </div>
-      <div className="flex flex-col w-full mt-6 gap-5 items-center">
+      <div className="flex w-full mt-6 gap-5 items-center flex-wrap">
         {loading && <LoadingSpinner />}
         {!filteredCourses
           ? 'No course found'
           : filteredCourses.map((course) => (
-            <CourseCard key={course._id} course={course} />
-          ))}
+              <CourseCard key={course._id} course={course} />
+            ))}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { useUserContext } from '@/providers/authContext';
+import { Calculator } from 'lucide-react';
 
 export default function CourseCard({ course }) {
   const { _id, name, goal, course_level, img_url, price } = course;
@@ -10,7 +11,10 @@ export default function CourseCard({ course }) {
   const isManager = user?.role === 'manager';
 
   return (
-    <Card className="w-full rounded-sm overflow-hidden hover:shadow-sm transition-all flex flex-col">
+    <Card
+      className=" rounded-sm overflow-hidden hover:shadow-sm transition-all flex flex-col pt-0"
+      style={{ width: 'calc(50% - 30px)' }}
+    >
       {/* Top Image */}
       <div className="h-48 w-full overflow-hidden">
         <img src={img_url} alt={name} className="object-cover w-full h-full" />
