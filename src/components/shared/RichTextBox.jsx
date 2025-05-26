@@ -101,12 +101,14 @@ const RichTextBox = forwardRef(
               <Underline className="w-5 h-5" />
             </button>
           </div>
-          <AttachAndUpload
-            file={file}
-            setFile={setFile}
-            link={link}
-            setLink={setLink}
-          />
+          {link && (
+            <AttachAndUpload
+              file={file}
+              setFile={setFile}
+              link={link}
+              setLink={setLink}
+            />
+          )}
         </div>
       </div>
     );

@@ -8,7 +8,6 @@ import SettingsForm from './detailPart/manage/SettingsForm';
 import api from '@/services/api';
 import CourseInfo from './detailPart/CourseInfo';
 import People from './detailPart/People';
-import { parts } from './data';
 import Stream from './detailPart/Stream';
 import Assignment from './detailPart/Assignment';
 import Grade from './detailPart/Grade';
@@ -19,6 +18,16 @@ import { useLayoutContext } from '@/providers/LayoutProvider';
 import ManageTab from './detailPart/manage/Manage';
 
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import ClassSchedule from './detailPart/ClassSchedule';
+
+const parts = {
+  stream: 'Stream',
+  assignments: 'Assignments',
+  people: 'People',
+  courseInfo: 'Course',
+  schedule: 'Schedule',
+};
+
 
 export default function ClassDetail() {
   const { classDetailId } = useParams();
@@ -75,13 +84,7 @@ export default function ClassDetail() {
   const class_code = data?.class_code;
   if (!data || data.length == 0) return <div>Loadingg...</div>;
   console.log(data);
-  return isNewAssignmentOpen ? (
-    <NewAssignmentForm
-      onClose={() => setIsNewAssignmentOpen(false)}
-      class_name={class_name}
-      data={data}
-    />
-  ) : isSetting ? (
+  return isSetting ? (
     <SettingsForm setIsSetting={setIsSetting} data={data} />
   ) : isSessionSchedule ? (
     <ScheduleSession setIsSessionSchedule={setIsSessionSchedule} />
@@ -102,17 +105,20 @@ export default function ClassDetail() {
             </TabsTrigger>
           ))}
         </TabsList>
-        <Settings className="w-5 h-5 mr-5" onClick={handleOpenSettings} />
+        {isManager && (
+          <Settings className="w-5 h-5 mr-5" onClick={handleOpenSettings} />
+        )}
       </div>
       <div className="h-screen bg-white">
         <Stream data={data} />
         <Assignment
           setIsNewAssignmentOpen={setIsNewAssignmentOpen}
-          data={data}
+          classData={data}
         />
         <People data={data} />
         <CourseInfo data={data} />
         {isTeacher && <Grade data={data} />}
+        <ClassSchedule classData={data} />
       </div>
     </Tabs>
   );

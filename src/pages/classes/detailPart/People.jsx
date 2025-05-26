@@ -46,11 +46,13 @@ export default function People({ data }) {
               {teachers.length} teachers
             </span>
             <Dialog>
-              <DialogTrigger asChild>
-                <button className="p-2 rounded-full hover:bg-gray-100 transition">
-                  <UserRoundPlus size={20} />
-                </button>
-              </DialogTrigger>
+              {isManager && (
+                <DialogTrigger asChild>
+                  <button className="p-2 rounded-full hover:bg-gray-100 transition">
+                    <UserRoundPlus size={20} />
+                  </button>
+                </DialogTrigger>
+              )}
               <DialogContent>
                 <AddPeopleToClass
                   type="teacher"
@@ -91,11 +93,13 @@ export default function People({ data }) {
               {students.length} students
             </span>
             <Dialog>
-              <DialogTrigger asChild>
-                <button className="p-2 rounded-full hover:bg-gray-100 transition">
-                  <UserRoundPlus size={20} />
-                </button>
-              </DialogTrigger>
+              {isManager && (
+                <DialogTrigger asChild>
+                  <button className="p-2 rounded-full hover:bg-gray-100 transition">
+                    <UserRoundPlus size={20} />
+                  </button>
+                </DialogTrigger>
+              )}
               <DialogContent>
                 <AddPeopleToClass
                   type="student"

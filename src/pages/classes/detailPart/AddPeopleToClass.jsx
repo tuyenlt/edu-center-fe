@@ -23,7 +23,8 @@ export default function AddPeopleToClass({
       try {
         let response;
         if (type === 'student') {
-          response = await api.get(`/courses/${courseId}/requested-students`);
+          // response = await api.get(`/courses/${courseId}/requested-students`);
+          response = await api.get(`/students`);
         } else if (type === 'teacher') {
           response = await api.get(`/users/list?role=teacher`);
         }
@@ -52,14 +53,10 @@ export default function AddPeopleToClass({
   };
 
   const handleAddClick = () => {
-    const payload =
-      type === 'student'
-        ? { students: selectedUsers }
-        : { teacher_id: selectedUsers };
-    const endpoint =
-      type === 'student'
-        ? `/classes/${classId}/add-students`
-        : `/classes/${classId}/add-teacher`;
+    const payload = {
+      userIds: selectedUsers,
+    }
+    const endpoint = `/classes/${classId}/add-users`
 
     api
       .post(endpoint, payload)

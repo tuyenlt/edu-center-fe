@@ -140,7 +140,7 @@ export default function ScheduleCalendar({
     };
 
     return (
-        <div className="max-w-8xl mx-auto mt-10 border shadow-sm w-full min-w-5xl">
+        <div className="max-w-8xl mx-auto mt-10 border w-full min-w-5xl">
             <CardContent className="p-6">
                 {renderHeader()}
                 {renderDays()}

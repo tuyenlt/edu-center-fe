@@ -160,9 +160,77 @@ export const headers = [
   },
 ];
 
-export const parts = {
-  stream: 'Stream',
-  assignments: 'Assignments',
-  people: 'People',
-  courseInfo: 'Course',
+
+export const fakeAssignmentsData = {
+  assignments: [
+    {
+      title: "Math Assignment: Pythagorean Theorem",
+      createdAt: "2025-05-20T00:00:00.000Z",
+      updatedAt: "2025-05-22T00:00:00.000Z",
+      description:
+        "Prove and apply the Pythagorean theorem to right triangles.",
+      submitted: 12,
+      assigned: 20,
+      resources: [
+        {
+          type: "link",
+          link: "https://en.wikipedia.org/wiki/Pythagorean_theorem",
+          name: "Wiki: Pythagorean Theorem",
+        },
+        {
+          type: "youtube",
+          link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+          name: "Pythagorean Theorem Tutorial",
+        },
+        {
+          type: "file",
+          link: "https://example.com/resources/pythagoras-exercises.pdf",
+          name: "Exercise PDF",
+        },
+      ],
+    },
+    {
+      title: "Literature Essay: Analysis of “Picked-up Wife”",
+      createdAt: "2025-05-25T00:00:00.000Z",
+      updatedAt: "2025-05-27T00:00:00.000Z",
+      description:
+        "Write a 3-page essay analyzing characters and social themes in Kim Lân’s short story “Picked-up Wife.”",
+      submitted: 8,
+      assigned: 25,
+      resources: [
+        {
+          type: "link",
+          link: "https://vanmau.com/vo-nhat-phan-tich.html",
+          name: "Sample Analysis",
+        },
+        {
+          type: "file",
+          link: "https://example.com/resources/vo-nhat-text.txt",
+          name: "Original Short Story Text",
+        },
+      ],
+    },
+    {
+      title: "Chemistry Lab: Anion Identification",
+      createdAt: "2025-05-28T00:00:00.000Z",
+      updatedAt: "2025-05-29T00:00:00.000Z",
+      description:
+        "Perform tests to identify common anions (Cl⁻, SO₄²⁻, NO₃⁻) using characteristic reactions.",
+      submitted: 15,
+      assigned: 18,
+      resources: [
+        {
+          type: "link",
+          link: "https://chemguide.co.uk/inorganic/aniontests/aniontests.html",
+          name: "Lab Guide: Anion Tests",
+        },
+        {
+          type: "file",
+          link: "https://example.com/resources/anion-test-lab-manual.docx",
+          name: "Lab Manual",
+        },
+      ],
+    },
+  ],
 };
+

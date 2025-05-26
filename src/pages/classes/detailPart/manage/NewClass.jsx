@@ -13,25 +13,25 @@ import { toast } from 'sonner';
 import api from '@/services/api';
 import SessionInfo from '../../SessionInfo';
 
+
 const NewClass = () => {
   const [customLessonIndex, setCustomLessonIndex] = useState();
   const navigate = useNavigate();
   const { state } = useLocation();
   const course = state?.course;
-  let count = 0;
   const initialSessions = course?.course_programs
     ? course.course_programs.flatMap((chap, chap_idx) =>
-        (chap.lessons || []).map((lesson, lesson_idx) => ({
-          title: lesson.title,
-          description: lesson.description,
-          chapter_index: chap_idx,
-          lecture_index: lesson_idx,
-          type: lesson.type,
-          start_time: null,
-          end_time: null,
-          room: '',
-        }))
-      )
+      (chap.lessons || []).map((lesson, lesson_idx) => ({
+        title: lesson.title,
+        description: lesson.description,
+        chapter_index: chap_idx,
+        lecture_index: lesson_idx,
+        type: lesson.type,
+        start_time: null,
+        end_time: null,
+        room: '',
+      }))
+    )
     : [];
 
   const [sessionArray, setSessionArray] = useState(initialSessions);
@@ -50,16 +50,14 @@ const NewClass = () => {
   const isValidSessionArray = (sessions) =>
     sessions.every((s) => s.start_time && s.end_time && s.room);
 
-  const handleSetSessionTime = (updatedSession) => {
-    // copy the array
+  const handleSetSessionTime = (data) => {
+    const { index, session } = data;
     const arr = [...sessionArray];
 
-    // pull out only the three fields you want to apply
-    const { start_time, end_time, room } = updatedSession;
+    const { start_time, end_time, room } = session;
 
-    // merge them onto the existing session
-    arr[selectedIndex] = {
-      ...arr[selectedIndex],
+    arr[index] = {
+      ...arr[index],
       start_time,
       end_time,
       room,
@@ -77,13 +75,15 @@ const NewClass = () => {
     }
     try {
       console.log(sessionArray);
-      const newClass = await api.post('/classes', {
-        course_id: course._id,
+      const response = await api.post('/classes', {
+        course: course._id,
         class_name: data.class_name,
         class_code: data.class_code,
         max_students: data.max_students,
         notes: data.notes,
+        status: "pending",
       });
+      const newClass = response.data;
       if (!newClass?._id) {
         toast.error('Error creating class');
         return;
@@ -98,7 +98,7 @@ const NewClass = () => {
         )
       );
       toast.success('Class created successfully');
-      navigate('/classes');
+      // navigate('/class');
     } catch (err) {
       console.error(err);
       toast.error('An error occurred');
@@ -108,7 +108,7 @@ const NewClass = () => {
     course?.course_programs.map((chap) => chap.lessons.length) || [];
 
   return (
-    <div className="max-w-screen-xl p-10">
+    <div className="max-w-screen-xl p-20 m-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
           <Label htmlFor="class_name">Class Name</Label>
@@ -187,17 +187,11 @@ const NewClass = () => {
                       />
                       <SessionScheduleDialog
                         session={
-                          customLessonIndex !== undefined
-                            ? sessionArray[customLessonIndex]
-                            : session
+                          sessionArray[globalIdx] || session
                         }
                         index={
-                          customLessonIndex !== undefined
-                            ? customLessonIndex
-                            : globalIdx
+                          globalIdx
                         }
-                        setCustomLessonIndex={setCustomLessonIndex}
-                        maxIndex={sessionArray.length}
                         onConfirm={handleSetSessionTime}
                       />
                     </div>

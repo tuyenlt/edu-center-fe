@@ -24,8 +24,7 @@ import StudentManage from './pages/student-manage/StudentManage';
 // export default App;
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ClassDetail from './pages/classes/ClassDetail';
-import AssignmentDetail from './pages/classes/AssignmentDetail';
-import Midterm from './pages/classes/MidTerm';
+import AssignmentDetail from './pages/Assignments/AssignmentDetail';
 import ChatPage from './pages/ChatPage/ChatPage';
 import StudentContacting from './pages/studentContacting/StudentContacting';
 import { LayoutContextProvider } from './providers/LayoutProvider';
@@ -57,14 +56,8 @@ function App() {
               <Route path="/add-course" element={<AddCoursePage />} />
               <Route path="/class" element={<ClassPage />} />
               <Route path="/class/:classDetailId" element={<ClassDetail />} />
-              <Route
-                path="/class/:classDetailId/:assignmentsId"
-                element={<AssignmentDetail />}
-              />
-              <Route
-                path="/class/:classDetailId/:assignmentsId/midterm-test"
-                element={<Midterm />}
-              />
+              <Route path='/assignments/:id' element={<AssignmentDetail />} />
+
               {/* </Route> */}
               <Route path="/add-class" element={<NewClass />} />
               <Route path="/users/:id" element={<Profile />} />

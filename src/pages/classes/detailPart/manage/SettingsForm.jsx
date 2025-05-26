@@ -21,26 +21,29 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import api from '@/services/api';
+import { toast } from 'sonner';
 
 export default function SettingsForm({ setIsSetting, data }) {
   const { setIsRootLayoutHidden } = useLayoutContext();
   const [isEditted, setIsEditted] = useState(false);
   const [open, setOpen] = useState(false);
   const initialInput = {
-    code: data.class_code,
-    name: data.class_name,
+    class_code: data.class_code,
+    class_name: data.class_name,
     status: data.status,
-    max: data.max_students,
+    max_students: data.max_students,
     note: data.note,
   };
 
   const [input, setInput] = useState({
-    code: '',
-    name: '',
+    class_code: '',
+    class_name: '',
     status: '',
-    max: '',
+    max_students: '',
     note: '',
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (!isEditted && input !== initialInput) setIsEditted(true);
@@ -54,9 +57,16 @@ export default function SettingsForm({ setIsSetting, data }) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log(input);
-    setIsEditted(false);
-    setIsSetting(false);
+    api.patch(`/classes/${data._id}`, input)
+      .then((res) => {
+        toast('Class updated successfully!');
+        setIsEditted(false);
+        setIsSetting(false);
+        setOpen(false);
+      }).catch((error) => {
+        console.error('Error updating class:', error);
+        toast('Error updating class. Please try again.')
+      })
   };
 
   const handleDiscard = () => {
@@ -108,8 +118,8 @@ export default function SettingsForm({ setIsSetting, data }) {
               <div className="space-y-1">
                 <Label>Class Code</Label>
                 <Input
-                  name="code"
-                  value={input.code}
+                  name="class_code"
+                  value={input.class_code}
                   onChange={handleInputChange}
                 />
               </div>
@@ -117,8 +127,8 @@ export default function SettingsForm({ setIsSetting, data }) {
               <div className="space-y-1">
                 <Label>Class Name</Label>
                 <Input
-                  name="name"
-                  value={input.name}
+                  name="class_name"
+                  value={input.class_name}
                   onChange={handleInputChange}
                 />
               </div>
@@ -148,20 +158,17 @@ export default function SettingsForm({ setIsSetting, data }) {
                   </SelectContent>
                 </Select>
               </div>
-              {Object.keys(data).length > 0 &&
-                console.log(input.class_code, input.status)}
               <div className="space-y-1">
                 <Label>Max Students</Label>
                 <Input
                   type="number"
-                  name="max"
-                  value={input.max}
+                  name="max_students"
+                  value={input.max_students}
                   onChange={handleInputChange}
                 />
               </div>
             </CardContent>
           </Card>
-          <div>// Coming soon...</div>
         </form>
 
         <Dialog open={open} onOpenChange={setOpen}>

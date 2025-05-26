@@ -11,16 +11,29 @@ import { getIntervalTimePosition } from '@/utils';
 import { dateTimeConvert_2 } from '@/utils/dateTimeConvert';
 import SessionScheduleDialog from './manage/SessionSchedule';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import api from '@/services/api';
 export default function SessionInfo({
   chapters,
   sessions,
-  isInCourse = false,
-  onConfirm,
 }) {
   const { user } = useUserContext();
-  const isManager = user?.role === 'manager';
-  const [customLessonIndex, setCustomLessonIndex] = useState();
+  const isManager = user.role === 'manager';
   let count = 0;
+
+  const onConfirm = async (data) => {
+    try {
+      const { index, session } = data;
+      const response = await api.patch(`/class-sessions/${sessions[index]._id}`, session);
+      if (response.status === 200) {
+        toast.success('Session updated successfully!');
+      }
+    } catch (error) {
+      console.error('Error updating session:', error);
+      toast.error('Failed to update session. Please try again later.');
+    }
+  }
+
   return (
     <Accordion type="multiple" className="space-y-4">
       {chapters.map((chapter, idx) => (
@@ -41,11 +54,9 @@ export default function SessionInfo({
           <AccordionContent className="px-6 pb-5">
             <div className="space-y-3">
               {chapter.lessons.map((l, lessonIndex) => {
-                const lesson = sessions ? sessions[count] : l;
+                const lesson = sessions[count];
                 const sessionIndex = count;
                 count++;
-                if (sessions) console.log(count);
-                const lessons = sessions ?? chapter.lessons;
                 const timePosition = getIntervalTimePosition(
                   new Date(lesson.start_time),
                   new Date(lesson.end_time),
@@ -59,8 +70,8 @@ export default function SessionInfo({
                       timePosition === 'before'
                         ? 'opacity-50'
                         : timePosition === 'within'
-                        ? 'bg-blue-50 border-blue-200'
-                        : 'bg-white'
+                          ? 'bg-blue-50 border-blue-200'
+                          : 'bg-white'
                     )}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between">
@@ -75,8 +86,7 @@ export default function SessionInfo({
                       </div>
                       <div
                         className={cn(
-                          `flex items-center  px-2 py-1 rounded-sm gap-3  ${
-                            isManager && 'border'
+                          `flex items-center  px-2 py-1 rounded-sm gap-3  ${isManager && 'border'
                           }`
                         )}
                       >
@@ -86,23 +96,17 @@ export default function SessionInfo({
                           </span>
                           <span>{dateTimeConvert_2(lesson.end_time)}</span>
                         </div>
-                        {/* {isManager && timePosition === 'after' && ( */}
-                        <SessionScheduleDialog
-                          session={
-                            customLessonIndex !== undefined
-                              ? sessions[customLessonIndex]
-                              : lesson
-                          }
-                          index={
-                            customLessonIndex !== undefined
-                              ? customLessonIndex
-                              : sessionIndex
-                          }
-                          setCustomLessonIndex={setCustomLessonIndex}
-                          maxIndex={sessions.length}
-                          onConfirm={onConfirm}
-                        />
-                        {/* )} */}
+                        {isManager && timePosition === 'after' && (
+                          <SessionScheduleDialog
+                            session={
+                              lesson
+                            }
+                            index={
+                              sessionIndex
+                            }
+                            onConfirm={onConfirm}
+                          />
+                        )}
                       </div>
                     </div>
                   </Card>

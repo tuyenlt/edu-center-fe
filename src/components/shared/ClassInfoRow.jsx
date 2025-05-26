@@ -16,7 +16,14 @@ export default function ClassInfoRow({ data, mode = 'default' }) {
         <Link to={`/class/${data._id}`} className="flex items-center justify-between w-full px-6 py-4 border rounded-lg shadow-sm bg-white hover:shadow-md transition-all">
             {/* Class Info Block */}
             <div className="flex items-center gap-4 w-1/3">
-                <AvatarUser user={data.teachers?.[0]} className="w-12 h-12" fallbackColor="bg-blue-500" />
+                {data.teachers.length > 0 ? (
+
+                    <AvatarUser user={data.teachers?.[0]} className="w-12 h-12" fallbackColor="bg-blue-500" />
+                ) : (
+                    <Avatar className="w-12 h-12">
+                        <AvatarFallback className="bg-gray-200 text-gray-500">?</AvatarFallback>
+                    </Avatar>
+                )}
                 <div>
                     <h3 className="text-base font-semibold text-gray-800">{data.class_name}</h3>
                     <p className="text-sm text-gray-500">{data.class_code}</p>

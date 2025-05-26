@@ -1,9 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons';
+import { Pencil } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,21 +17,17 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import { toast } from 'sonner';
-import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
 
 export default function SessionScheduleDialog({
   session,
   index,
-  setCustomLessonIndex,
   onConfirm,
-  maxIndex,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [startHour, setStartHour] = useState('');
   const [endHour, setEndHour] = useState('');
   const [room, setRoom] = useState('');
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!session) return;
@@ -67,18 +59,6 @@ export default function SessionScheduleDialog({
     }
   }, [startHour, endHour]);
 
-  const handlePrevSession = () => {
-    if (index > 0) setCustomLessonIndex(index - 1);
-  };
-
-  const handleNextSession = () => {
-    if (index < maxIndex - 1) setCustomLessonIndex(index + 1);
-  };
-
-  const handleDialog = () => {
-    setOpen(false);
-    setCustomLessonIndex(undefined);
-  };
   const handleConfirm = () => {
     if (!date || !startHour || !endHour || room.trim() === '') {
       alert('Please fill all information');
@@ -95,36 +75,34 @@ export default function SessionScheduleDialog({
     endDate.setHours(endH, 0, 0, 0);
 
     onConfirm?.({
-      title: session.title,
-      description: session.description,
-      type: session.type,
-      start_time: startDate.toISOString(),
-      end_time: endDate.toISOString(),
-      room,
+      index,
+      session: {
+        title: session.title,
+        description: session.description,
+        type: session.type,
+        start_time: startDate.toISOString(),
+        end_time: endDate.toISOString(),
+        room,
+      }
     });
 
-    toast(`Scheduled: ${startDate.toLocaleString()}`);
+    setIsOpen(false);
   };
 
   return (
-    <Dialog onOpenChange={handleDialog}>
-      <DialogTrigger>
-        <Pencil className="w-5 h-5 absolute top-[42px] right-5" />
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Pencil
+          className="w-5 h-5"
+          onClick={() => setIsOpen(true)}
+        />
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="grid items-center gap-5 grid-cols-6 w-3/4">
-            <div className="col-span-5">
+            <div className="col-span-6">
               Session {index + 1}: {session?.title}
-            </div>
-            <div className="col-span-1 flex text-gray-500 space-x-2">
-              <button onClick={handlePrevSession}>
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </button>
-              <button onClick={handleNextSession}>
-                <FontAwesomeIcon icon={faChevronRight} />
-              </button>
             </div>
           </DialogTitle>
         </DialogHeader>
@@ -184,7 +162,6 @@ export default function SessionScheduleDialog({
               onChange={(e) => setRoom(e.target.value)}
             />
           </div>
-
           <Button onClick={handleConfirm}>Confirm</Button>
         </div>
       </DialogContent>

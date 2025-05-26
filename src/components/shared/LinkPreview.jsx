@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { MoreVertical } from 'lucide-react';
 
-export default function LinkPreview({ url }) {
+export default function LinkPreview({ url, className }) {
   const [meta, setMeta] = useState(null);
 
   useEffect(() => {
@@ -26,8 +26,7 @@ export default function LinkPreview({ url }) {
 
   return (
     <div
-      className="flex items-center border rounded-lg px-4 py-3 shadow-sm hover:shadow transition mb-1 "
-      style={{ width: 'calc(50% - 12px)' }}
+      className={`flex w-[calc(50%-12px)] items-center border rounded-lg px-4 py-3 shadow-sm hover:shadow transition mb-1 ${className}`}
     >
       {/* Stripe bên trái */}
       <div className="w-1 h-12 bg-gray-200 rounded-l-md mr-4" />
