@@ -5,6 +5,7 @@ import { io } from 'socket.io-client';
 import ChatRoom from './ChatRoom';
 import { useLocation } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { stringToColorClass } from '@/utils';
 
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -36,7 +37,6 @@ export default function ChatPage() {
 		return () => newSocket.disconnect();
 	}, [token, chatRoomId]);
 
-	// Fetch chat rooms
 	useEffect(() => {
 		if (!user) return;
 		const fetchChatRoom = async () => {
@@ -44,8 +44,8 @@ export default function ChatPage() {
 				const response = await api.get('/chat-of-user');
 				const chatRooms = response.data.map(room => {
 					if (room.type === 'p2p') {
-						room.name = room.members.find(member => member._id !== room.owner._id).name;
-						room.avatar = room.members.find(member => member._id !== room.owner._id).avatar_url;
+						room.name = room.members.find(member => member._id !== user._id).name;
+						room.avatar = room.members.find(member => member._id !== user._id).avatar_url;
 						return room;
 					}
 
@@ -59,6 +59,7 @@ export default function ChatPage() {
 							room.avatar = room.owner.avatar_url;
 						}
 					}
+
 					return room;
 
 				});
@@ -117,8 +118,8 @@ export default function ChatPage() {
 									{room.avatar ? (
 										<AvatarImage src={room.avatar} alt={room.name} />
 									) : (
-										<AvatarFallback className="bg-gray-300 dark:bg-gray-700">
-											{room.name.charAt(0).toUpperCase()}
+										<AvatarFallback className={`bg-gray-300 dark:bg-gray-700 ${stringToColorClass(room.name)}`}>
+											{room.name.split(' ').at(-1).toUpperCase()}
 										</AvatarFallback>
 									)}
 								</Avatar>

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Edit, Edit2 as EditIcon } from "lucide-react";
+import { Edit, Edit2 as EditIcon, MessageCircle, MessageCircleMore, MessageSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AvatarUser from "@/components/shared/AvatarUser";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { useUserContext } from "@/providers/authContext";
+import { toast } from "sonner";
+import api from "@/services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
     const { user: currentUser } = useUserContext();
     const isSelf = currentUser?._id === userData._id;
+    const navigate = useNavigate();
 
     const [editing, setEditing] = useState(false);
     const [formData, setFormData] = useState({
@@ -35,6 +39,17 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
         onAvatarUpload(file);
     };
 
+    const handleMessaging = async () => {
+        try {
+            const response = await api.post(`/chatrooms/p2p/${userData._id}`);
+            const chatRoomId = response.data._id;
+            navigate(`/chat`, { state: { chatRoomId } });
+        } catch (error) {
+            console.error("Error handling messaging:", error);
+            toast.error("Failed to open messaging");
+        }
+    }
+
     if (!userData) {
         return (
             <div className="flex items-center justify-center h-full">
@@ -44,7 +59,7 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
     }
 
     return (
-        <section className="flex flex-col items-center space-y-4 p-4 bg-blue-500 text-white w-80 rounded-md shadow">
+        <section className="flex flex-col items-center space-y-4 p-4 bg-blue-500 text-white w-80 rounded-md shadow max-h-350">
             {/* Toggle Edit */}
             {isSelf && (
                 <div
@@ -55,6 +70,16 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
                     {editing ? "Close" : "Edit"}
                 </div>
             )}
+            {!isSelf && currentUser.role !== "manager" && userData.role !== "manager" && (
+                <div
+                    className="flex items-center self-end cursor-pointer hover:bg-blue-600 transition-colors rounded-md p-2"
+                    onClick={handleMessaging}
+                >
+                    <MessageSquare className="w-8 h-8 mr-2" />
+                    <div className="">Message</div>
+                </div>
+            )
+            }
 
             {/* Avatar */}
             <div className="relative">
@@ -150,6 +175,7 @@ export default function ProfileSidebar({ userData, onSubmit, onAvatarUpload }) {
                                 {userData.phone_number || "—"}
                             </p>
                         </div>
+
                     </>
                 )}
             </div>

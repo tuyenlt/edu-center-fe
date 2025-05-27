@@ -9,14 +9,12 @@ export default function AuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (isLoggingOut) {
       return;
     }
-    setLoading(true);
     if (user) return;
     const fetchUser = async () => {
       try {
@@ -29,13 +27,11 @@ export default function AuthContextProvider({ children }) {
         console.log('fetch user fail');
         setUser(null);
         setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchUser();
-  }, [token]);
+  }, [token, isLoggingOut, user]);
 
   useEffect(() => {
     console.log('Token changed:', token);
@@ -51,7 +47,6 @@ export default function AuthContextProvider({ children }) {
         !config._retry && token
           ? `Bearer ${token}`
           : config.headers.Authorization;
-      console.log(`set auth header: Bearer ${token}`);
       return config;
     });
     return () => {
@@ -187,7 +182,6 @@ export default function AuthContextProvider({ children }) {
     login,
     logout,
     register,
-    loading,
     setUser,
   };
 
