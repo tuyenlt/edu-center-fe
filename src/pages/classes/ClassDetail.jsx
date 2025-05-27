@@ -3,16 +3,14 @@ import { Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '@/providers/authContext';
-import NewAssignmentForm from './detailPart/NewAssignmentForm';
 import SettingsForm from './detailPart/manage/SettingsForm';
 import api from '@/services/api';
 import CourseInfo from './detailPart/CourseInfo';
 import People from './detailPart/People';
 import Stream from './detailPart/Stream';
 import Assignment from './detailPart/Assignment';
-import Grade from './detailPart/Grade';
+import Grade from './detailPart/grade/Grade';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useClassDataContext } from '@/providers/ClassDataProvider';
 import { useLayoutContext } from '@/providers/LayoutProvider';
 
 import ManageTab from './detailPart/manage/Manage';
@@ -117,7 +115,7 @@ export default function ClassDetail() {
         />
         <People data={data} />
         <CourseInfo data={data} />
-        {isTeacher && <Grade data={data} />}
+        {isTeacher && <Grade students={data.students} />}
         <ClassSchedule classData={data} />
       </div>
     </Tabs>

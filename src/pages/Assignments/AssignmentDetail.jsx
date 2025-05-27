@@ -72,7 +72,7 @@ export default function AssignmentDetail() {
       await api.post(`/assignments/${id}/submit`, {
         ...submissionForm,
         student: user._id,
-        submitted_at: new Date().toISOString(),
+        assignment: id,
       });
       const res = await api.get(`/assignments/${id}`);
       setAssignment(res.data);
@@ -88,13 +88,19 @@ export default function AssignmentDetail() {
   };
 
   const handleSaveGrade = async (subId) => {
-    const { score, feedback } = grading[subId];
-    await api.patch(
-      `/assignments/${id}/submissions/${subId}`,
-      { score, feedback }
-    );
-    const res = await api.get(`/assignments/${id}`);
-    setAssignment(res.data);
+    try {
+      const { score, feedback } = grading[subId];
+      await api.patch(
+        `/assignments/grade/${subId}`,
+        { score, feedback }
+      );
+      const res = await api.get(`/assignments/${id}`);
+      setAssignment(res.data);
+      toast.success("Grade saved successfully!");
+    } catch (error) {
+      console.error("Error saving grade:", error);
+      toast.error("Failed to save grade. Please try again.");
+    }
   };
 
   if (loading) return <div>Loading...</div>;

@@ -25,10 +25,44 @@ import { dateTimeConvert_2 } from "@/utils/dateTimeConvert";
 import LinkPreview from "@/components/shared/LinkPreview";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "@/providers/authContext";
 
 export default function AssignmentItem({ assignment, isTeacher, setIsEditMenuOpen }) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const { user } = useUserContext();
+
+    const studentStatusRender = () => {
+        if (user.role !== "student") {
+            return null;
+        }
+
+        const submission = assignment.submissions.find(sub => sub.student === user._id);
+        if (!submission) {
+            return (
+                <div className="text-sm text-red-500">
+                    not submitted
+                </div>
+            );
+        }
+
+        if (!submission.score) {
+            return (
+                <div className="text-sm text-yellow-500">
+                    not graded yet
+                </div>
+            );
+        }
+
+        return (
+            <div className="text-sm text-green-500">
+                Your score: {submission.score} / {assignment.max_score}
+            </div>
+        );
+
+    }
+
+
 
     return (
         <Accordion type="single" collapsible className="w-full" key={assignment.title}>
@@ -46,6 +80,7 @@ export default function AssignmentItem({ assignment, isTeacher, setIsEditMenuOpe
                                         }
                                     </CardDescription>
                                 </div>
+                                {studentStatusRender()}
                                 {isTeacher && (
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

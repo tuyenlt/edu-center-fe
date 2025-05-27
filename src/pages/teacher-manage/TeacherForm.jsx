@@ -21,7 +21,7 @@ export default function TeacherForm({ teacher, open, onSave, onCancel, mode = 'e
             ? format(new Date(teacher?.personal_info.dob), 'yyyy-MM-dd')
             : '',
         address: teacher?.personal_info?.address || '',
-        fixed_salary: teacher?.fixed_salary || 0,
+        hourly_wage: teacher?.hourly_wage || 0,
         bank_name: teacher?.payment_info?.bank_name || '',
         bank_account: teacher?.payment_info?.bank_account || '',
         account_holder: teacher?.payment_info?.account_holder_name || '',
@@ -50,7 +50,7 @@ export default function TeacherForm({ teacher, open, onSave, onCancel, mode = 'e
         const data = {
             name: form.name,
             email: form.email,
-            fixed_salary: Number(form.fixed_salary),
+            hourly_wage: Number(form.hourly_wage),
             personal_info: { dob: form.dob, address: form.address },
             payment_info: {
                 bank_name: form.bank_name,
@@ -119,10 +119,10 @@ export default function TeacherForm({ teacher, open, onSave, onCancel, mode = 'e
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Fixed Salary</label>
+                        <label className="block text-sm font-medium">Hourly Wage</label>
                         <Input
                             type="number"
-                            value={form.fixed_salary}
+                            value={form.hourly_wage || ''}
                             onChange={e => setForm(f => ({ ...f, fixed_salary: e.target.value }))}
                             className="mt-1 w-full"
                         />

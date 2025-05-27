@@ -40,6 +40,11 @@ export default function Assignment({ classData }) {
   const isTeacher = user?.role === "teacher";
   const [assignments, setAssignments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [studentStatus, setStudentStatus] = useState({
+    upcoming: 0,
+    grading: 0,
+    notSubmitted: 0,
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,13 +58,28 @@ export default function Assignment({ classData }) {
       })
   }, [classData]);
 
+  useEffect(() => {
+    if (isStudent) {
+      const upcoming = assignments.filter(a => new Date(a.due_date) > new Date()).length;
+      const grading = assignments.filter(a => a.submissions.some(s => (s.student === user._id && !s.score))).length;
+      const notSubmitted = assignments.filter(a => !a.submissions.some(s => s.student === user._id)).length;
+      setStudentStatus({
+        upcoming,
+        grading,
+        notSubmitted,
+      });
+    }
+  }, [assignments, isStudent, user]);
+
+
+
   const handleAddNewAssignment = () => {
     setIsNewAssignmentOpen(true);
   }
 
 
   return (
-    <TabsContent value="assignments" className="w-4/5 mx-auto mt-5 py-20">
+    <TabsContent value="assignments" className="w-4/5 max-w-screen-2xl mx-auto mt-5 py-20">
       <div className={cn("md:grid-cols-4 gap-4 mt-4 items-start", isStudent && "grid")}>
         {isStudent && (
           <div className="rounded-xl shadow-sm bg-white p-4 w-full max-w-xs border border-gray-200">
@@ -68,17 +88,17 @@ export default function Assignment({ classData }) {
               <li className="flex items-center gap-2 border-b pb-1 relative px-4 justify-between">
                 <span className="h-2 w-2 rounded-full bg-red-500 absolute left-0"></span>
                 <span>Upcoming Deadline</span>
-                <span>3</span>
+                <span>{studentStatus.upcoming}</span>
               </li>
               <li className="flex items-center gap-2 border-b pb-1 relative px-4 justify-between">
                 <span className="h-2 w-2 rounded-full bg-orange-400 absolute left-0"></span>
-                <span>Submitted Late</span>
-                <span>3</span>
+                <span>Grading</span>
+                <span>{studentStatus.grading}</span>
               </li>
               <li className="flex items-center gap-2 relative px-4 justify-between">
                 <span className="h-2 w-2 rounded-full bg-gray-400 absolute left-0"></span>
                 <span>Not Submitted</span>
-                <span>0</span>
+                <span>{studentStatus.notSubmitted}</span>
               </li>
             </ul>
           </div>

@@ -35,18 +35,16 @@ const menuByRole = {
     { title: 'Classes', url: '/class', icon: Users },
     { title: 'Courses', url: '/courses', icon: BookOpen },
     { title: 'Calendar', url: '/calendar', icon: CalendarDays },
-    { title: 'Assignments', url: '/assignments', icon: ClipboardList },
+    // { title: 'Assignments', url: '/assignments', icon: ClipboardList },
     { title: 'Messages', url: '/chat', icon: MessageSquare },
-    { title: 'Notifications', url: '#', icon: Bell },
   ],
   teacher: [
     { title: 'Dashboard', url: '#', icon: Home },
     { title: 'Classes', url: '/class', icon: Users },
     { title: 'Courses', url: '/courses', icon: BookOpen },
     { title: 'Calendar', url: '/calendar', icon: CalendarDays },
-    { title: 'Assignments', url: '#', icon: ClipboardList },
+    // { title: 'Assignments', url: '#', icon: ClipboardList },
     { title: 'Messages', url: '/chat', icon: MessageSquare },
-    { title: 'Notifications', url: '#', icon: Bell },
   ],
   manager: [
     { title: 'Dashboard', url: '/', icon: Home },
@@ -55,13 +53,12 @@ const menuByRole = {
     { title: 'Student Manage', url: '/students-manage', icon: Users },
     { title: 'Teacher Manage', url: '/teachers-manage', icon: UserCircle },
     { title: 'Payment Manage', url: '/payment-manage', icon: CreditCard },
-    { title: 'Settings', url: '/setting', icon: Settings },
   ],
   staff: [
     { title: 'Dashboard', url: '/', icon: Home },
     { title: 'Student contacting', url: '/student-contacting', icon: Users },
     { title: 'Messaging', url: '/chat', icon: MessageSquare },
-    { title: 'Notifications', url: '#', icon: Bell },
+    { title: 'Teacher Checkin', url: '/teachers-manage', icon: UserCircle },
   ]
 };
 

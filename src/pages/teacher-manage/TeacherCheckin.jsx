@@ -22,8 +22,7 @@ export default function TeacherCheckin({ open, onClose, teacherId }) {
         try {
             const response = await api.get(`/users/${teacherId}/schedules`);
             const sessionsData = response.data.filter(session => {
-                // return getIntervalTimePosition(session.start_time, session.end_time, new Date()) === "within";
-                return true;
+                return getIntervalTimePosition(session.start_time, session.end_time, new Date()) === "within";
             })
             setSessions(sessionsData);
             console.log("Fetched sessions:", sessionsData);
@@ -46,8 +45,11 @@ export default function TeacherCheckin({ open, onClose, teacherId }) {
                 toast.error("Failed to check in session");
             }
         } catch (error) {
-            console.error("Error handling session click:", error);
-            toast.error("Failed to handle session click");
+            if (error.response.status === 400) {
+                return toast.error("Session already checked in");
+            }
+            console.error("Error checking in session:", error);
+            toast.error("Failed to check in session. Please try again later.");
         }
     };
 

@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit, Star, MessageSquare, Activity, Edit2Icon } from "lucide-react";
+import { Edit, Star, MessageSquare, Activity, Edit2Icon, User } from "lucide-react";
 import { toast } from "sonner";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import AvatarUser from "@/components/shared/AvatarUser";
@@ -23,10 +23,11 @@ import {
     TabsTrigger,
     TabsContent,
 } from "@/components/ui/tabs";
-import ProfileSidebar from "./ProfileSideBar";
+import ProfileSidebar from "./components/ProfileSideBar";
 import { activeClass } from "@/utils";
-import AssignmentStatsCard from "./AssignmentStatsCard";
-import ClassesOfUser from "./ClassesOfUser";
+import AssignmentStatsCard from "./components/AssignmentStatsCard";
+import ClassesOfUser from "./components/ClassesOfUser";
+import UserPayment from "./components/UserPayment";
 
 const tabs = {
     classes: "Classes",
@@ -86,7 +87,7 @@ export default function Profile() {
             />
             <section className="w-full h-[calc(100vh-100px)] space-y-4">
                 <div className="flex">
-                    <AssignmentStatsCard className="w-1/2" />
+                    <AssignmentStatsCard user={userData} className="w-1/2" />
                 </div>
                 <Card className="w-full">
                     <CardContent className="flex flex-col gap-6">
@@ -113,8 +114,7 @@ export default function Profile() {
                                 </TabsContent>
 
                                 <TabsContent value="payment">
-                                    {/* Add your activity content here */}
-                                    <p>Activity information goes here.</p>
+                                    <UserPayment user={userData} />
                                 </TabsContent>
 
                                 <TabsContent value="notifies">

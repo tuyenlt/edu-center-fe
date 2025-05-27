@@ -12,8 +12,7 @@ export default function CourseCard({ course }) {
 
   return (
     <Card
-      className=" rounded-sm overflow-hidden hover:shadow-sm transition-all flex flex-col pt-0"
-      style={{ width: 'calc(50% - 30px)' }}
+      className="rounded-sm overflow-hidden hover:shadow-sm transition-all flex flex-col pt-0 w-full"
     >
       {/* Top Image */}
       <div className="h-48 w-full overflow-hidden">

@@ -28,8 +28,6 @@ import AssignmentDetail from './pages/Assignments/AssignmentDetail';
 import ChatPage from './pages/ChatPage/ChatPage';
 import StudentContacting from './pages/studentContacting/StudentContacting';
 import { LayoutContextProvider } from './providers/LayoutProvider';
-import { ClassDataProvider } from './providers/ClassDataProvider';
-import ClassWrapper from './pages/classes/ClassWrapper';
 import ClassManage from './pages/class-manage/ClassManage';
 import CalendarPage from './pages/Calendar/CalendarPage';
 import LandingPage from './pages/LandingPage';

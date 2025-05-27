@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { dateTimeConvert_2 } from '@/utils/dateTimeConvert';
 
 export default function PaymentManage() {
     const [bills, setBills] = useState([]);
@@ -29,7 +30,9 @@ export default function PaymentManage() {
     const [statusFilter, setStatusFilter] = useState('all');
     const [typeFilter, setTypeFilter] = useState('all');
     const [page, setPage] = useState(1);
-    const pageSize = 10;
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [selectingType, setSelectingType] = useState('all');
+    const pageSize = 15;
 
     useEffect(() => {
         fetchBills();
@@ -38,10 +41,16 @@ export default function PaymentManage() {
     const fetchBills = async () => {
         try {
             const { data } = await api.get('/bills/list');
-            setBills(data);
             setSelected(new Set());
+            const sortedBills = data.sort((a, b) => {
+                if (a.status === 'paid' && b.status !== 'paid') return 1;
+                if (b.status === 'paid' && a.status !== 'paid') return -1;
+                return new Date(b.updatedAt) - new Date(a.updatedAt);
+            });
+            setBills(sortedBills);
             setPage(1);
         } catch (err) {
+            console.error('Failed to fetch bills', err);
             toast.error('Failed to load bills');
         }
     };
@@ -71,12 +80,22 @@ export default function PaymentManage() {
         setPage(1);
     }, [searchTerm, statusFilter, typeFilter]);
 
+
     // toggle single bill
     const toggle = id => {
         const s = new Set(selected);
         if (s.has(id)) s.delete(id);
         else s.add(id);
         setSelected(s);
+        setSelectingType(bills.find(b => b._id === id)?.type || 'all');
+        if (s.size === 0) {
+            setSelectingType('all');
+        }
+
+        const newTotal = bills
+            .filter(bill => s.has(bill._id))
+            .reduce((sum, bill) => sum + bill.amount, 0);
+        setTotalAmount(newTotal);
     };
     const unpaidIds = bills.filter(b => b.status === 'unpaid').map(b => b._id);
     const allSelected = unpaidIds.length > 0 && unpaidIds.every(id => selected.has(id));
@@ -85,6 +104,10 @@ export default function PaymentManage() {
     const toggleAll = () => {
         if (allSelected) setSelected(new Set());
         else setSelected(new Set(unpaidIds));
+        const newTotal = bills
+            .filter(bill => s.has(bill._id))
+            .reduce((sum, bill) => sum + bill.amount, 0);
+        setTotalAmount(newTotal);
     };
 
     // bulk pay
@@ -98,10 +121,13 @@ export default function PaymentManage() {
                     bankName: paymentMethod === 'banking' ? bankName : undefined,
                 },
             });
+            fetchBills();
             toast.success('Payment successful');
             setBulkOpen(false);
             fetchBills();
-        } catch {
+            setSelectingType('all');
+        } catch (error) {
+            console.error('Payment failed', error);
             toast.error('Payment failed');
         }
     };
@@ -166,9 +192,9 @@ export default function PaymentManage() {
                             <RadioGroup
                                 value={paymentMethod}
                                 onValueChange={setPaymentMethod}
-                                className="flex gap-4"
+                                className="flex flex-col gap-4"
                             >
-                                <label>Totals Amount { }</label>
+                                <label>Totals Amount : {totalAmount} ₫</label>
                                 <label className="flex items-center space-x-2">
                                     <RadioGroupItem value="cash" />
                                     <span>Cash</span>
@@ -223,12 +249,12 @@ export default function PaymentManage() {
                         currentBills.map(bill => (
                             <div
                                 key={bill._id}
-                                className={`grid grid-cols-12 gap-2 items-center py-2 border-b hover:bg-gray-50 ${bill.status === 'paid' ? 'opacity-60' : ''
+                                className={`grid grid-cols-12 gap-2 items-center py-2 border-b hover:bg-gray-50 ${(bill.status === 'paid' || (selectingType !== bill.type && selectingType !== 'all')) ? 'opacity-50' : ''
                                     }`}
                             >
                                 <div className="col-span-1">
                                     <Checkbox
-                                        disabled={bill.status === 'paid'}
+                                        disabled={bill.status === 'paid' || (selectingType !== bill.type && selectingType !== 'all')}
                                         checked={selected.has(bill._id)}
                                         onCheckedChange={() => toggle(bill._id)}
                                     />
@@ -240,7 +266,12 @@ export default function PaymentManage() {
                                 <div className={`col-span-2 ${bill.type === "tuition" ? "text-green-500" : "text-red-500"}`}>{bill.amount.toLocaleString()}₫</div>
                                 <div className="col-span-2 capitalize">{bill.type}</div>
                                 <div className="col-span-2 capitalize">{bill.payment_method}</div>
-                                <div className="col-span-2 capitalize">{bill.status}</div>
+                                <div className="col-span-2">
+                                    <div className="col-span-2 capitalize">{bill.status}</div>
+                                    {bill.status === 'paid' && (
+                                        <div className="">{dateTimeConvert_2(bill.updatedAt)}</div>
+                                    )}
+                                </div>
                             </div>
                         ))
                     ) : (

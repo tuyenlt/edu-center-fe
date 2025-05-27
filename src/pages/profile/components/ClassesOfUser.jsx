@@ -6,17 +6,18 @@ import ClassInfoRow from "@/components/shared/ClassInfoRow";
 
 export default function ClassesOfUser({ userId }) {
     const [classes, setClasses] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         api.get(`/classes-of-user/${userId}`)
             .then((response) => {
                 setClasses(response.data);
-                setLoading(false);
                 console.log('Fetched classes:', response.data);
             })
             .catch((error) => {
                 console.error('Error fetching classes:', error);
+            }).finally(() => {
                 setLoading(false);
             });
     }, [userId]);
@@ -24,7 +25,7 @@ export default function ClassesOfUser({ userId }) {
     return (
         <div className="">
             {loading ? (
-                <div className="flex items-center justify-center h-screen">
+                <div className="flex justify-center items-center h-64">
                     <LoadingSpinner />
                 </div>
             ) : classes.length === 0 ? (

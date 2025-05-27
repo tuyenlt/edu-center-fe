@@ -36,24 +36,29 @@ export const activeClass =
 
 
 export function getIntervalTimePosition(checkStart, checkEnd, refTime) {
-    const toMs = t =>
-        t instanceof Date
-            ? t.getTime()
-            : typeof t === 'string'
-                ? Date.parse(t)
-                : Number(t);
+    const toMs = t => {
+        if (t instanceof Date) return t.getTime();
+        if (typeof t === "string") return Date.parse(t);
+        if (typeof t === "number") return t;
+        return NaN;
+    };
 
-    const start = toMs(checkStart);
-    const end = toMs(checkEnd);
-    const ref = toMs(refTime);
+    const startMs = toMs(checkStart);
+    const endMs = toMs(checkEnd);
+    const refMs = toMs(refTime);
 
-    if (start < ref) {
-        return 'before';
+    // validate
+    if (isNaN(startMs) || isNaN(endMs) || isNaN(refMs)) {
+        return "invalid";
     }
-    if (end > ref) {
-        return 'after';
+    if (startMs > endMs) {
+        return "invalid";  // or you could swap them, depending on your needs
     }
-    return 'within';
+
+    // determine position
+    if (refMs < startMs) return "before";
+    if (refMs > endMs) return "after";
+    return "within";
 }
 
 export function getClassProgress(classData) {
