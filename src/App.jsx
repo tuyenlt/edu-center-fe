@@ -13,15 +13,6 @@ import ClassPage from './pages/classes/ClassPage';
 import Profile from './pages/profile/Profile';
 import StudentManage from './pages/student-manage/StudentManage';
 
-// function App() {
-//   return (
-//     <AuthContextProvider>
-//       <RouterProvider router={router} />
-//     </AuthContextProvider>
-//   );
-// }
-
-// export default App;
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ClassDetail from './pages/classes/ClassDetail';
 import AssignmentDetail from './pages/Assignments/AssignmentDetail';
@@ -34,44 +25,37 @@ import LandingPage from './pages/LandingPage';
 import TeacherManage from './pages/teacher-manage/TeacherManage';
 import MagicInput from './components/shared/MagicInput';
 import PaymentManage from './pages/payment-manage/PaymentManage';
-
+import { protectedRoutes } from './routes/routesConfig';
+import RequireRole from './routes/RequireRoute';
 function App() {
   return (
     <Router>
       <AuthContextProvider>
         <LayoutContextProvider>
           <Routes>
+            {/* Public Routes */}
             <Route path="/login" element={<Signin />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/test" element={<MagicInput />} />
-            <Route path="*" element={<LandingPage />} />
-            {/* Protect dashboard: only accessible if logged in */}
+            <Route path="/landing" element={<LandingPage />} />
+
+            {/* Protected Routes */}
             <Route element={<RootLayout />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/courses" element={<Course />} />
-              <Route path="/course/:id" element={<CourseDetail />} />
-              <Route path="/course/:id/edit" element={<EditCourse />} />
-              <Route path="/add-course" element={<AddCoursePage />} />
-              <Route path="/class" element={<ClassPage />} />
-              <Route path="/class/:classDetailId" element={<ClassDetail />} />
-              <Route path='/assignments/:id' element={<AssignmentDetail />} />
-
-              {/* </Route> */}
-              <Route path="/add-class" element={<NewClass />} />
-              <Route path="/users/:id" element={<Profile />} />
-              <Route path="/students-manage" element={<StudentManage />} />
-              <Route path="/teachers-manage" element={<TeacherManage />} />
-              <Route path="/class-manage" element={<ClassManage />} />
-              <Route path="/payment-manage" element={<PaymentManage />} />
-
-
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/calendar" element={<CalendarPage />} />
-              <Route
-                path="/student-contacting"
-                element={<StudentContacting />}
-              />
+              {protectedRoutes.map(({ path, element, allowedRoles }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    <RequireRole allowedRoles={allowedRoles}>
+                      {element}
+                    </RequireRole>
+                  }
+                />
+              ))}
             </Route>
+
+            {/* Catch-all 404 */}
+            <Route path="*" element={<LandingPage />} />
           </Routes>
         </LayoutContextProvider>
       </AuthContextProvider>

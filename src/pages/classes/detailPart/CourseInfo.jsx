@@ -52,7 +52,7 @@ export default function CourseInfo({ data }) {
           }}
         >
           {' '}
-          <div className="absolute bottom-0 left-0 w-full h-2/3 bg-gradient-to-t from-black/80 via-black-50 to-transparent z-10" />
+          <div className="absolute bottom-0 left-0 w-full h-2/3 bg-gradient-to-t from-black/80 via-black-50 to-transparent z-5" />
           {/* Overlay tối mờ giúp chữ nổi bật */}
           {/* Nội dung phía trên overlay */}
           <div className="absolute bottom-0 left-0 z-10 grid grid-cols-1 md:grid-cols-2 items-center">

@@ -13,8 +13,6 @@ import Grade from './detailPart/grade/Grade';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useLayoutContext } from '@/providers/LayoutProvider';
 
-import ManageTab from './detailPart/manage/Manage';
-
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import ClassSchedule from './detailPart/ClassSchedule';
 
@@ -25,7 +23,6 @@ const parts = {
   courseInfo: 'Course',
   schedule: 'Schedule',
 };
-
 
 export default function ClassDetail() {
   const { classDetailId } = useParams();
@@ -87,8 +84,8 @@ export default function ClassDetail() {
   ) : isSessionSchedule ? (
     <ScheduleSession setIsSessionSchedule={setIsSessionSchedule} />
   ) : (
-    <Tabs defaultValue="stream" className="pb-20">
-      <div className="border-b fixed z-10 bg-white flex items-center justify-between w-[calc(100vw-85px)] ">
+    <Tabs defaultValue="stream" className=" gap-0">
+      <div className="border-b sticky z-10 bg-white flex items-center justify-between w-[calc(100vw-85px)] ">
         <TabsList className="bg-inherit ml-5 h-full flex items-center p-0 z-1000">
           {Object.entries(copyParts).map(([key, value]) => (
             <TabsTrigger
