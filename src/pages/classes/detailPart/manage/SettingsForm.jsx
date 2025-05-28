@@ -23,19 +23,13 @@ import {
 import { Button } from '@/components/ui/button';
 import api from '@/services/api';
 import { toast } from 'sonner';
+import { useParams } from 'react-router-dom';
 
-export default function SettingsForm({ setIsSetting, data }) {
-  const { setIsRootLayoutHidden } = useLayoutContext();
-  const [isEditted, setIsEditted] = useState(false);
+export default function SettingsForm({ setIsSetting }) {
+  const [isEdited, setIsEdited] = useState(false);
   const [open, setOpen] = useState(false);
-  const initialInput = {
-    class_code: data.class_code,
-    class_name: data.class_name,
-    status: data.status,
-    max_students: data.max_students,
-    note: data.note,
-  };
-
+  const [isLoading, setIsLoading] = useState(true);
+  const { classId } = useParams();
   const [input, setInput] = useState({
     class_code: '',
     class_name: '',
@@ -44,23 +38,45 @@ export default function SettingsForm({ setIsSetting, data }) {
     note: '',
   });
 
+  useEffect(() => {
+    setIsLoading(true);
+    api.get(`/classes/${classId}`)
+      .then((response) => {
+        const classData = response.data;
+        setInput({
+          class_code: classData.class_code || '',
+          class_name: classData.class_name || '',
+          status: classData.status || '',
+          max_students: classData.max_students || '',
+          note: classData.note || '',
+        });
+      }).catch((error) => {
+        console.error('Error fetching class data:', error);
+        toast.error('Failed to load class data. Please try again.');
+      }).finally(() => {
+        setIsLoading(false);
+      })
+  }, [])
+
+
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (!isEditted && input !== initialInput) setIsEditted(true);
+    if (!isEdited) setIsEdited(true);
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleStatusChange = (value) => {
-    // if (!isEditted && input !== initialInput) setIsEditted(true);
+    // if (!isEdited && input !== initialInput) setIsEdited(true);
     setInput((prev) => ({ ...prev, status: value }));
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    api.patch(`/classes/${data._id}`, input)
-      .then((res) => {
+    api.patch(`/classes/${classId}`, input)
+      .then((response) => {
         toast('Class updated successfully!');
-        setIsEditted(false);
         setIsSetting(false);
         setOpen(false);
       }).catch((error) => {
@@ -70,21 +86,16 @@ export default function SettingsForm({ setIsSetting, data }) {
   };
 
   const handleDiscard = () => {
-    setInput(initialInput);
     setOpen(false);
-    setIsEditted(false);
+    setIsEdited(false);
     setIsSetting(false);
   };
 
   const handleCancel = () => {
-    isEditted ? setOpen(true) : setIsSetting(false);
+    isEdited ? setOpen(true) : setIsSetting(false);
   };
 
-  useEffect(() => {
-    if (data) {
-      setInput(initialInput);
-    }
-  }, [data]);
+
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') {
@@ -95,7 +106,6 @@ export default function SettingsForm({ setIsSetting, data }) {
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, [handleCancel]);
-  console.log(data.status);
   return (
     <div className="fixed inset-0 bg-gray-50 z-50 overflow-auto">
       <div className="max-w-4xl mx-auto flex flex-col gap-6 p-6 pt-24">

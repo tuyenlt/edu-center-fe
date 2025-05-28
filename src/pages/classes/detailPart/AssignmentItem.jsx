@@ -26,10 +26,11 @@ import LinkPreview from "@/components/shared/LinkPreview";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/providers/authContext";
+import api from "@/services/api";
+import { toast } from "sonner";
 
-export default function AssignmentItem({ assignment, isTeacher, setIsEditMenuOpen }) {
+export default function AssignmentItem({ assignment, setIsEditMenuOpen, onDelete }) {
     const navigate = useNavigate();
-    const [open, setOpen] = useState(false);
     const { user } = useUserContext();
 
     const studentStatusRender = () => {
@@ -62,6 +63,18 @@ export default function AssignmentItem({ assignment, isTeacher, setIsEditMenuOpe
 
     }
 
+    const handleDeleteAssignment = () => {
+        api.delete(`/assignments/${assignment._id}`)
+            .then(() => {
+                onDelete();
+                toast.success("Assignment deleted successfully");
+            })
+            .catch((error) => {
+                console.error("Error deleting assignment:", error);
+                toast.error("Failed to delete assignment");
+            });
+    }
+
 
 
     return (
@@ -76,12 +89,12 @@ export default function AssignmentItem({ assignment, isTeacher, setIsEditMenuOpe
                                     <CardDescription className="mt-2 no-underline">
                                         {(new Date() - new Date(assignment.due_date)) < 0 ?
                                             `Due Date ${dateTimeConvert_2(assignment.due_date)}` :
-                                            ""
+                                            "Overdue"
                                         }
                                     </CardDescription>
                                 </div>
                                 {studentStatusRender()}
-                                {isTeacher && (
+                                {user.role === "teacher" && (
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <EllipsisVertical />
@@ -91,7 +104,7 @@ export default function AssignmentItem({ assignment, isTeacher, setIsEditMenuOpe
                                                 <Pencil className="mr-2 h-5 w-5" />
                                                 <span>Edit</span>
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem>
+                                            <DropdownMenuItem onClick={handleDeleteAssignment}>
                                                 <ClipboardCheck className="mr-2 h-5 w-5" />
                                                 <span>Delete Assignment</span>
                                             </DropdownMenuItem>
@@ -108,19 +121,21 @@ export default function AssignmentItem({ assignment, isTeacher, setIsEditMenuOpe
                             </div>
 
                             <div className="flex items-start justify-between">
-                                <h2 className="text-md font-semibold">{assignment.description}</h2>
-                                <div className="flex items-center gap-8 text-sm pt-2">
-                                    <div>
-                                        <span className="text-xl font-semibold">{assignment.submissions.length}</span>
-                                        <br />
-                                        Submitted
+                                <h2 className="text-md ml-2">{assignment.description}</h2>
+                                {user.role === "teacher" && (
+                                    <div className="flex items-center gap-8 text-sm pt-2">
+                                        <div>
+                                            <span className="text-xl font-semibold">{assignment.submissions.length}</span>
+                                            <br />
+                                            Submitted
+                                        </div>
+                                        <div>
+                                            <span className="text-xl font-semibold">{assignment.students.length}</span>
+                                            <br />
+                                            Assigned
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span className="text-xl font-semibold">{assignment.students.length}</span>
-                                        <br />
-                                        Assigned
-                                    </div>
-                                </div>
+                                )}
                             </div>
 
                             {/* File & link preview */}

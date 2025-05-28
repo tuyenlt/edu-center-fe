@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import {
   DropdownMenu,
@@ -27,12 +27,12 @@ import {
 import { TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useUserContext } from "@/providers/authContext";
-import { fakeAssignmentsData } from "../data";
 import NewAssignmentForm from "./NewAssignmentForm";
 import api from "@/services/api";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
-export default function Assignment({ classData }) {
+export default function Assignment() {
+  const { classId } = useParams();
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const { user } = useUserContext();
@@ -46,9 +46,9 @@ export default function Assignment({ classData }) {
     notSubmitted: 0,
   });
 
-  useEffect(() => {
+  const fetchAssignments = async () => {
     setIsLoading(true);
-    api.get(`/assignments/class/${classData._id}`)
+    api.get(`/assignments/class/${classId}`)
       .then((response) => {
         setAssignments(response.data);
       }).catch((error) => {
@@ -56,7 +56,11 @@ export default function Assignment({ classData }) {
       }).finally(() => {
         setIsLoading(false);
       })
-  }, [classData]);
+  }
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
 
   useEffect(() => {
     if (isStudent) {
@@ -79,10 +83,10 @@ export default function Assignment({ classData }) {
 
 
   return (
-    <TabsContent value="assignments" className="w-4/5 max-w-screen-2xl mx-auto mt-5 py-20">
-      <div className={cn("md:grid-cols-4 gap-4 mt-4 items-start", isStudent && "grid")}>
+    <div>
+      <div className={cn("md:grid-cols-4 gap-4 mt-4 items-start", isStudent && "flex ")}>
         {isStudent && (
-          <div className="rounded-xl shadow-sm bg-white p-4 w-full max-w-xs border border-gray-200">
+          <div className="rounded-xl shadow-sm bg-white p-4 w-1/3 max-w-xs border border-gray-200">
             <h2 className="text-base font-semibold text-gray-800 mb-3">Status</h2>
             <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex items-center gap-2 border-b pb-1 relative px-4 justify-between">
@@ -116,28 +120,29 @@ export default function Assignment({ classData }) {
 
         {isLoading ?
           (
-            <div className="w-full flex items-center">
+            <div className="w-full flex justify-center">
               <LoadingSpinner />
             </div>
           ) : assignments.length === 0 ? (
             <div className="text-center">No Assignment Available</div>
           ) : (
-            <div className="md:col-span-3 space-y-5">
+            <div className="flex flex-col w-full gap-5">
               {assignments.map((assignment, idx) => (
                 isStudent ? (
-                  <Link to={`/assignments/${assignment._id}`} key={idx}>
-                    <AssignmentItem
-                      assignment={assignment}
-                      isTeacher={isTeacher}
-                      setIsEditMenuOpen={setIsEditMenuOpen}
-                    />
-                  </Link>
+                  // <Link to={`/assignments/${assignment._id}`} key={idx}>
+                  <AssignmentItem
+                    assignment={assignment}
+                    isTeacher={isTeacher}
+                    setIsEditMenuOpen={setIsEditMenuOpen}
+                  />
+                  // </Link>
                 ) : (
                   <AssignmentItem
                     key={idx}
                     assignment={assignment}
                     isTeacher={isTeacher}
                     setIsEditMenuOpen={setIsEditMenuOpen}
+                    onDelete={() => fetchAssignments()}
                   />
                 )
               ))}
@@ -145,10 +150,10 @@ export default function Assignment({ classData }) {
           )}
       </div>
       <NewAssignmentForm
-        students={classData.students}
         isOpen={isNewAssignmentOpen}
         onClose={() => setIsNewAssignmentOpen(false)}
+        onCreated={fetchAssignments}
       />
-    </TabsContent>
+    </div>
   );
 }

@@ -15,10 +15,16 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function ScheduleCalendar({
     scheduleData = [],
     onSelectDate = () => { },
+    prevScheduleData = [],
 }) {
     const [currentWeek, setCurrentWeek] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
     scheduleData = scheduleData.filter((item) => item.start_time);
+    scheduleData.push(...prevScheduleData.map(item => ({
+        ...item,
+        prev: true,
+    })))
+
     const hours = Array.from({ length: 16 }, (_, i) => i + 7);
 
     const renderHeader = () => (
@@ -96,7 +102,6 @@ export default function ScheduleCalendar({
                                         const itemStart = parseISO(item.start_time);
                                         const itemEnd = parseISO(item.end_time);
                                         const duration = (itemEnd - itemStart) / (1000 * 60 * 60);
-                                        // const itemDayIndex = itemStart.getDay() === 0 ? 6 : itemStart.getDay() - 1;
                                         const itemHour = itemStart.getHours();
 
                                         const uniqueKey = `${item.title}-${item.start_time}-${item.end_time}`;
@@ -111,7 +116,7 @@ export default function ScheduleCalendar({
                                             return (
                                                 <div
                                                     key={i}
-                                                    className="absolute z-10 bg-blue-100 border border-blue-400 text-xs p-1 rounded shadow-sm pointer-events-auto cursor-pointer"
+                                                    className={`absolute z-10 bg-blue-100 border border-blue-400 text-xs p-1 rounded shadow-sm pointer-events-auto cursor-pointer ${item.prev && "bg-gray-300 opacity-50"}`}
                                                     style={{ top: 0, height, left: 0, right: 0 }}
                                                     onClick={(e) => {
                                                         e.stopPropagation();

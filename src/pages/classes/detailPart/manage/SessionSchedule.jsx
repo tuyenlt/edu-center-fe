@@ -22,6 +22,7 @@ export default function SessionScheduleDialog({
   session,
   index,
   onConfirm,
+  className = ''
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -93,7 +94,7 @@ export default function SessionScheduleDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Pencil
-          className="w-5 h-5"
+          className={`w-5 h-5 ${className}`}
           onClick={() => setIsOpen(true)}
         />
       </DialogTrigger>

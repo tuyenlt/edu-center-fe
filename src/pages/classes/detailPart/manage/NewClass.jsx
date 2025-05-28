@@ -1,5 +1,5 @@
 // components/NewClass.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,7 +15,6 @@ import SessionInfo from '../../SessionInfo';
 
 
 const NewClass = () => {
-  const [customLessonIndex, setCustomLessonIndex] = useState();
   const navigate = useNavigate();
   const { state } = useLocation();
   const course = state?.course;
@@ -35,12 +34,21 @@ const NewClass = () => {
     : [];
 
   const [sessionArray, setSessionArray] = useState(initialSessions);
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
-  // const [scheduleData, setScheduleData] = useState([])
+  const [allClassSchedule, setAllClassSchedule] = useState([]);
+
+  useEffect(() => {
+    api.get('/classes/all/schedule')
+      .then((response) => {
+        console.log(response.data);
+        setAllClassSchedule(response.data);
+      }).catch((error) => {
+        console.error("Error fetching class schedules:", error);
+        toast.error('Failed to fetch class schedules');
+      })
+  }, [])
+
   let scheduleData = [];
   scheduleData = sessionArray.filter((session) => session.start_time !== null);
-
   const {
     register,
     handleSubmit,
@@ -64,8 +72,6 @@ const NewClass = () => {
     };
 
     setSessionArray(arr);
-    setScheduleOpen(false);
-    console.log(scheduleData);
   };
 
   const onSubmit = async (data) => {
@@ -159,7 +165,7 @@ const NewClass = () => {
         </div>
 
         <div className="space-y-8">
-          <ScheduleCalendar scheduleData={scheduleData} />
+          <ScheduleCalendar scheduleData={scheduleData} prevScheduleData={allClassSchedule} />
 
           {course.course_programs.map((chap, chapIdx) => {
             const start = lessonCounts
@@ -180,12 +186,9 @@ const NewClass = () => {
                         key={globalIdx}
                         session={session}
                         index={globalIdx + 1}
-                        onClick={() => {
-                          setSelectedIndex(globalIdx);
-                          setScheduleOpen(true);
-                        }}
                       />
                       <SessionScheduleDialog
+                        className='relative right-12 w-6 h-6'
                         session={
                           sessionArray[globalIdx] || session
                         }
@@ -200,12 +203,6 @@ const NewClass = () => {
               </div>
             );
           })}
-          {/* <SessionInfo
-            chapters={course.course_programs}
-            onConfirm={handleSetSessionTime}
-            isInCourse={true}
-            sessions={sessionArray}
-          /> */}
         </div>
 
         <Button type="submit" className="w-full mt-4">

@@ -19,13 +19,33 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import AvatarUser from '@/components/shared/AvatarUser';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserContext } from '@/providers/authContext';
 import RemoveOrEdit from './manage/RemoveOrEdit';
-export default function People({ data }) {
+import api from '@/services/api';
+import { useParams } from 'react-router-dom';
+
+
+
+
+export default function People() {
+  const { classId } = useParams();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    api.get(`/classes/${classId}`, {
+      params: {
+        populate_fields: ['teachers', 'students', 'course'],
+      },
+    }).then((response) => {
+      setData(response.data);
+    }).catch((error) => {
+      console.error('Error fetching class data:', error);
+    });
+  }, [classId]);
+
   const { user } = useUserContext();
   const isManager = user?.role === 'manager';
-  const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenRemove, setIsOpenRemove] = useState(false);
   if (!data || Object.keys(data).length === 0) {
     return <div>Loading...</div>;
@@ -33,10 +53,8 @@ export default function People({ data }) {
   const teachers = data.teachers;
   const students = data.students;
   return (
-    <TabsContent
-      value="people"
-      className="w-4/5 mx-auto mt-5 py-20  space-y-12"
-    >
+    <div>
+
       {/* TEACHERS SECTION */}
       <section className="space-y-6">
         <div className="flex items-center justify-between border-b pb-3">
@@ -79,7 +97,7 @@ export default function People({ data }) {
                   <p className="text-sm text-gray-500">{teacher.email}</p>
                 </div>
               </div>
-              {isManager && <RemoveOrEdit role="teacher" name={teacher.name} />}
+              {isManager && <RemoveOrEdit user={teacher} />}
             </li>
           ))}
         </ul>
@@ -129,7 +147,7 @@ export default function People({ data }) {
                     </div>
                   </div>
                   {isManager && (
-                    <RemoveOrEdit role="student" name={student.name} />
+                    <RemoveOrEdit user={student} />
                   )}
                 </li>
               );
@@ -141,6 +159,6 @@ export default function People({ data }) {
           </p>
         )}
       </section>
-    </TabsContent>
+    </div>
   );
 }

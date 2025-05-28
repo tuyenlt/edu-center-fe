@@ -34,45 +34,51 @@ import LandingPage from './pages/LandingPage';
 import TeacherManage from './pages/teacher-manage/TeacherManage';
 import MagicInput from './components/shared/MagicInput';
 import PaymentManage from './pages/payment-manage/PaymentManage';
+import { WebSocketProvider } from './providers/WebSocketProvider';
+import ChatRoom from './pages/ChatPage/ChatRoom';
 
 function App() {
   return (
     <Router>
       <AuthContextProvider>
         <LayoutContextProvider>
-          <Routes>
-            <Route path="/login" element={<Signin />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/test" element={<MagicInput />} />
-            <Route path="*" element={<LandingPage />} />
-            {/* Protect dashboard: only accessible if logged in */}
-            <Route element={<RootLayout />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/courses" element={<Course />} />
-              <Route path="/course/:id" element={<CourseDetail />} />
-              <Route path="/course/:id/edit" element={<EditCourse />} />
-              <Route path="/add-course" element={<AddCoursePage />} />
-              <Route path="/class" element={<ClassPage />} />
-              <Route path="/class/:classDetailId" element={<ClassDetail />} />
-              <Route path='/assignments/:id' element={<AssignmentDetail />} />
+          <WebSocketProvider>
+            <Routes>
+              <Route path="/login" element={<Signin />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/test" element={<MagicInput />} />
+              <Route path="*" element={<LandingPage />} />
+              {/* Protect dashboard: only accessible if logged in */}
+              <Route element={<RootLayout />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/courses" element={<Course />} />
+                <Route path="/course/:id" element={<CourseDetail />} />
+                <Route path="/course/:id/edit" element={<EditCourse />} />
+                <Route path="/add-course" element={<AddCoursePage />} />
+                <Route path="/class" element={<ClassPage />} />
+                <Route path="/class/:classId" element={<ClassDetail />} />
+                <Route path='/assignments/:id' element={<AssignmentDetail />} />
 
-              {/* </Route> */}
-              <Route path="/add-class" element={<NewClass />} />
-              <Route path="/users/:id" element={<Profile />} />
-              <Route path="/students-manage" element={<StudentManage />} />
-              <Route path="/teachers-manage" element={<TeacherManage />} />
-              <Route path="/class-manage" element={<ClassManage />} />
-              <Route path="/payment-manage" element={<PaymentManage />} />
+                {/* </Route> */}
+                <Route path="/add-class" element={<NewClass />} />
+                <Route path="/users/:id" element={<Profile />} />
+                <Route path="/students-manage" element={<StudentManage />} />
+                <Route path="/teachers-manage" element={<TeacherManage />} />
+                <Route path="/class-manage" element={<ClassManage />} />
+                <Route path="/payment-manage" element={<PaymentManage />} />
 
 
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/calendar" element={<CalendarPage />} />
-              <Route
-                path="/student-contacting"
-                element={<StudentContacting />}
-              />
-            </Route>
-          </Routes>
+                <Route path="/chat" element={<ChatPage />}>
+                  <Route path=":roomId" element={<ChatRoom />} />
+                </Route>
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route
+                  path="/student-contacting"
+                  element={<StudentContacting />}
+                />
+              </Route>
+            </Routes>
+          </WebSocketProvider>
         </LayoutContextProvider>
       </AuthContextProvider>
     </Router>
