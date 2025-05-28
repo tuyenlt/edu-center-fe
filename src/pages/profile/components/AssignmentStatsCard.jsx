@@ -20,6 +20,7 @@ export default function AssignmentStatsCard({ user, className }) {
         api.get(`/assignments/user/${user._id}`)
             .then((response) => {
                 const assignments = response.data;
+                console.log("Assignments fetched:", assignments);
                 let submitted = assignments.filter(a => a.submissions.find(s => s.student === user._id)).length;
                 if (user.role === "teacher") {
                     let submittedCount = 0

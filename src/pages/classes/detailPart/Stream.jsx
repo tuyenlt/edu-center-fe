@@ -21,63 +21,93 @@ import { cn } from '@/lib/utils';
 import { Copy, Maximize, CheckCheck, Users } from 'lucide-react';
 import { useUserContext } from '@/providers/authContext';
 import RichTextBox from '@/components/shared/RichTextBox';
-import Comment from '../Comment';
+import Comment from '../components/Comment';
 import AvatarUser from '@/components/shared/AvatarUser';
 import { io } from 'socket.io-client';
 import { convertUTC } from '@/utils/dateTimeConvert';
 import LinkPreview from '@/components/shared/LinkPreview';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import MagicInput from '@/components/shared/MagicInput';
-import CommentList from '../CommentList';
+import CommentList from '../components/CommentList';
+import ClassPostItem from '../components/ClassPostItem';
+import api from '@/services/api';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import { useParams } from 'react-router-dom';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-export default function Stream({ data }) {
+export default function Stream() {
+  const { classId } = useParams();
   const { user, token } = useUserContext();
   const isTeacher = user?.role === 'teacher';
 
+  const [data, setData] = useState(null);
   const [socket, setSocket] = useState(null);
-  const [posts, setPosts] = useState([]);
   const [isCopied, setIsCopied] = useState(false);
   const [isRichTextOpen, setIsRichTextOpen] = useState(false);
   const [title, setTitle] = useState(''); // ← title!
   const [file, setFile] = useState([]);
   const [link, setLink] = useState([]);
   const editorRef = useRef(null);
+
+  useEffect(() => {
+    api
+      .get(`/classes/${classId}`, {
+        params: {
+          populate_fields: ['class_posts', 'course'],
+        },
+      })
+      .then((response) => {
+        response.data.class_posts.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setData(response.data);
+        console.log('Class data fetched:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching class data:', error);
+      });
+  }, [classId]);
+
   useEffect(() => {
     if (!token) return;
     const s = io(API_URL, { auth: { accessToken: token } });
 
     s.on('connect', () => {
-      s.emit('initClassUpdate', data._id);
+      s.emit('initClassUpdate', classId);
     });
 
     s.on('classPostCreate', (newPost) => {
-      setPosts((prev) => [newPost, ...prev]);
+      setData((prev) => ({
+        prev,
+        class_posts: [...prev.class_posts, newPost],
+      }));
     });
 
     s.on('classPostComment', (comment) => {
-      setPosts((prev) =>
-        prev.map((post) =>
-          post._id === comment.postId
-            ? { ...post, comments: [...post.comments, comment] }
-            : post
-        )
-      );
+      setData((prev) => {
+        const updatedPosts = prev.class_posts.map((post) => {
+          if (post._id === comment.postId) {
+            return {
+              ...post,
+              comments: [...post.comments, comment],
+            };
+          }
+          return post;
+        });
+        return { ...prev, class_posts: updatedPosts };
+      });
     });
 
     setSocket(s);
     return () => void s.disconnect();
-  }, [data._id, token]);
+  }, [classId, token]);
 
-  useEffect(() => {
-    if (Array.isArray(data?.class_posts)) {
-      setPosts(
-        data.class_posts.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        )
-      );
-    }
-  }, [data.class_posts]);
+  if (!data)
+    return (
+      <div className="flex items-center justify-center h-50">
+        <LoadingSpinner />
+      </div>
+    );
 
   const handleCopyCode = () => {
     setIsCopied(true);
@@ -85,8 +115,6 @@ export default function Stream({ data }) {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const class_name = data?.class_name;
-  const class_code = data?.class_code;
   const addPostHandler = () => {
     socket.emit('classPostCreate', {
       classId: data._id,
@@ -117,10 +145,8 @@ export default function Stream({ data }) {
     });
   };
 
-  if (!data || data.length == 0) return <div>Loading…</div>;
-
   return (
-    <TabsContent value="stream" className="w-4/5 mx-auto mt-5 py-20">
+    <div>
       {isCopied && (
         <Alert className="fixed z-1000 bottom-5 left-5 w-50">
           <CheckCheck className="h-4 w-4" />
@@ -160,7 +186,7 @@ export default function Stream({ data }) {
                   <DialogHeader>
                     <DialogTitle>Class Code</DialogTitle>
                   </DialogHeader>
-                  <p className="text-center text-9xl py-6">{data.class_code}</p>
+                  <p className="text-center text-6xl py-6">{data.class_code}</p>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">
                       {data.class_name.length <= 10
@@ -227,42 +253,16 @@ export default function Stream({ data }) {
           )}
 
           {/* Announcements list */}
-          {posts.map((post) => (
-            <Card key={post._id}>
-              <CardHeader className="flex items-center gap-4">
-                <AvatarUser user={post.author} className="w-12 h-12" />
-                <div>
-                  <CardTitle>
-                    {post.author.name} Announce {post.title}
-                  </CardTitle>
-                  <CardDescription className="text-xs text-gray-500 m-1">
-                    {convertUTC(post.createdAt)}
-                  </CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="text-gray-800 ml-0 border-b pb-5">
-                <div
-                  className=""
-                  dangerouslySetInnerHTML={{ __html: post.content }}
-                />
-                <div className="mt-3 flex flex-wrap gap-3">
-                  {post.links?.map((link, index) => (
-                    <LinkPreview url={link} key={index} className="" />
-                  ))}
-                </div>
-              </CardContent>
-              <CardFooter className="flex flex-col gap-5 ">
-                <CommentList commentsParam={post.comments} />
-
-                <div className="flex items-center gap-3 w-full">
-                  <AvatarUser user={user} className="w-8 h-8" />
-                  <Comment postId={post._id} onSubmit={handleAddComment} />
-                </div>
-              </CardFooter>
-            </Card>
+          {data.class_posts.map((post) => (
+            <ClassPostItem
+              user={user}
+              post={post}
+              key={post._id}
+              handleAddComment={handleAddComment}
+            />
           ))}
         </div>
       </div>
-    </TabsContent>
+    </div>
   );
 }

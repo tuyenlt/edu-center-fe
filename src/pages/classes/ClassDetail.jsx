@@ -10,7 +10,7 @@ import People from './detailPart/People';
 import Stream from './detailPart/Stream';
 import Assignment from './detailPart/Assignment';
 import Grade from './detailPart/grade/Grade';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useLayoutContext } from '@/providers/LayoutProvider';
 
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
@@ -24,30 +24,28 @@ const parts = {
   schedule: 'Schedule',
 };
 
+const activeClass =
+  'data-[state=active]:text-blue-600 data-[state=active]:hover:bg-blue-50 ' +
+  'data-[state=active]:after:content-[""] data-[state=active]:after:absolute ' +
+  'data-[state=active]:after:-bottom-[1px] data-[state=active]:after:left-0 data-[state=active]:after:right-0 ' +
+  'data-[state=active]:after:h-0 data-[state=active]:after:border-t-4 data-[state=active]:after:bg-blue-600 ' +
+  'data-[state=active]:after:rounded-t-md';
+
 export default function ClassDetail() {
   const { classDetailId } = useParams();
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
   const isManager = user?.role === 'manager';
-  const { setIsRootLayoutHidden } = useLayoutContext();
-  const activeClass =
-    'data-[state=active]:text-blue-600 data-[state=active]:hover:bg-blue-50 ' +
-    'data-[state=active]:after:content-[""] data-[state=active]:after:absolute ' +
-    'data-[state=active]:after:-bottom-[1px] data-[state=active]:after:left-0 data-[state=active]:after:right-0 ' +
-    'data-[state=active]:after:h-0 data-[state=active]:after:border-t-4 data-[state=active]:after:bg-blue-600 ' +
-    'data-[state=active]:after:rounded-t-md';
 
-  const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const [isSetting, setIsSetting] = useState(false);
   const [isSessionSchedule, setIsSessionSchedule] = useState(false);
+
   const handleCloseSettings = () => {
-    // setIsRootLayoutHidden(false);
     setIsSetting(false);
   };
 
   const handleOpenSettings = () => {
-    // setIsRootLayoutHidden(true);
     setIsSetting(true);
   };
 
@@ -67,18 +65,6 @@ export default function ClassDetail() {
     fetchClassData();
   }, []);
 
-  if (!data) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
-  const class_name = data?.class_name;
-  const class_code = data?.class_code;
-  if (!data || data.length == 0) return <div>Loadingg...</div>;
-  console.log(data);
   return isSetting ? (
     <SettingsForm setIsSetting={setIsSetting} data={data} />
   ) : isSessionSchedule ? (
@@ -105,15 +91,34 @@ export default function ClassDetail() {
         )}
       </div>
       <div className="h-screen bg-white">
-        <Stream data={data} />
-        <Assignment
-          setIsNewAssignmentOpen={setIsNewAssignmentOpen}
-          classData={data}
-        />
-        <People data={data} />
-        <CourseInfo data={data} />
-        {isTeacher && <Grade students={data.students} />}
-        <ClassSchedule classData={data} />
+        <TabsContent value="stream" className="w-4/5 mx-auto mt-5 py-20">
+          <Stream />
+        </TabsContent>
+
+        <TabsContent
+          value="assignments"
+          className="w-4/5 max-w-screen-2xl mx-auto mt-5 py-20"
+        >
+          <Assignment />
+        </TabsContent>
+
+        <TabsContent value="people" className="w-4/5 mx-auto mt-5 py-20">
+          <People />
+        </TabsContent>
+
+        <TabsContent value="courseInfo" className="w-4/5 mx-auto mt-5 py-20">
+          <CourseInfo />
+        </TabsContent>
+
+        <TabsContent value="schedule" className="p-10 max-w-screen-2xl m-auto">
+          <ClassSchedule />
+        </TabsContent>
+
+        {isTeacher && (
+          <TabsContent value="grade">
+            <Grade students={data} />
+          </TabsContent>
+        )}
       </div>
     </Tabs>
   );

@@ -1,41 +1,21 @@
 import { useUserContext } from '@/providers/authContext';
 import api from '@/services/api';
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
 import ChatRoom from './ChatRoom';
-import { useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { stringToColorClass } from '@/utils';
 
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function ChatPage() {
-	const location = useLocation();
-	const initialChatId = location.state?.chatId;
-	const { token, user } = useUserContext();
-
-	const [socket, setSocket] = useState(null);
+	const navigate = useNavigate();
+	const { user } = useUserContext();
+	const { roomId } = useParams();
 	const [chatRooms, setChatRooms] = useState([]);
-	const [chatRoomId, setChatRoomId] = useState(initialChatId);
+	const [chatRoomId, setChatRoomId] = useState(roomId);
 	const [search, setSearch] = useState('');
 
-	// Initialize socket connection
-	useEffect(() => {
-		if (!token || !chatRoomId) return;
-
-		const newSocket = io(API_URL, {
-			auth: { accessToken: token },
-		});
-
-		newSocket.on('connect', () => {
-			console.log('Connected', newSocket.id);
-			newSocket.emit('joinRoom', chatRoomId);
-		});
-
-		setSocket(newSocket);
-		return () => newSocket.disconnect();
-	}, [token, chatRoomId]);
 
 	useEffect(() => {
 		if (!user) return;
@@ -67,6 +47,7 @@ export default function ChatPage() {
 				setChatRooms(chatRooms);
 				if (!chatRoomId && chatRooms.length) {
 					setChatRoomId(chatRooms[0]._id);
+					navigate(`/chat/${chatRooms[0]._id}`);
 				}
 			} catch (error) {
 				console.error('Error fetching chat rooms:', error);
@@ -81,6 +62,11 @@ export default function ChatPage() {
 				<p className="text-gray-500">No chat rooms available</p>
 			</div>
 		);
+	}
+
+	const handleChangeRoom = (roomId) => {
+		setChatRoomId(roomId);
+		navigate(`/chat/${roomId}`);
 	}
 
 	const filteredRooms = chatRooms.filter(room =>
@@ -110,7 +96,7 @@ export default function ChatPage() {
 						filteredRooms.map(room => (
 							<div
 								key={room._id}
-								onClick={() => setChatRoomId(room._id)}
+								onClick={() => handleChangeRoom(room._id)}
 								className={`flex items-center p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 \
 									${room._id === chatRoomId ? 'bg-blue-100 dark:bg-blue-900 text-blue-600' : 'text-gray-800 dark:text-gray-200'}`}
 							>
@@ -139,14 +125,8 @@ export default function ChatPage() {
 						{currentRoom ? currentRoom.name : 'Select a Chat'}
 					</h2>
 				</header>
-				<div className="flex-1 overflow-hidden">
-					{socket && chatRoomId ? (
-						<ChatRoom id={chatRoomId} socket={socket} />
-					) : (
-						<div className="h-full flex items-center justify-center text-gray-500">
-							Loading chat...
-						</div>
-					)}
+				<div className="flex-1 overflow-hidden ">
+					<Outlet />
 				</div>
 			</main>
 		</div>

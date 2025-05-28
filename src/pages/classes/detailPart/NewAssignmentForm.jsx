@@ -16,10 +16,12 @@ import DateTimePicker from "@/components/shared/DateTimePicker";
 import { toast } from "sonner";
 import LinkPreview from "@/components/shared/LinkPreview";
 
-export default function NewAssignmentForm({ isOpen, onClose, onCreated, students }) {
-  const { classDetailId } = useParams();
+export default function NewAssignmentForm({ isOpen, onClose, onCreated }) {
+  const { classId } = useParams();
   const { user } = useUserContext();
   const editorRef = useRef(null);
+  const [open, setOpen] = useState(isOpen);
+  const [students, setStudents] = useState([]);
 
   const [form, setForm] = useState({
     title: "",
@@ -35,8 +37,23 @@ export default function NewAssignmentForm({ isOpen, onClose, onCreated, students
 
   // default to all students selected
   useEffect(() => {
-    setForm(f => ({ ...f, students: students.map(s => s._id) }));
-  }, [students]);
+    api.get(`/classes/${classId}`, {
+      params: {
+        populate_fields: ["students"],
+      },
+    }).then(response => {
+      const students = response.data.students || [];
+      setStudents(students);
+      setForm(f => ({
+        ...f,
+        students: students.map(s => s._id),
+      }));
+    }).catch(err => {
+      console.error("Failed to fetch class students:", err);
+      toast.error("Failed to load students. Please try again.");
+    })
+
+  }, [classId]);
 
   const handleChange = (field, value) => {
     setForm(f => ({ ...f, [field]: value }));
@@ -66,7 +83,7 @@ export default function NewAssignmentForm({ isOpen, onClose, onCreated, students
     const payload = {
       title: form.title,
       description: editorRef.current?.getHTML?.() || form.description,
-      class: classDetailId,
+      class: classId,
       teacher: user._id,
       due_date: form.due_date,
       max_score: form.max_score,
@@ -74,20 +91,21 @@ export default function NewAssignmentForm({ isOpen, onClose, onCreated, students
       students: form.students,
     };
     try {
-      await api.post("/assignments", payload);
-      onCreated();
-      onClose();
+      const response = await api.post("/assignments", payload);
+      console.log("Assignment created:", payload);
       toast.success("Assignment created successfully!");
+      onClose();
+      onCreated(response.data);
+      setOpen(false);
     } catch (err) {
       console.error(err);
       toast.error("Failed to create assignment. Please try again.");
     }
   };
 
-  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-50 z-50 overflow-auto">
+    <div className={`fixed inset-0 bg-gray-50 z-50 overflow-auto ${!isOpen && "hidden"}`}>
       {/* Header */}
       <div className="flex items-center justify-between bg-white px-6 py-4 shadow">
         <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">

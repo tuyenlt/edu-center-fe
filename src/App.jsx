@@ -25,8 +25,13 @@ import LandingPage from './pages/LandingPage';
 import TeacherManage from './pages/teacher-manage/TeacherManage';
 import MagicInput from './components/shared/MagicInput';
 import PaymentManage from './pages/payment-manage/PaymentManage';
+
 import { protectedRoutes } from './routes/routesConfig';
 import RequireRole from './routes/RequireRoute';
+
+import { WebSocketProvider } from './providers/WebSocketProvider';
+import ChatRoom from './pages/ChatPage/ChatRoom';
+
 function App() {
   return (
     <Router>

@@ -1,4 +1,3 @@
-import { chapters } from '../data';
 import { TabsContent } from '@/components/ui/tabs';
 
 import {
@@ -10,13 +9,48 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import SessionInfo from './SessionInfo';
-export default function CourseInfo({ data }) {
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import api from '@/services/api';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
+export default function CourseInfo() {
+  const { classId } = useParams();
 
-  const chaptersInfo = data.course;
-  const chapters = data.course.course_programs;
-  const sessions = data.class_sessions;
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (!classId) {
+      setIsLoading(false);
+      return;
+    }
+    api.get(`/classes/${classId}`, {
+      params: {
+        populate_fields: ['course', 'class_sessions'],
+      },
+    })
+      .then((response) => {
+        setData(response.data);
+        console.log('Class data fetched:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching class data:', error);
+      }).finally(() => {
+        setIsLoading(false);
+      })
+  }, [classId]);
+
+  const chaptersInfo = data?.course;
+  const chapters = data?.course.course_programs;
+  const sessions = data?.class_sessions;
+
   return (
-    <TabsContent value="courseInfo" className="w-4/5 mx-auto mt-5 py-20">
+    isLoading ? (
+      <div className="flex items-center justify-center h-50">
+        <LoadingSpinner />
+      </div>
+    ) : (
       <div className="space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between border-b pb-4">
@@ -54,6 +88,6 @@ export default function CourseInfo({ data }) {
         {/* Chapters Accordion */}
         <SessionInfo sessions={sessions} chapters={chapters} />
       </div>
-    </TabsContent>
+    )
   );
 }
