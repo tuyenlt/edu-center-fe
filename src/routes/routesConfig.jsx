@@ -1,5 +1,5 @@
 // routesConfig.js
-import Dashboard from '@/pages/Dashboard';
+import Dashboard from '@/pages/Dashboard/Dashboard';
 import ClassManage from '@/pages/class-manage/ClassManage';
 import TeacherManage from '@/pages/teacher-manage/TeacherManage';
 import StudentManage from '@/pages/student-manage/StudentManage';
@@ -19,7 +19,7 @@ import StudentContacting from '@/pages/studentContacting/StudentContacting';
 
 export const protectedRoutes = [
   {
-    path: '/',
+    path: '/home',
     element: <Dashboard />,
     allowedRoles: ['manager', 'teacher', 'student'],
   },

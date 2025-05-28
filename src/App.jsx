@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AuthContextProvider from '@/providers/authProvider';
 import SignUp from './pages/SignUp';
 import RootLayout from './layouts/RootLayout';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
 import Course from './pages/Course/Courses';
 import AddCoursePage from './pages/Course/AddCourse';
 import CourseDetail from './pages/Course/CourseDetail';
@@ -36,7 +36,6 @@ function App() {
             {/* Public Routes */}
             <Route path="/login" element={<Signin />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/test" element={<MagicInput />} />
             <Route path="/landing" element={<LandingPage />} />
 
             {/* Protected Routes */}

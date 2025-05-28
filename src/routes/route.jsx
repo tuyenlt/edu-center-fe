@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Signin from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
 import RootLayout from '@/layouts/RootLayout';
-import Dashboard from '@/pages/Dashboard';
+import Dashboard from '@/pages/Dashboard/Dashboard';
 import Course from '@/pages/Course/Courses';
 import AddCoursePage from '@/pages/Course/AddCourse';
 import CourseDetail from '@/pages/Course/CourseDetail';
@@ -27,6 +27,7 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Signin />,
   },
+
   {
     path: '/signup',
     element: <SignUp />,
@@ -58,10 +59,6 @@ const router = createBrowserRouter([
       { path: 'calendar', element: <CalendarPage /> },
       { path: 'student-contacting', element: <StudentContacting /> },
     ],
-  },
-  {
-    path: '*',
-    element: <LandingPage />,
   },
 ]);
 
