@@ -9,31 +9,12 @@ import {
   CardFooter,
   CardDescription,
 } from '@/components/ui/card';
-import { dateTimeConvert_2 } from '@/utils/dateTimeConvert';
-import { useState } from 'react';
-import SessionScheduleDialog from './manage/SessionSchedule';
-import { useUserContext } from '@/providers/authContext';
-import { cn } from '@/lib/utils';
-import { getIntervalTimePosition } from '@/utils';
-import { toast } from 'sonner';
 import SessionInfo from './SessionInfo';
 export default function CourseInfo({ data }) {
-  const { user } = useUserContext();
-  const isManager = user?.role === 'manager';
-
-  // const handleChangeSession = (session) => {
-  //   try {
-
-  //   } catch (error) {
-  //     console.error('Error updating session:', error);
-  //     toast.error('Failed to update session. Please try again later.');
-  //   }
-  // }
 
   const chaptersInfo = data.course;
   const chapters = data.course.course_programs;
   const sessions = data.class_sessions;
-  let count = 0;
   return (
     <TabsContent value="courseInfo" className="w-4/5 mx-auto mt-5 py-20">
       <div className="space-y-8">

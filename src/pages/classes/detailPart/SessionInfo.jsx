@@ -67,7 +67,7 @@ export default function SessionInfo({
                     key={lessonIndex}
                     className={cn(
                       'bg-gray-50 p-4 border border-gray-200 shadow-sm',
-                      timePosition === 'before'
+                      timePosition === 'after'
                         ? 'opacity-50'
                         : timePosition === 'within'
                           ? 'bg-blue-50 border-blue-200'
@@ -96,7 +96,7 @@ export default function SessionInfo({
                           </span>
                           <span>{dateTimeConvert_2(lesson.end_time)}</span>
                         </div>
-                        {isManager && timePosition === 'after' && (
+                        {isManager && timePosition === 'before' && (
                           <SessionScheduleDialog
                             session={
                               lesson

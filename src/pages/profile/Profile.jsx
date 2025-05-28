@@ -28,6 +28,7 @@ import { activeClass } from "@/utils";
 import AssignmentStatsCard from "./components/AssignmentStatsCard";
 import ClassesOfUser from "./components/ClassesOfUser";
 import UserPayment from "./components/UserPayment";
+import UserNotifies from "./components/UserNotifies";
 
 const tabs = {
     classes: "Classes",
@@ -118,8 +119,7 @@ export default function Profile() {
                                 </TabsContent>
 
                                 <TabsContent value="notifies">
-                                    {/* Add your activity content here */}
-                                    <p>Activity information goes here.</p>
+                                    <UserNotifies user={userData} />
                                 </TabsContent>
                             </div>
                         </Tabs>
