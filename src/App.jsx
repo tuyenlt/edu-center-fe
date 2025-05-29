@@ -8,7 +8,7 @@ import Course from './pages/Course/Courses';
 import AddCoursePage from './pages/Course/AddCourse';
 import CourseDetail from './pages/Course/CourseDetail';
 import EditCourse from './pages/Course/EditCourse';
-import NewClass from './pages/classes/detailPart/manage/NewClass';
+import NewClass from './pages/classes/tabs/manage/NewClass';
 import ClassPage from './pages/classes/ClassPage';
 import Profile from './pages/profile/Profile';
 import StudentManage from './pages/student-manage/StudentManage';

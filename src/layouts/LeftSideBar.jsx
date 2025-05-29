@@ -54,6 +54,7 @@ const menuByRole = {
     { title: 'Student Manage', url: '/students-manage', icon: Users },
     { title: 'Teacher Manage', url: '/teachers-manage', icon: UserCircle },
     { title: 'Payment Manage', url: '/payment-manage', icon: CreditCard },
+    { title: 'Schedule', url: '/calendar', icon: CalendarDays },
   ],
   staff: [
     { title: 'Dashboard', url: '/', icon: Home },

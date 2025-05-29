@@ -3,20 +3,21 @@ import { Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useUserContext } from '@/providers/authContext';
-import SettingsForm from './detailPart/manage/SettingsForm';
+import SettingsForm from './tabs/manage/SettingsForm';
 import api from '@/services/api';
-import CourseInfo from './detailPart/CourseInfo';
-import People from './detailPart/People';
-import Stream from './detailPart/Stream';
-import Assignment from './detailPart/Assignment';
-import Grade from './detailPart/grade/Grade';
+import CourseInfo from './tabs/CourseInfo';
+import People from './tabs/People';
+import Stream from './tabs/Stream';
+import Assignment from './tabs/Assignment';
+import Grade from './tabs/grade/Grade';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useLayoutContext } from '@/providers/LayoutProvider';
 
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
-import ClassSchedule from './detailPart/ClassSchedule';
+import ClassSchedule from './tabs/ClassSchedule';
+import Attendance from './tabs/Attendance';
 
-const parts = {
+const tabs = {
 	stream: 'Stream',
 	assignments: 'Assignments',
 	people: 'People',
@@ -34,9 +35,9 @@ const activeClass =
 export default function ClassDetail() {
 	const { classId } = useParams();
 	const { user } = useUserContext();
-	const isStudent = user?.role === 'student';
-	const isTeacher = user?.role === 'teacher';
 	const isManager = user?.role === 'manager';
+
+	const isRoleAllowed = (user.role !== "staff") && (user.role !== "student")
 
 	const [isSetting, setIsSetting] = useState(false);
 	const [isSessionSchedule, setIsSessionSchedule] = useState(false);
@@ -49,7 +50,10 @@ export default function ClassDetail() {
 		setIsSetting(true);
 	};
 
-	let copyParts = isTeacher ? { ...parts, grade: 'Grade' } : parts;
+	if (isRoleAllowed) {
+		tabs.attendance = 'Attendance';
+		tabs.grade = 'Grade';
+	}
 	const [data, setData] = useState(null);
 
 	useEffect(() => {
@@ -73,7 +77,7 @@ export default function ClassDetail() {
 		<Tabs defaultValue="stream" className=" gap-0">
 			<div className="border-b sticky z-10 bg-white flex items-center justify-between w-[calc(100vw-85px)] ">
 				<TabsList className="bg-inherit ml-5 h-full flex items-center p-0 z-1000">
-					{Object.entries(copyParts).map(([key, value]) => (
+					{Object.entries(tabs).map(([key, value]) => (
 						<TabsTrigger
 							key={key}
 							value={key}
@@ -90,23 +94,23 @@ export default function ClassDetail() {
 					<Settings className="w-5 h-5 mr-5" onClick={handleOpenSettings} />
 				)}
 			</div>
-			<div className="h-screen bg-white">
-				<TabsContent value="stream" className="w-4/5 mx-auto mt-5 py-20">
+			<div className="bg-white h-[calc(100vh-140px)]">
+				<TabsContent value="stream" className="w-4/5 mx-auto  py-10">
 					<Stream />
 				</TabsContent>
 
 				<TabsContent
 					value="assignments"
-					className="w-4/5 max-w-screen-2xl mx-auto mt-5 py-20"
+					className="w-4/5 max-w-screen-2xl mx-auto  py-10"
 				>
 					<Assignment />
 				</TabsContent>
 
-				<TabsContent value="people" className="w-4/5 mx-auto mt-5 py-20">
+				<TabsContent value="people" className="w-4/5 mx-auto  py-10">
 					<People />
 				</TabsContent>
 
-				<TabsContent value="courseInfo" className="w-4/5 mx-auto mt-5 py-20">
+				<TabsContent value="courseInfo" className="w-4/5 mx-auto  py-10">
 					<CourseInfo />
 				</TabsContent>
 
@@ -114,9 +118,14 @@ export default function ClassDetail() {
 					<ClassSchedule />
 				</TabsContent>
 
-				{isTeacher && (
+				{isRoleAllowed && (
 					<TabsContent value="grade">
 						<Grade students={data} />
+					</TabsContent>
+				)}
+				{isRoleAllowed && (
+					<TabsContent value="attendance">
+						<Attendance />
 					</TabsContent>
 				)}
 			</div>

@@ -27,6 +27,7 @@ export default function CourseDetail() {
   const navigate = useNavigate();
   const { user } = useUserContext();
   const [course, setCourse] = useState();
+  // temporary fetch to fix dashboard
   // setCourse(location.state && location.state.course);
 
   useEffect(() => {
@@ -266,7 +267,7 @@ export default function CourseDetail() {
                   <button
                     key={student._id}
                     onClick={() => navigate(`/users/${student._id}`)}
-                    className="flex items-center p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-sm hover:shadow-md transition-shadow duration-200 focus:outline-none"
+                    className="flex items-center p-3 bg-white dark:bg-gray-800 border  hover:shadow-md transition-shadow duration-200 focus:outline-none"
                   >
                     <img
                       src={student.avatar_url}

@@ -11,7 +11,7 @@ import EditCourse from '@/pages/Course/EditCourse';
 import ClassPage from '@/pages/classes/ClassPage';
 import ClassDetail from '@/pages/classes/ClassDetail';
 import AssignmentDetail from '@/pages/Assignments/AssignmentDetail';
-import NewClass from '@/pages/classes/detailPart/manage/NewClass';
+import NewClass from '@/pages/classes/tabs/manage/NewClass';
 import Profile from '@/pages/profile/Profile';
 import ChatPage from '@/pages/ChatPage/ChatPage';
 import CalendarPage from '@/pages/Calendar/CalendarPage';
