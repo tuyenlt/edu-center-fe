@@ -5,6 +5,7 @@ import { ClassCard } from './ClassCard';
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import AssignmentStatus from '../Dashboard/AssignmentStatus';
 export default function ClassPage() {
 	const { user } = useUserContext();
 	const isStudent = user?.role === 'student';

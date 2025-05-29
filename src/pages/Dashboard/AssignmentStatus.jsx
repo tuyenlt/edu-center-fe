@@ -7,20 +7,16 @@ import { Link } from 'react-router-dom';
 export default function AssignmentStatus({ classes }) {
   const [assignments, setAssignments] = useState([]);
   useEffect(() => {
-    classes?.map((classData) => {
-      api
-        .get(`/assignments/class/${classData._id}`)
-        .then((response) => {
-          console.log(response.data);
-          setAssignments((prev) => [...prev, ...response.data]);
-        })
-        .catch((error) => {
-          console.error('Error fetching assignments:', error);
-        });
+    if (!classes || classes.length === 0) return;
+    setAssignments([]);
+    classes.forEach((classData) => {
+      api.get(`/assignments/class/${classData._id}`).then((response) => {
+        setAssignments((prev) => [...prev, ...response.data]);
+      });
     });
   }, [classes]);
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md overflow-scroll h-[396px]">
+    <div className="bg-white p-4 rounded-lg shadow-md overflow-auto h-[396px]">
       <div className="flex justify-between mb-4">
         <h2 className="font-semibold text-lg">Assignment Status</h2>
         <Link to="/assignment" className="text-blue-700 text-sm font-medium">
