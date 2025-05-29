@@ -33,38 +33,49 @@ import { WebSocketProvider } from './providers/WebSocketProvider';
 import ChatRoom from './pages/ChatPage/ChatRoom';
 
 function App() {
-  return (
-    <Router>
-      <AuthContextProvider>
-        <LayoutContextProvider>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<Signin />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/landing" element={<LandingPage />} />
+	return (
+		<Router>
+			<AuthContextProvider>
+				<WebSocketProvider>
 
-            {/* Protected Routes */}
-            <Route element={<RootLayout />}>
-              {protectedRoutes.map(({ path, element, allowedRoles }) => (
-                <Route
-                  key={path}
-                  path={path}
-                  element={
-                    <RequireRole allowedRoles={allowedRoles}>
-                      {element}
-                    </RequireRole>
-                  }
-                />
-              ))}
-            </Route>
+					<LayoutContextProvider>
+						<Routes>
+							{/* Public Routes */}
+							<Route path="/login" element={<Signin />} />
+							<Route path="/signup" element={<SignUp />} />
+							<Route path="/landing" element={<LandingPage />} />
 
-            {/* Catch-all 404 */}
-            <Route path="*" element={<LandingPage />} />
-          </Routes>
-        </LayoutContextProvider>
-      </AuthContextProvider>
-    </Router>
-  );
+							{/* Protected Routes */}
+							<Route element={<RootLayout />}>
+								{protectedRoutes.map(({ path, element, allowedRoles, children }) => (
+									<Route
+										key={path}
+										path={path}
+										element={
+											<RequireRole allowedRoles={allowedRoles}>
+												{element}
+											</RequireRole>
+										}
+									>
+										{children && children.map((child) => (
+											<Route
+												key={child.path}
+												path={child.path}
+												element={child.element}
+											/>
+										))}
+									</Route>
+								))}
+							</Route>
+
+							{/* Catch-all 404 */}
+							<Route path="*" element={<LandingPage />} />
+						</Routes>
+					</LayoutContextProvider>
+				</WebSocketProvider>
+			</AuthContextProvider>
+		</Router>
+	);
 }
 
 export default App;
