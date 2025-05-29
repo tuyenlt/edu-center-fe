@@ -116,7 +116,9 @@ export default function MonthlyAttendanceChart() {
       <div className="flex justify-between items-center mb-4">
         <div>
           <h2 className="text-lg font-semibold">Attendance Overview</h2>
-          <p>Tracking the number of students participating each months</p>
+          <p className="text-zinc-700 text-sm ">
+            Tracking the number of students participating each months
+          </p>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <button onClick={handlePrev} disabled={currentYearIndex === 0}>

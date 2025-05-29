@@ -7,7 +7,7 @@ export default function CourseRequest({ courses }) {
       <div className="flex justify-between mb-4">
         <h2 className="font-semibold text-lg">Students's Requests</h2>
       </div>
-      {courses.map(
+      {courses?.map(
         (course) =>
           course.requested_students.length > 0 && (
             <Link

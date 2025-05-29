@@ -57,7 +57,7 @@ export default function Dashboard() {
             <ClassProgressList isManager={isManager} classes={classes} />
           )}{' '}
           {isStudent && <AssignmentStatus classes={classes} />}
-          {!isManager && <UpcomingActivities className="grid-auto-rows" />}
+          {!isManager && <UpcomingActivities />}
           {isStudent && <CourseRegistered />}
           {!isManager && <MiniClassPost classes={classes} />}
           <MiniChatRoom />

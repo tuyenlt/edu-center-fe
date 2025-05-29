@@ -71,7 +71,7 @@ export function LeftSidebar() {
 
   return (
     <div className="group relative">
-      <div className="fixed top-15 pt-6 h-[calc(100vh)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 group-hover:w-64">
+      <div className="fixed top-15 pt-6 h-[calc(100vh)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 group-hover:w-64 text-zinc-700">
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>
@@ -85,7 +85,7 @@ export function LeftSidebar() {
                     >
                       <Link to={item.url} className="flex items-center gap-3">
                         <item.icon className="!w-5 !h-5 opacity-50" />
-                        <span className="font-light text-xl transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:visible invisible">
+                        <span className=" text-base font-medium transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:visible invisible">
                           {item.title}
                         </span>
                       </Link>
@@ -99,7 +99,7 @@ export function LeftSidebar() {
                   >
                     <button
                       onClick={() => logout()}
-                      className="flex items-center gap-3 text-[20px]"
+                      className="flex items-center gap-3 text-base font-medium"
                     >
                       <LogOutIcon className="w-5 h-5 opacity-50" />
                       <span className="transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:visible invisible">

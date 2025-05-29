@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useUserContext } from '@/providers/authContext';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -22,12 +22,28 @@ import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 export default function CourseDetail() {
+  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUserContext();
-  const course = location.state && location.state.course;
+  const [course, setCourse] = useState();
+  // setCourse(location.state && location.state.course);
+
+  useEffect(() => {
+    const getCourse = async () => {
+      try {
+        const response = await api.get(`/courses/${id}`);
+        setCourse(response.data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        return [];
+      }
+    };
+    getCourse();
+  }, []);
+
   const [openChapters, setOpenChapters] = useState({});
-  const isCurrentlyRequested = course.requested_students.includes(user?._id);
+  const isCurrentlyRequested = course?.requested_students.includes(user?._id);
   const [requested, setRequested] = useState(isCurrentlyRequested);
 
   if (!course) {
