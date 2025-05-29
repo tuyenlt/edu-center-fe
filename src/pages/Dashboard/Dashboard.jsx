@@ -46,22 +46,21 @@ export default function Dashboard() {
   return (
     classes && (
       <div className="p-6 space-y-6 bg-[#f5f9ff] min-h-screen ">
-        <WelcomeBanner username={user.name} />
+        <WelcomeBanner user={user} />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
-          {isTeacher && <StudentStatsChart />}
-          {isStudent && <AssignmentStatus classes={classes} />}
-          {!isManager && (
-            <ClassProgressList isManager={isManager} classes={classes} />
-          )}
-          {!isManager && <UpcomingActivities className="grid-auto-rows" />}
-
-          {isStudent && <CourseRegistered />}
+          {isManager && <Payment />}
           {isManager && <MonthlyAttendance />}
-          <MiniChatRoom />
           {isManager && courses && <CourseRequest courses={courses} />}
           {isManager && courses && <FeedbackCourses courses={courses} />}
+          {isTeacher && <StudentStatsChart />}
+          {!isManager && (
+            <ClassProgressList isManager={isManager} classes={classes} />
+          )}{' '}
+          {isStudent && <AssignmentStatus classes={classes} />}
+          {!isManager && <UpcomingActivities className="grid-auto-rows" />}
+          {isStudent && <CourseRegistered />}
           {!isManager && <MiniClassPost classes={classes} />}
-          {isManager && <Payment />}
+          <MiniChatRoom />
         </div>
       </div>
     )

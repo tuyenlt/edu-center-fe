@@ -3,12 +3,18 @@ import { useUserContext } from '@/providers/authContext';
 import api from '@/services/api';
 import { getClassProgress } from '@/utils';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ClassProgressList({ classes }) {
   return (
     classes && (
       <div className="bg-white p-4 rounded-lg shadow-md h-[396px] overflow-auto">
-        <h2 className="font-semibold text-lg mb-4">Class Progress</h2>
+        <div className="flex justify-between mb-4">
+          <h2 className="font-semibold text-lg">Class Progress</h2>
+          <Link to="/class" className="text-blue-700 text-sm font-medium">
+            See all
+          </Link>
+        </div>
         {classes.map((cls) => (
           <div
             key={cls._id}

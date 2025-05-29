@@ -7,16 +7,12 @@ import { Link } from 'react-router-dom';
 export default function AssignmentStatus({ classes }) {
   const [assignments, setAssignments] = useState([]);
   useEffect(() => {
-    classes?.map((classData) => {
-      api
-        .get(`/assignments/class/${classData._id}`)
-        .then((response) => {
-          console.log(response.data);
-          setAssignments((prev) => [...prev, ...response.data]);
-        })
-        .catch((error) => {
-          console.error('Error fetching assignments:', error);
-        });
+    if (!classes || classes.length === 0) return;
+    setAssignments([]);
+    classes.forEach((classData) => {
+      api.get(`/assignments/class/${classData._id}`).then((response) => {
+        setAssignments((prev) => [...prev, ...response.data]);
+      });
     });
   }, [classes]);
   return (

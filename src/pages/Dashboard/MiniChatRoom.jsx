@@ -8,7 +8,7 @@ import { stringToColorClass } from '@/utils';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-export default function ChatPage() {
+export default function MiniChatRoom() {
   const location = useLocation();
   const initialChatId = location.state?.chatId;
   const { token, user } = useUserContext();
@@ -82,10 +82,10 @@ export default function ChatPage() {
 
   const currentRoom = chatRooms.find((r) => r._id === chatRoomId);
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md overflow-auto h-[396px] ">
+    <div className="bg-white p-4 rounded-lg shadow-md overflow-auto h-[396px]">
       {/* Sidebar */}
-      <aside className="w-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-        <div className="border-b border-gray-200 dark:border-gray-700">
+      <aside className="w-full bg-white  flex flex-col">
+        <div className="">
           <div className="flex justify-between">
             {' '}
             <h2 className="mb-4 font-semibold text-lg">Chats Room</h2>
@@ -101,7 +101,7 @@ export default function ChatPage() {
             className="mt-2 w-full px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto mt-5">
           {filteredRooms.length === 0 ? (
             <div className="p-4 text-gray-500">No chats yet</div>
           ) : (
@@ -109,11 +109,11 @@ export default function ChatPage() {
               <div
                 key={room._id}
                 onClick={() => setChatRoomId(room._id)}
-                className={`flex items-center p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 \
+                className={`rounded-2xl flex items-center p-4 cursor-pointer  dark:hover:bg-gray-700 \
                     ${
                       room._id === chatRoomId
-                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-600'
-                        : 'text-gray-800 dark:text-gray-200'
+                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 '
+                        : 'text-gray-800 dark:text-gray-200 hover:bg-gray-100'
                     }`}
               >
                 <Avatar className="w-12 h-12 mr-3">

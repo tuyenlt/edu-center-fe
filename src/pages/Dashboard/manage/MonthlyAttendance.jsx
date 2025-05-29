@@ -68,6 +68,20 @@ const fakeData = {
     { name: 'No', attendance: 7 },
     { name: 'De', attendance: 10 },
   ],
+  2025: [
+    { name: 'Ja', attendance: 40 },
+    { name: 'Fe', attendance: 41 },
+    { name: 'Mr', attendance: 43 },
+    { name: 'Ap', attendance: 45 },
+    { name: 'My', attendance: 49 },
+    { name: 'Jn', attendance: 45 },
+    { name: 'Jl', attendance: 30 },
+    { name: 'Au', attendance: 11 },
+    { name: 'Se', attendance: 18 },
+    { name: 'Oc', attendance: 20 },
+    { name: 'No', attendance: 90 },
+    { name: 'De', attendance: 10 },
+  ],
 };
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -118,7 +132,7 @@ export default function MonthlyAttendanceChart() {
         </div>
       </div>
 
-      <CardContent className="h-[300px] px-0">
+      <CardContent className="h-[252px] px-0">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData}
