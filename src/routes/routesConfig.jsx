@@ -16,91 +16,96 @@ import Profile from '@/pages/profile/Profile';
 import ChatPage from '@/pages/ChatPage/ChatPage';
 import CalendarPage from '@/pages/Calendar/CalendarPage';
 import StudentContacting from '@/pages/studentContacting/StudentContacting';
+import { Route } from 'lucide-react';
+import ChatRoom from '@/pages/ChatPage/ChatRoom';
 
 export const protectedRoutes = [
-  {
-    path: '/home',
-    element: <Dashboard />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/courses',
-    element: <Course />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/course/:id',
-    element: <CourseDetail />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/course/:id/edit',
-    element: <EditCourse />,
-    allowedRoles: ['manager'],
-  },
-  {
-    path: '/add-course',
-    element: <AddCoursePage />,
-    allowedRoles: ['manager'],
-  },
-  {
-    path: '/class',
-    element: <ClassPage />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/class/:classDetailId',
-    element: <ClassDetail />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/assignments/:id',
-    element: <AssignmentDetail />,
-    allowedRoles: ['teacher', 'student'],
-  },
-  {
-    path: '/add-class',
-    element: <NewClass />,
-    allowedRoles: ['manager'],
-  },
-  {
-    path: '/users/:id',
-    element: <Profile />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/students-manage',
-    element: <StudentManage />,
-    allowedRoles: ['manager'],
-  },
-  {
-    path: '/teachers-manage',
-    element: <TeacherManage />,
-    allowedRoles: ['manager'],
-  },
-  {
-    path: '/class-manage',
-    element: <ClassManage />,
-    allowedRoles: ['manager'],
-  },
-  {
-    path: '/payment-manage',
-    element: <PaymentManage />,
-    allowedRoles: ['manager'],
-  },
-  {
-    path: '/chat',
-    element: <ChatPage />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/calendar',
-    element: <CalendarPage />,
-    allowedRoles: ['manager', 'teacher', 'student'],
-  },
-  {
-    path: '/student-contacting',
-    element: <StudentContacting />,
-    allowedRoles: ['manager', 'teacher'],
-  },
+	{
+		path: '/home',
+		element: <Dashboard />,
+		allowedRoles: ['manager', 'teacher', 'student'],
+	},
+	{
+		path: '/courses',
+		element: <Course />,
+		allowedRoles: ['manager', 'teacher', 'student'],
+	},
+	{
+		path: '/course/:id',
+		element: <CourseDetail />,
+		allowedRoles: ['manager', 'teacher', 'student'],
+	},
+	{
+		path: '/course/:id/edit',
+		element: <EditCourse />,
+		allowedRoles: ['manager'],
+	},
+	{
+		path: '/add-course',
+		element: <AddCoursePage />,
+		allowedRoles: ['manager'],
+	},
+	{
+		path: '/class',
+		element: <ClassPage />,
+		allowedRoles: ['manager', 'teacher', 'student'],
+	},
+	{
+		path: '/class/:classId',
+		element: <ClassDetail />,
+		allowedRoles: ['manager', 'teacher', 'student'],
+	},
+	{
+		path: '/assignments/:id',
+		element: <AssignmentDetail />,
+		allowedRoles: ['teacher', 'student', 'manager'],
+	},
+	{
+		path: '/add-class',
+		element: <NewClass />,
+		allowedRoles: ['manager'],
+	},
+	{
+		path: '/users/:id',
+		element: <Profile />,
+		allowedRoles: ['manager', 'teacher', 'student', 'staff'],
+	},
+	{
+		path: '/students-manage',
+		element: <StudentManage />,
+		allowedRoles: ['manager', 'staff'],
+	},
+	{
+		path: '/teachers-manage',
+		element: <TeacherManage />,
+		allowedRoles: ['manager', 'staff'],
+	},
+	{
+		path: '/class-manage',
+		element: <ClassManage />,
+		allowedRoles: ['manager'],
+	},
+	{
+		path: '/payment-manage',
+		element: <PaymentManage />,
+		allowedRoles: ['manager', 'staff'],
+	},
+	{
+		path: '/chat',
+		element: <ChatPage />,
+		children: [
+			{ path: ':roomId', element: <ChatRoom /> }
+		],
+		allowedRoles: ['manager', 'teacher', 'student', 'staff'],
+	},
+	{
+		path: '/calendar',
+		element: <CalendarPage />,
+		allowedRoles: ['manager', 'teacher', 'student'],
+	},
+	{
+		path: '/student-contacting',
+		element: <StudentContacting />,
+		allowedRoles: ['staff'],
+	},
 ];

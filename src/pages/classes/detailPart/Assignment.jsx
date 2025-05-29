@@ -132,7 +132,6 @@ export default function Assignment() {
                   // <Link to={`/assignments/${assignment._id}`} key={idx}>
                   <AssignmentItem
                     assignment={assignment}
-                    isTeacher={isTeacher}
                     setIsEditMenuOpen={setIsEditMenuOpen}
                   />
                   // </Link>
@@ -140,7 +139,6 @@ export default function Assignment() {
                   <AssignmentItem
                     key={idx}
                     assignment={assignment}
-                    isTeacher={isTeacher}
                     setIsEditMenuOpen={setIsEditMenuOpen}
                     onDelete={() => fetchAssignments()}
                   />

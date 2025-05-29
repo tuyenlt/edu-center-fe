@@ -23,43 +23,43 @@ import TeacherManage from '@/pages/teacher-manage/TeacherManage';
 import PaymentManage from '@/pages/payment-manage/PaymentManage';
 
 const router = createBrowserRouter([
-  {
-    path: '/login',
-    element: <Signin />,
-  },
+	{
+		path: '/login',
+		element: <Signin />,
+	},
 
-  {
-    path: '/signup',
-    element: <SignUp />,
-  },
+	{
+		path: '/signup',
+		element: <SignUp />,
+	},
 
-  {
-    path: '/landing',
-    element: <LandingPage />,
-  },
-  {
-    path: '/',
-    element: <RootLayout />,
-    children: [
-      { path: '', element: <Dashboard /> },
-      { path: 'courses', element: <Course /> },
-      { path: 'course/:id', element: <CourseDetail /> },
-      { path: 'course/:id/edit', element: <EditCourse /> },
-      { path: 'add-course', element: <AddCoursePage /> },
-      { path: 'class', element: <ClassPage /> },
-      { path: 'class/:classDetailId', element: <ClassDetail /> },
-      { path: 'assignments/:id', element: <AssignmentDetail /> },
-      { path: 'add-class', element: <NewClass /> },
-      { path: 'users/:id', element: <Profile /> },
-      { path: 'students-manage', element: <StudentManage /> },
-      { path: 'teachers-manage', element: <TeacherManage /> },
-      { path: 'class-manage', element: <ClassManage /> },
-      { path: 'payment-manage', element: <PaymentManage /> },
-      { path: 'chat', element: <ChatPage /> },
-      { path: 'calendar', element: <CalendarPage /> },
-      { path: 'student-contacting', element: <StudentContacting /> },
-    ],
-  },
+	{
+		path: '/landing',
+		element: <LandingPage />,
+	},
+	{
+		path: '/',
+		element: <RootLayout />,
+		children: [
+			{ path: '', element: <Dashboard /> },
+			{ path: 'courses', element: <Course /> },
+			{ path: 'course/:id', element: <CourseDetail /> },
+			{ path: 'course/:id/edit', element: <EditCourse /> },
+			{ path: 'add-course', element: <AddCoursePage /> },
+			{ path: 'class', element: <ClassPage /> },
+			{ path: 'class/:classId', element: <ClassDetail /> },
+			{ path: 'assignments/:id', element: <AssignmentDetail /> },
+			{ path: 'add-class', element: <NewClass /> },
+			{ path: 'users/:id', element: <Profile /> },
+			{ path: 'students-manage', element: <StudentManage /> },
+			{ path: 'teachers-manage', element: <TeacherManage /> },
+			{ path: 'class-manage', element: <ClassManage /> },
+			{ path: 'payment-manage', element: <PaymentManage /> },
+			{ path: 'chat', element: <ChatPage /> },
+			{ path: 'calendar', element: <CalendarPage /> },
+			{ path: 'student-contacting', element: <StudentContacting /> },
+		],
+	},
 ]);
 
 export default router;
