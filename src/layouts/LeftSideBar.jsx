@@ -100,7 +100,7 @@ export function LeftSidebar() {
 									>
 										<button
 											onClick={() => logout()}
-											className="flex items-center gap-3 text-[20px]"
+											className="flex items-center gap-3 text-[20px] py-8"
 										>
 											<LogOutIcon className="w-5 h-5 opacity-50" />
 											<span className="transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:visible invisible">
