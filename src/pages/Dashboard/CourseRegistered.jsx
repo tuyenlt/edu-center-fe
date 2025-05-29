@@ -37,7 +37,7 @@ export default function CourseRegistered() {
   const sortedClasses = [...approvedClasses, ...pendingClasses];
 
   return (
-    <div className=" bg-white p-4 rounded-lg shadow-md overflow-scroll h-[396px] ">
+    <div className=" bg-white p-4 rounded-lg shadow-md overflow-auto h-[396px] ">
       <h2 className="mb-4 font-semibold text-lg">Course Registered</h2>
       <div className="space-y-4">
         {sortedClasses.map((cls) => (

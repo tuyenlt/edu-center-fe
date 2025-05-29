@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 export default function ClassProgressList({ classes }) {
   return (
     classes && (
-      <div className="bg-white p-4 rounded-lg shadow-md h-[396px] overflow-scroll">
+      <div className="bg-white p-4 rounded-lg shadow-md h-[396px] overflow-auto">
         <h2 className="font-semibold text-lg mb-4">Class Progress</h2>
         {classes.map((cls) => (
           <div

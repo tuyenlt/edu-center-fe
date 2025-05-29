@@ -82,7 +82,7 @@ export default function ChatPage() {
 
   const currentRoom = chatRooms.find((r) => r._id === chatRoomId);
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md overflow-scroll h-[396px] ">
+    <div className="bg-white p-4 rounded-lg shadow-md overflow-auto h-[396px] ">
       {/* Sidebar */}
       <aside className="w-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
         <div className="border-b border-gray-200 dark:border-gray-700">

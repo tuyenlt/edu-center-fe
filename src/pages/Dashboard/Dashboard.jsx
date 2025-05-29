@@ -10,12 +10,27 @@ import AssignmentStatus from './AssignmentStatus';
 import CourseRegistered from './CourseRegistered';
 import MiniChatRoom from './MiniChatRoom';
 import MiniClassPost from './MiniClassPost';
+import MonthlyAttendance from './manage/MonthlyAttendance';
+import CourseRequest from './manage/CourseRequests';
+import { getAllCourse } from '@/services/api/courses.api';
+import FeedbackCourses from './manage/Feedback';
+import Payment from './manage/Payment';
 export default function Dashboard() {
   const { user } = useUserContext();
   const isManager = user?.role === 'manager';
   const isTeacher = user?.role === 'teacher';
   const isStudent = user?.role === 'student';
   const [classes, setClasses] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const getCourses = async () => {
+    const result = await getAllCourse();
+    setCourses(result);
+    console.log(courses);
+  };
+
+  useEffect(() => {
+    getCourses();
+  }, []);
   useEffect(() => {
     api
       .get(`/classes-of-user/${user._id}`)
@@ -35,14 +50,18 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
           {isTeacher && <StudentStatsChart />}
           {isStudent && <AssignmentStatus classes={classes} />}
-          <ClassProgressList isManager={isManager} classes={classes} />
+          {!isManager && (
+            <ClassProgressList isManager={isManager} classes={classes} />
+          )}
           {!isManager && <UpcomingActivities className="grid-auto-rows" />}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
-          {' '}
+
           {isStudent && <CourseRegistered />}
+          {isManager && <MonthlyAttendance />}
           <MiniChatRoom />
+          {isManager && courses && <CourseRequest courses={courses} />}
+          {isManager && courses && <FeedbackCourses courses={courses} />}
           {!isManager && <MiniClassPost classes={classes} />}
+          {isManager && <Payment />}
         </div>
       </div>
     )

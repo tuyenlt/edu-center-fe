@@ -20,7 +20,7 @@ export default function AssignmentStatus({ classes }) {
     });
   }, [classes]);
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md overflow-scroll h-[396px]">
+    <div className="bg-white p-4 rounded-lg shadow-md overflow-auto h-[396px]">
       <div className="flex justify-between mb-4">
         <h2 className="font-semibold text-lg">Assignment Status</h2>
         <Link to="/assignment" className="text-blue-700 text-sm font-medium">
