@@ -5,6 +5,7 @@ import { ClassCard } from './ClassCard';
 import { useEffect, useState } from 'react';
 import api from '@/services/api';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import AssignmentStatus from '../Dashboard/AssignmentStatus';
 export default function ClassPage() {
   const { user } = useUserContext();
   const isStudent = user?.role === 'student';
@@ -34,18 +35,20 @@ export default function ClassPage() {
     fetchClassData();
   }, []);
   if (loading) {
-    return <div className='m-auto'>
-      <LoadingSpinner />
-    </div>;
+    return (
+      <div className="m-auto">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
     <div className="grid grid-cols-4 items-start gap-y-7 p-6 max-w-screen-xl m-auto">
-      {classData?.length === 0 &&
+      {classData?.length === 0 && (
         <div className="flex items-center justify-center h-screen">
           <p className="text-gray-500">No class available</p>
         </div>
-      }
+      )}
       <div
         className={cn({
           'col-span-3 grid-cols-3 grid gap-y-12': isStudent,
@@ -59,7 +62,7 @@ export default function ClassPage() {
 
       {isStudent && (
         <div className="col-span-1">
-          <ClassAssignmentSummary />
+          <AssignmentStatus classes={classData} />
         </div>
       )}
     </div>

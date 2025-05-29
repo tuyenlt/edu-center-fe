@@ -10,7 +10,10 @@ export default function CourseRequest({ courses }) {
       {courses.map(
         (course) =>
           course.requested_students.length > 0 && (
-            <Link className="text-blue-700 text-sm font-medium">
+            <Link
+              to={`/course/${course._id}`}
+              className="text-blue-700 text-sm font-medium"
+            >
               <div key={course.id} className="p-4 rounded-2xl">
                 <h3 className="text-lg font-semibold text-blue-700 mb-2">
                   {course.name}

@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
-import AssignmentItem from "./AssignmentItem";
+import AssignmentItem from './AssignmentItem';
 import {
   EllipsisVertical,
   Pencil,
@@ -22,22 +22,22 @@ import {
   BookMarked,
   Repeat,
   FolderOpen,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { TabsContent } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
-import { useUserContext } from "@/providers/authContext";
-import NewAssignmentForm from "./NewAssignmentForm";
-import api from "@/services/api";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import { TabsContent } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
+import { useUserContext } from '@/providers/authContext';
+import NewAssignmentForm from './NewAssignmentForm';
+import api from '@/services/api';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
 
 export default function Assignment() {
   const { classId } = useParams();
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
   const [isNewAssignmentOpen, setIsNewAssignmentOpen] = useState(false);
   const { user } = useUserContext();
-  const isStudent = user?.role === "student";
-  const isTeacher = user?.role === "teacher";
+  const isStudent = user?.role === 'student';
+  const isTeacher = user?.role === 'teacher';
   const [assignments, setAssignments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [studentStatus, setStudentStatus] = useState({
@@ -48,15 +48,18 @@ export default function Assignment() {
 
   const fetchAssignments = async () => {
     setIsLoading(true);
-    api.get(`/assignments/class/${classId}`)
+    api
+      .get(`/assignments/class/${classId}`)
       .then((response) => {
         setAssignments(response.data);
-      }).catch((error) => {
-        console.error("Error fetching assignments:", error);
-      }).finally(() => {
-        setIsLoading(false);
       })
-  }
+      .catch((error) => {
+        console.error('Error fetching assignments:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   useEffect(() => {
     fetchAssignments();
@@ -64,9 +67,15 @@ export default function Assignment() {
 
   useEffect(() => {
     if (isStudent) {
-      const upcoming = assignments.filter(a => new Date(a.due_date) > new Date()).length;
-      const grading = assignments.filter(a => a.submissions.some(s => (s.student === user._id && !s.score))).length;
-      const notSubmitted = assignments.filter(a => !a.submissions.some(s => s.student === user._id)).length;
+      const upcoming = assignments.filter(
+        (a) => new Date(a.due_date) > new Date()
+      ).length;
+      const grading = assignments.filter((a) =>
+        a.submissions.some((s) => s.student === user._id && !s.score)
+      ).length;
+      const notSubmitted = assignments.filter(
+        (a) => !a.submissions.some((s) => s.student === user._id)
+      ).length;
       setStudentStatus({
         upcoming,
         grading,
@@ -75,19 +84,23 @@ export default function Assignment() {
     }
   }, [assignments, isStudent, user]);
 
-
-
   const handleAddNewAssignment = () => {
     setIsNewAssignmentOpen(true);
-  }
-
+  };
 
   return (
     <div>
-      <div className={cn("md:grid-cols-4 gap-4 mt-4 items-start", isStudent && "flex ")}>
+      <div
+        className={cn(
+          'md:grid-cols-4 gap-4 mt-4 items-start',
+          isStudent && 'flex '
+        )}
+      >
         {isStudent && (
           <div className="rounded-xl shadow-sm bg-white p-4 w-1/3 max-w-xs border border-gray-200">
-            <h2 className="text-base font-semibold text-gray-800 mb-3">Status</h2>
+            <h2 className="text-base font-semibold text-gray-800 mb-3">
+              Status
+            </h2>
             <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex items-center gap-2 border-b pb-1 relative px-4 justify-between">
                 <span className="h-2 w-2 rounded-full bg-red-500 absolute left-0"></span>
@@ -118,34 +131,33 @@ export default function Assignment() {
           </button>
         )}
 
-        {isLoading ?
-          (
-            <div className="w-full flex justify-center">
-              <LoadingSpinner />
-            </div>
-          ) : assignments.length === 0 ? (
-            <div className="text-center">No Assignment Available</div>
-          ) : (
-            <div className="flex flex-col w-full gap-5">
-              {assignments.map((assignment, idx) => (
-                isStudent ? (
-                  // <Link to={`/assignments/${assignment._id}`} key={idx}>
-                  <AssignmentItem
-                    assignment={assignment}
-                    setIsEditMenuOpen={setIsEditMenuOpen}
-                  />
-                  // </Link>
-                ) : (
-                  <AssignmentItem
-                    key={idx}
-                    assignment={assignment}
-                    setIsEditMenuOpen={setIsEditMenuOpen}
-                    onDelete={() => fetchAssignments()}
-                  />
-                )
-              ))}
-            </div>
-          )}
+        {isLoading ? (
+          <div className="w-full flex justify-center">
+            <LoadingSpinner />
+          </div>
+        ) : assignments.length === 0 ? (
+          <div className="text-center">No Assignment Available</div>
+        ) : (
+          <div className="flex flex-col w-full gap-5">
+            {assignments.map((assignment, idx) =>
+              isStudent ? (
+                // <Link to={`/assignments/${assignment._id}`} key={idx}>
+                <AssignmentItem
+                  assignment={assignment}
+                  setIsEditMenuOpen={setIsEditMenuOpen}
+                />
+              ) : (
+                // </Link>
+                <AssignmentItem
+                  key={idx}
+                  assignment={assignment}
+                  setIsEditMenuOpen={setIsEditMenuOpen}
+                  onDelete={() => fetchAssignments()}
+                />
+              )
+            )}
+          </div>
+        )}
       </div>
       <NewAssignmentForm
         isOpen={isNewAssignmentOpen}
