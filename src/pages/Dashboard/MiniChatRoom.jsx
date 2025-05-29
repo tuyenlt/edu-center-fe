@@ -76,14 +76,6 @@ export default function ChatPage() {
     fetchChatRoom();
   }, [user]);
 
-  if (!chatRooms || chatRooms.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500">No chat rooms available</p>
-      </div>
-    );
-  }
-
   const filteredRooms = chatRooms.filter((room) =>
     room.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -93,7 +85,7 @@ export default function ChatPage() {
     <div className="bg-white p-4 rounded-lg shadow-md overflow-scroll h-[396px] ">
       {/* Sidebar */}
       <aside className="w-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex justify-between">
             {' '}
             <h2 className="mb-4 font-semibold text-lg">Chats Room</h2>
@@ -111,7 +103,7 @@ export default function ChatPage() {
         </div>
         <div className="flex-1 overflow-y-auto">
           {filteredRooms.length === 0 ? (
-            <div className="p-4 text-gray-500">No chats found</div>
+            <div className="p-4 text-gray-500">No chats yet</div>
           ) : (
             filteredRooms.map((room) => (
               <div
