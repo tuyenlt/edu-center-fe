@@ -11,7 +11,7 @@ export default function ClassPostItem({ post, handleAddComment, user }) {
 	const isAssignment = post.type === "assignment";
 	const handleHeaderClick = () => {
 		if (!isAssignment) return;
-		navigate(`/assignments/${post.assignment}`);
+		navigate(`/assignments/${post.assignment._id}`);
 	}
 
 	return (
