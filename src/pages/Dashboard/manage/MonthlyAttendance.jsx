@@ -115,9 +115,9 @@ export default function MonthlyAttendanceChart() {
     <Card className="p-4  ">
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="text-lg font-semibold">Attendance Overview</h2>
+          <h2 className="text-lg font-semibold">Enrollment Overview</h2>
           <p className="text-zinc-700 text-sm ">
-            Tracking the number of students participating each months
+            Tracking the number of students enroll each months
           </p>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600">

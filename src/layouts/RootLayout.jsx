@@ -16,16 +16,16 @@ export default function RootLayout() {
       }}
     >
       <TopBar /> {/* fixed topbar */}
-      <div className="pt-15 flex justify-center w-full bg-gray-50">
+      <div className=" flex justify-center w-full ">
         {/* Container chứa sidebar và main sát nhau */}
-        <div className="flex w-full m-auto">
+        <div className="flex w-full">
           {/* Left Sidebar (chiều rộng cố định) */}
           <div className="w-16">
             <LeftSidebar />
           </div>
 
           {/* Main content (chiếm phần còn lại) */}
-          <main className="flex-1 mt-5 min-h-[calc(100vh-96px)]">
+          <main className="flex-1 mt-15 ">
             <Outlet />
           </main>
         </div>

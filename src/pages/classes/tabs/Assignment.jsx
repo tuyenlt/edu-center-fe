@@ -30,7 +30,6 @@ import { useUserContext } from '@/providers/authContext';
 import NewAssignmentForm from './NewAssignmentForm';
 import api from '@/services/api';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
-
 export default function Assignment() {
   const { classId } = useParams();
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
@@ -89,31 +88,44 @@ export default function Assignment() {
   };
 
   return (
-    <div>
+    <div className="space-y-6 mt-6">
+      {/* Teacher button */}
+      {isTeacher && (
+        <div className="flex justify-end">
+          <button
+            className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-white font-medium shadow hover:bg-blue-700 transition-colors"
+            onClick={handleAddNewAssignment}
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Assignment</span>
+          </button>
+        </div>
+      )}
+
       <div
         className={cn(
-          'md:grid-cols-4 gap-4 mt-4 items-start',
-          isStudent && 'flex '
+          'grid md:grid-cols-4 gap-6 items-start',
+          isStudent && 'grid-cols-1 md:grid-cols-4'
         )}
       >
         {isStudent && (
-          <div className="rounded-xl shadow-sm bg-white p-4 w-1/3 max-w-xs border border-gray-200">
-            <h2 className="text-base font-semibold text-gray-800 mb-3">
+          <div className="rounded-2xl shadow-sm bg-white p-4 border border-gray-200 md:col-span-1">
+            <h2 className="text-base font-semibold text-gray-800 mb-4">
               Status
             </h2>
-            <ul className="space-y-2 text-sm text-gray-700">
-              <li className="flex items-center gap-2 border-b pb-1 relative px-4 justify-between">
-                <span className="h-2 w-2 rounded-full bg-red-500 absolute left-0"></span>
+            <ul className="space-y-3 text-sm text-gray-700">
+              <li className="flex items-center justify-between gap-2 relative pl-4 pr-2 pb-1 border-b">
+                <span className="h-2 w-2 rounded-full bg-red-500 absolute left-0 top-2" />
                 <span>Upcoming Deadline</span>
                 <span>{studentStatus.upcoming}</span>
               </li>
-              <li className="flex items-center gap-2 border-b pb-1 relative px-4 justify-between">
-                <span className="h-2 w-2 rounded-full bg-orange-400 absolute left-0"></span>
+              <li className="flex items-center justify-between gap-2 relative pl-4 pr-2 pb-1 border-b">
+                <span className="h-2 w-2 rounded-full bg-orange-400 absolute left-0 top-2" />
                 <span>Grading</span>
                 <span>{studentStatus.grading}</span>
               </li>
-              <li className="flex items-center gap-2 relative px-4 justify-between">
-                <span className="h-2 w-2 rounded-full bg-gray-400 absolute left-0"></span>
+              <li className="flex items-center justify-between gap-2 relative pl-4 pr-2">
+                <span className="h-2 w-2 rounded-full bg-gray-400 absolute left-0 top-2" />
                 <span>Not Submitted</span>
                 <span>{studentStatus.notSubmitted}</span>
               </li>
@@ -121,44 +133,33 @@ export default function Assignment() {
           </div>
         )}
 
-        {isTeacher && (
-          <button
-            className="mb-5 ml-auto flex items-center gap-2 rounded-2xl bg-blue-600 px-4 py-2 text-white font-medium shadow-md hover:bg-blue-700 transition-colors"
-            onClick={handleAddNewAssignment}
-          >
-            <Plus className="w-4 h-4" />
-            <span>New</span>
-          </button>
-        )}
-
-        {isLoading ? (
-          <div className="w-full flex justify-center">
-            <LoadingSpinner />
-          </div>
-        ) : assignments.length === 0 ? (
-          <div className="text-center">No Assignment Available</div>
-        ) : (
-          <div className="flex flex-col w-full gap-5">
-            {assignments.map((assignment, idx) =>
-              isStudent ? (
-                // <Link to={`/assignments/${assignment._id}`} key={idx}>
-                <AssignmentItem
-                  assignment={assignment}
-                  setIsEditMenuOpen={setIsEditMenuOpen}
-                />
-              ) : (
-                // </Link>
-                <AssignmentItem
-                  key={idx}
-                  assignment={assignment}
-                  setIsEditMenuOpen={setIsEditMenuOpen}
-                  onDelete={() => fetchAssignments()}
-                />
-              )
-            )}
-          </div>
-        )}
+        <div
+          className={cn(
+            'flex flex-col gap-5',
+            isStudent ? 'md:col-span-3' : 'md:col-span-4'
+          )}
+        >
+          {isLoading ? (
+            <div className="w-full flex justify-center">
+              <LoadingSpinner />
+            </div>
+          ) : assignments.length === 0 ? (
+            <div className="text-center text-muted-foreground">
+              No Assignment Available
+            </div>
+          ) : (
+            assignments.map((assignment, idx) => (
+              <AssignmentItem
+                key={idx}
+                assignment={assignment}
+                setIsEditMenuOpen={setIsEditMenuOpen}
+                onDelete={isTeacher ? () => fetchAssignments() : undefined}
+              />
+            ))
+          )}
+        </div>
       </div>
+
       <NewAssignmentForm
         isOpen={isNewAssignmentOpen}
         onClose={() => setIsNewAssignmentOpen(false)}

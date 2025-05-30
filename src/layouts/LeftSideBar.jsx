@@ -93,16 +93,16 @@ export function LeftSidebar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
-                <SidebarMenuItem className="mt-[200px]">
+                <SidebarMenuItem className="mt-40">
                   <SidebarMenuButton
                     asChild
-                    className="hover:text-blue-600 size-lg"
+                    className="hover:text-red-400  p-2"
                   >
                     <button
                       onClick={() => logout()}
-                      className="flex items-center gap-3 text-base font-medium"
+                      className="flex items-center gap-3  text-base font-medium"
                     >
-                      <LogOutIcon className="w-5 h-5 opacity-50" />
+                      <LogOutIcon className="!w-5 !h-5 opacity-50" />
                       <span className="transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:visible invisible">
                         Log Out
                       </span>

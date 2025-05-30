@@ -51,15 +51,15 @@ export default function AssignmentItem({
       (sub) => sub.student === user._id
     );
     if (!submission) {
-      return <div className="text-sm text-red-500">not submitted</div>;
+      return <div className="text-sm text-green-600">Assigned</div>;
     }
 
     if (!submission.score) {
-      return <div className="text-sm text-yellow-500">not graded yet</div>;
+      return <div className="text-sm  text-gray-400">Submitted</div>;
     }
 
     return (
-      <div className="text-sm text-green-500">
+      <div className="text-sm text-gray-400">
         Your score: {submission.score} / {assignment.max_score}
       </div>
     );
