@@ -34,11 +34,12 @@ import api from '@/services/api';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import { useParams } from 'react-router-dom';
 import { useWebSocket } from '@/providers/WebSocketProvider';
+import { toast } from 'sonner';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function Stream() {
 	const { classId } = useParams();
-	const { user, token } = useUserContext();
+	const { user } = useUserContext();
 	const isTeacher = user?.role === 'teacher';
 
 	const [data, setData] = useState(null);
@@ -109,22 +110,27 @@ export default function Stream() {
 		setTimeout(() => setIsCopied(false), 2000);
 	};
 
-	const addPostHandler = () => {
-		socket.emit('classPostCreate', {
-			classId: data._id,
-			title,
-			content: editorRef.current.getHTML(),
-			author: user._id,
-			type: 'announcement',
-			attachments: file,
-			links: link,
-		});
+	const addPostHandler = async () => {
+		try {
+			await api.post(`/class-posts`, {
+				classId: classId,
+				title,
+				content: editorRef.current.getHTML(),
+				type: 'announcement',
+				attachments: file,
+				links: link,
+			})
+			setTitle('');
+			editorRef.current.clear();
+			setFile([]);
+			setLink([]);
+			setIsRichTextOpen(false);
+			toast.success('Announcement posted successfully!');
+		} catch (error) {
+			console.error('Error creating class post:', error);
+			toast.error('Failed to post announcement.');
+		}
 
-		setTitle('');
-		editorRef.current.clear();
-		setFile([]);
-		setLink([]);
-		setIsRichTextOpen(false);
 	};
 
 	const handleAddComment = (postId, commentText) => {
