@@ -27,7 +27,7 @@ export default function MiniClassPost({ classes }) {
 								const latestPost = posts.sort(
 									(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
 								)[0];
-
+								
 								return {
 									post: latestPost,
 									class_name: cls.class_name,

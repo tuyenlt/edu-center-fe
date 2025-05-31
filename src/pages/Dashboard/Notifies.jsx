@@ -25,6 +25,7 @@ export default function Notifies() {
 		navigate(link);
 	}
 
+
 	return (
 		<div className="bg-white p-4 rounded-lg shadow-md overflow-y-scroll h-[396px]">
 			<h2 className="mb-4 font-semibold text-lg">Notifications</h2>
