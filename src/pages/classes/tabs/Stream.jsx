@@ -185,7 +185,7 @@ export default function Stream() {
                   <DialogHeader>
                     <DialogTitle>Class Code</DialogTitle>
                   </DialogHeader>
-                  <p className="text-center text-6xl py-6">{data.class_code}</p>
+                  <p className="text-center text-9xl py-6">{data.class_code}</p>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">
                       {data.class_name.length <= 10

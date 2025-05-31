@@ -4,7 +4,7 @@ import { useState } from 'react';
 export default function MagicInput({
   value,
   placeholder = 'Placeholder',
-  className = '',
+  className,
   height = 44,
   type = 'text',
   onChange,
@@ -21,7 +21,7 @@ export default function MagicInput({
       style={{ backgroundColor: `${bgColor}` }}
     >
       <input
-        className="w-full border border-gray-300 rounded-md px-4 pt-5 pb-3 text-sm outline-none focus:border-blue-500 transition-all "
+        className={`w-full border border-gray-300 rounded-md px-4 pt-5 pb-3 text-sm outline-none focus:border-blue-500 transition-all ${className} `}
         onFocus={() => setFocused(true)}
         onBlur={(e) => {
           setFocused(false);

@@ -20,13 +20,13 @@ export default function FeedbackCourses({ courses }) {
               <div className="font-medium max-w-[200px] text-wrap">
                 {c.name}
               </div>
-              <div className="flex gap-1 items-center">
+              <div className="grid grid-cols-5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#0052B4"
                   viewBox="0 0 24 24"
                   stroke="none"
-                  className="w-4 h-4"
+                  className="w-4 h-4 grid-cols-1"
                 >
                   <path
                     fillRule="evenodd"
@@ -34,16 +34,20 @@ export default function FeedbackCourses({ courses }) {
                     clipRule="evenodd"
                   />
                 </svg>
-                <div className="font-medium text-sm mt-1 mr-3">4.5</div>
+                <div className="font-medium text-sm grid-cols-1 justify-self-center">
+                  {Math.floor(Math.random() * 5)}
+                </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="#0052B4"
-                  className="w-4 h-4 mt-[6px]"
+                  className="w-4 h-4 mt-[2px] col-start-4"
                 >
                   <path d="M4 2C2.895 2 2 2.895 2 4v16l4-4h14c1.105 0 2-.895 2-2V4c0-1.105-.895-2-2-2H4z" />
                 </svg>
-                <div className="font-medium text-sm mt-1">20</div>
+                <div className="font-medium text-sm  justify-self-center">
+                  {Math.floor(Math.random() * 20)}
+                </div>
               </div>
             </div>
           </div>

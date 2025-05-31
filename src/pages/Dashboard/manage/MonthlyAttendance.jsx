@@ -27,68 +27,65 @@ const monthMap = {
 
 const fakeData = {
   2022: [
-    { name: 'Ja', attendance: 20 },
-    { name: 'Fe', attendance: 15 },
-    { name: 'Mr', attendance: 25 },
-    { name: 'Ap', attendance: 18 },
-    { name: 'My', attendance: 5 },
-    { name: 'Jn', attendance: 10 },
-    { name: 'Jl', attendance: 12 },
-    { name: 'Au', attendance: 8 },
-    { name: 'Se', attendance: 16 },
-    { name: 'Oc', attendance: 14 },
-    { name: 'No', attendance: 11 },
-    { name: 'De', attendance: 13 },
+    { name: 'Jan', attendance: 20 },
+    { name: 'Feb', attendance: 15 },
+    { name: 'Mar', attendance: 25 },
+    { name: 'Apr', attendance: 18 },
+    { name: 'May', attendance: 5 },
+    { name: 'Jun', attendance: 10 },
+    { name: 'Jul', attendance: 12 },
+    { name: 'Aug', attendance: 8 },
+    { name: 'Sep', attendance: 16 },
+    { name: 'Oct', attendance: 14 },
+    { name: 'Nov', attendance: 11 },
+    { name: 'Dec', attendance: 13 },
   ],
   2023: [
-    { name: 'Ja', attendance: 18 },
-    { name: 'Fe', attendance: 17 },
-    { name: 'Mr', attendance: 23 },
-    { name: 'Ap', attendance: 20 },
-    { name: 'My', attendance: 10 },
-    { name: 'Jn', attendance: 15 },
-    { name: 'Jl', attendance: 14 },
-    { name: 'Au', attendance: 13 },
-    { name: 'Se', attendance: 19 },
-    { name: 'Oc', attendance: 21 },
-    { name: 'No', attendance: 12 },
-    { name: 'De', attendance: 17 },
+    { name: 'Jan', attendance: 18 },
+    { name: 'Feb', attendance: 17 },
+    { name: 'Mar', attendance: 23 },
+    { name: 'Apr', attendance: 20 },
+    { name: 'May', attendance: 10 },
+    { name: 'Jun', attendance: 15 },
+    { name: 'Jul', attendance: 14 },
+    { name: 'Aug', attendance: 13 },
+    { name: 'Sep', attendance: 19 },
+    { name: 'Oct', attendance: 21 },
+    { name: 'Nov', attendance: 12 },
+    { name: 'Dec', attendance: 17 },
   ],
   2024: [
-    { name: 'Ja', attendance: 22 },
-    { name: 'Fe', attendance: 13 },
-    { name: 'Mr', attendance: 19 },
-    { name: 'Ap', attendance: 25 },
-    { name: 'My', attendance: 6 },
-    { name: 'Jn', attendance: 9 },
-    { name: 'Jl', attendance: 15 },
-    { name: 'Au', attendance: 11 },
-    { name: 'Se', attendance: 18 },
-    { name: 'Oc', attendance: 20 },
-    { name: 'No', attendance: 7 },
-    { name: 'De', attendance: 10 },
+    { name: 'Jan', attendance: 22 },
+    { name: 'Feb', attendance: 13 },
+    { name: 'Mar', attendance: 19 },
+    { name: 'Apr', attendance: 25 },
+    { name: 'May', attendance: 6 },
+    { name: 'Jun', attendance: 9 },
+    { name: 'Jul', attendance: 15 },
+    { name: 'Aug', attendance: 11 },
+    { name: 'Sep', attendance: 18 },
+    { name: 'Oct', attendance: 20 },
+    { name: 'Nov', attendance: 7 },
+    { name: 'Dec', attendance: 10 },
   ],
   2025: [
-    { name: 'Ja', attendance: 40 },
-    { name: 'Fe', attendance: 41 },
-    { name: 'Mr', attendance: 43 },
-    { name: 'Ap', attendance: 45 },
-    { name: 'My', attendance: 49 },
-    { name: 'Jn', attendance: 45 },
-    { name: 'Jl', attendance: 30 },
-    { name: 'Au', attendance: 11 },
-    { name: 'Se', attendance: 18 },
-    { name: 'Oc', attendance: 20 },
-    { name: 'No', attendance: 90 },
-    { name: 'De', attendance: 10 },
+    { name: 'Jan', attendance: 40 },
+    { name: 'Feb', attendance: 41 },
+    { name: 'Mar', attendance: 43 },
+    { name: 'Apr', attendance: 45 },
+    { name: 'May', attendance: 49 },
+    { name: 'Jun', attendance: 45 },
   ],
 };
+
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-2 rounded-lg shadow text-sm text-gray-800 ">
-        <p className="font-semibold">{monthMap[label]}</p>
-        <p>Attendance: {payload[0].value}</p>
+        <p className="font-semibold text-blue-800">{monthMap[label]}</p>
+        <p className="text-blue-800 font-semibold">
+          Attendance: {payload[0].value}
+        </p>
       </div>
     );
   }
@@ -99,7 +96,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 const years = Object.keys(fakeData);
 
 export default function MonthlyAttendanceChart() {
-  const [currentYearIndex, setCurrentYearIndex] = useState(0);
+  const [currentYearIndex, setCurrentYearIndex] = useState(years.length - 1);
   const currentYear = years[currentYearIndex];
   const chartData = fakeData[currentYear];
 

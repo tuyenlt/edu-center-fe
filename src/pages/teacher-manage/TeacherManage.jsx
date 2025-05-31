@@ -8,6 +8,7 @@ import { Plus } from 'lucide-react';
 import { useUserContext } from '@/providers/authContext';
 import TeacherForm from './TeacherForm';
 import { toast } from 'sonner';
+import MagicInput from '@/components/shared/MagicInput';
 
 export default function TeacherManage() {
   const [teachers, setTeachers] = useState([]);
@@ -73,7 +74,7 @@ export default function TeacherManage() {
           <div className="flex flex-col sm:flex-row items-stretch gap-4 w-full md:w-auto">
             <div className="flex items-center gap-3">
               {' '}
-              <Input
+              <MagicInput
                 placeholder="Search by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
