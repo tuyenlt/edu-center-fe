@@ -2,6 +2,7 @@ import CircularProgress from '@/components/shared/CircularProgress';
 import { useUserContext } from '@/providers/authContext';
 import api from '@/services/api';
 import { getClassProgress } from '@/utils';
+import { MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function FeedbackCourses({ courses }) {
@@ -13,17 +14,19 @@ export default function FeedbackCourses({ courses }) {
         {courses.map((c) => (
           <div
             key={c._id}
-            className="bg-blue-50 p-3 rounded-[10px] mb-4 flex justify-between items-center"
+            className="bg-blue-50 p-3 rounded-[10px] mb-4 flex justify-between"
           >
-            <div className="flex justify-between w-full">
-              <div className="font-medium">{c.name}</div>
-              <div className="flex gap-3 items-center">
+            <div className="flex justify-between w-full items-start">
+              <div className="font-medium max-w-[200px] text-wrap">
+                {c.name}
+              </div>
+              <div className="flex gap-1 items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#0052B4"
                   viewBox="0 0 24 24"
                   stroke="none"
-                  className="w-6 h-6"
+                  className="w-4 h-4"
                 >
                   <path
                     fillRule="evenodd"
@@ -31,7 +34,16 @@ export default function FeedbackCourses({ courses }) {
                     clipRule="evenodd"
                   />
                 </svg>
-                <div className="font-medium text-sm">4.5</div>
+                <div className="font-medium text-sm mt-1 mr-3">4.5</div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="#0052B4"
+                  className="w-4 h-4 mt-[6px]"
+                >
+                  <path d="M4 2C2.895 2 2 2.895 2 4v16l4-4h14c1.105 0 2-.895 2-2V4c0-1.105-.895-2-2-2H4z" />
+                </svg>
+                <div className="font-medium text-sm mt-1">20</div>
               </div>
             </div>
           </div>

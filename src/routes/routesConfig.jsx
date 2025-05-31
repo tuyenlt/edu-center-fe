@@ -18,12 +18,13 @@ import CalendarPage from '@/pages/Calendar/CalendarPage';
 import StudentContacting from '@/pages/studentContacting/StudentContacting';
 import { Route } from 'lucide-react';
 import ChatRoom from '@/pages/ChatPage/ChatRoom';
+import StaffManage from '@/pages/staff-manage/StaffManage';
 
 export const protectedRoutes = [
 	{
 		path: '/home',
 		element: <Dashboard />,
-		allowedRoles: ['manager', 'teacher', 'student'],
+		allowedRoles: ['manager', 'teacher', 'student', 'staff'],
 	},
 	{
 		path: '/courses',
@@ -83,6 +84,11 @@ export const protectedRoutes = [
 	{
 		path: '/class-manage',
 		element: <ClassManage />,
+		allowedRoles: ['manager'],
+	},
+	{
+		path: '/staff-manage',
+		element: <StaffManage />,
 		allowedRoles: ['manager'],
 	},
 	{

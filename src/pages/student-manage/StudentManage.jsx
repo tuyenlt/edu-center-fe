@@ -8,6 +8,7 @@ import AvatarUser from '@/components/shared/AvatarUser';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Plus, UserRound } from 'lucide-react';
+import MagicInput from '@/components/shared/MagicInput';
 
 export default function StudentManage() {
   const { user } = useUserContext();
@@ -63,26 +64,24 @@ export default function StudentManage() {
 
   return (
     <div className="p-6 max-w-screen-2xl mx-auto mt-10">
-      <Card className="bg-white shadow-sm rounded-xl border">
-        <CardContent className="flex flex-col md:flex-row items-center justify-between gap-4 p-6">
+      <div className="bg-white  rounded-xl ">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-6">
           {/* Title */}
           <div className="flex items-center gap-2">
-            <UserRound className="w-6 h-6 text-primary" />
-            <h1 className="text-2xl font-semibold text-gray-800">
+            <h1 className="text-2xl font-semibold text-gray-800 min-w-[500px]">
               Student Management
             </h1>
           </div>
 
           {/* Search */}
-          <Input
+
+          <MagicInput
             placeholder="Search by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full max-w-sm"
-            leadingIcon="Search"
           />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <div className="mt-3">
         {loading ? (

@@ -62,8 +62,8 @@ export default function TeacherManage() {
   return (
     <div className="max-w-screen-xl mx-auto px-6 py-8 space-y-8">
       {/* Header Card */}
-      <Card className="bg-white shadow-md rounded-2xl">
-        <CardContent className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 py-6 px-4 md:px-6">
+      <div className="bg-white  rounded-2xl">
+        <div className="flex items-center justify-between gap-6 py-6 ">
           {/* Title */}
           <h1 className="text-2xl font-bold text-gray-800">
             Teacher Management
@@ -71,25 +71,28 @@ export default function TeacherManage() {
 
           {/* Search and Button */}
           <div className="flex flex-col sm:flex-row items-stretch gap-4 w-full md:w-auto">
-            <Input
-              placeholder="Search by name or email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="sm:w-[300px]"
-            />
-            {user.role === 'manager' && (
-              <Button
-                variant="default"
-                className="flex items-center gap-2 whitespace-nowrap"
-                onClick={() => setAddTeacherOpen(true)}
-              >
-                <Plus className="w-4 h-4" />
-                <span>Add Teacher</span>
-              </Button>
-            )}
+            <div className="flex items-center gap-3">
+              {' '}
+              <Input
+                placeholder="Search by name or email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="sm:w-[300px]"
+              />
+              {user.role === 'manager' && (
+                <Button
+                  variant="default"
+                  className="flex items-center gap-2 whitespace-nowrap"
+                  onClick={() => setAddTeacherOpen(true)}
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add Teacher</span>
+                </Button>
+              )}
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Add Teacher Modal */}
       <TeacherForm

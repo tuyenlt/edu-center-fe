@@ -53,14 +53,16 @@ const menuByRole = {
     { title: 'Classes Manage', url: '/class-manage', icon: LayoutDashboard },
     { title: 'Student Manage', url: '/students-manage', icon: Users },
     { title: 'Teacher Manage', url: '/teachers-manage', icon: UserCircle },
+    { title: 'Staff Manage', url: '/staff-manage', icon: UserCircle },
     { title: 'Payment Manage', url: '/payment-manage', icon: CreditCard },
     { title: 'Schedule', url: '/calendar', icon: CalendarDays },
   ],
   staff: [
-    { title: 'Dashboard', url: '/', icon: Home },
+    { title: 'Dashboard', url: '/home', icon: Home },
     { title: 'Student contacting', url: '/student-contacting', icon: Users },
     { title: 'Messaging', url: '/chat', icon: MessageSquare },
     { title: 'Teacher Checkin', url: '/teachers-manage', icon: UserCircle },
+    { title: 'Payment Manage', url: '/payment-manage', icon: CreditCard },
   ],
 };
 
@@ -72,7 +74,7 @@ export function LeftSidebar() {
 
   return (
     <div className="group relative">
-      <div className="fixed top-15 pt-6 h-[calc(100vh)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 group-hover:w-64 text-zinc-700">
+      <div className="fixed top-10 pt-6 h-[calc(100vh)] bg-white dark:bg-gray-900 z-40 border-r transition-all duration-300 w-16 group-hover:w-64 text-zinc-700">
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>

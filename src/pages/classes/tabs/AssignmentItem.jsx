@@ -126,7 +126,7 @@ export default function AssignmentItem({
                   {`Created ` + dateTimeConvert_2(assignment.createdAt)}
                 </div>
                 <ArrowRight
-                  className="ml-2"
+                  className="ml-2 text-blue-600"
                   onClick={() => navigate(`/assignments/${assignment._id}`)}
                 ></ArrowRight>
               </div>
