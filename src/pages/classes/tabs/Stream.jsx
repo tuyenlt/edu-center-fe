@@ -1,15 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { TabsContent } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
+import { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
   Dialog,
   DialogTrigger,
@@ -21,21 +12,15 @@ import { cn } from '@/lib/utils';
 import { Copy, Maximize, CheckCheck, Users } from 'lucide-react';
 import { useUserContext } from '@/providers/authContext';
 import RichTextBox from '@/components/shared/RichTextBox';
-import Comment from '../components/Comment';
 import AvatarUser from '@/components/shared/AvatarUser';
-import { io } from 'socket.io-client';
-import { convertUTC } from '@/utils/dateTimeConvert';
-import LinkPreview from '@/components/shared/LinkPreview';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import MagicInput from '@/components/shared/MagicInput';
-import CommentList from '../components/CommentList';
 import ClassPostItem from '../components/ClassPostItem';
 import api from '@/services/api';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import { useParams } from 'react-router-dom';
 import { useWebSocket } from '@/providers/WebSocketProvider';
 import { toast } from 'sonner';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function Stream() {
   const { classId } = useParams();
@@ -45,7 +30,7 @@ export default function Stream() {
   const [data, setData] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [isRichTextOpen, setIsRichTextOpen] = useState(false);
-  const [title, setTitle] = useState(''); // ← title!
+  const [title, setTitle] = useState('');
   const [file, setFile] = useState([]);
   const [link, setLink] = useState([]);
   const { socket, onClassPostComment, onClassPostCreate, joinClassUpdate } =
@@ -60,11 +45,12 @@ export default function Stream() {
         },
       })
       .then((response) => {
-        response.data.class_posts.sort((a, b) => {
+        const classData = response.data;
+        classData.class_posts.sort((a, b) => {
           return new Date(b.createdAt) - new Date(a.createdAt);
         });
-        setData(response.data);
-        console.log('Class data fetched:', response.data);
+        setData(classData);
+        console.log('Class data fetched:', classData);
       })
       .catch((error) => {
         console.error('Error fetching class data:', error);
@@ -72,17 +58,24 @@ export default function Stream() {
   }, [classId]);
 
   useEffect(() => {
+    if (!socket) return;
     joinClassUpdate(classId);
 
-    onClassPostCreate((newPost) => {
-      setData((prev) => ({
-        prev,
-        class_posts: [...prev.class_posts, newPost],
-      }));
+    const unsubscribePostCreate = onClassPostCreate((newPost) => {
+      console.log('New class post received:', newPost);
+      setData((prev) => {
+        if (!prev) return prev;
+        const updatedPosts = [...prev.class_posts, newPost];
+        updatedPosts.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        return { ...prev, class_posts: updatedPosts };
+      });
     });
 
-    onClassPostComment((comment) => {
+    const unsubscribePostComment = onClassPostComment((comment) => {
       setData((prev) => {
+        if (!prev) return prev;
         const updatedPosts = prev.class_posts.map((post) => {
           if (post._id === comment.postId) {
             return {
@@ -95,7 +88,12 @@ export default function Stream() {
         return { ...prev, class_posts: updatedPosts };
       });
     });
-  }, [classId]);
+
+    return () => {
+      unsubscribePostCreate();
+      unsubscribePostComment();
+    };
+  }, [socket, classId]);
 
   if (!data)
     return (
@@ -112,19 +110,36 @@ export default function Stream() {
 
   const addPostHandler = async () => {
     try {
-      await api.post(`/class-posts`, {
-        classId: classId,
+      const response = await api.post(`/class-posts`, {
+        classId: data._id,
         title,
         content: editorRef.current.getHTML(),
         type: 'announcement',
         attachments: file,
         links: link,
       });
+      const createdPost = response.data;
+
+      if (socket) {
+        socket.emit('classPostCreate', {
+          classId: data._id,
+          post: createdPost,
+        });
+      }
+
+      setData((prev) => {
+        const updatedPosts = [...prev.class_posts, createdPost];
+        updatedPosts.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        return { ...prev, class_posts: updatedPosts };
+      });
       setTitle('');
       editorRef.current.clear();
       setFile([]);
       setLink([]);
       setIsRichTextOpen(false);
+
       toast.success('Announcement posted successfully!');
     } catch (error) {
       console.error('Error creating class post:', error);
@@ -133,6 +148,7 @@ export default function Stream() {
   };
 
   const handleAddComment = (postId, commentText) => {
+    if (!socket) return;
     socket.emit('classPostComment', {
       classId: data._id,
       classPostId: postId,
@@ -185,7 +201,7 @@ export default function Stream() {
                   <DialogHeader>
                     <DialogTitle>Class Code</DialogTitle>
                   </DialogHeader>
-                  <p className="text-center text-9xl py-6">{data.class_code}</p>
+                  <p className="text-center text-6xl py-6">{data.class_code}</p>
                   <div className="flex justify-between items-center">
                     <span className="font-medium">
                       {data.class_name.length <= 10
