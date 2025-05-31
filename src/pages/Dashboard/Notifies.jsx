@@ -18,7 +18,7 @@ export default function Notifies() {
           (a, b) => new Date(b.notify.updatedAt) - new Date(a.notify.updatedAt)
         );
         setNotifies(sortedNotifies);
-        console.log(response.data);
+        console.log(sortedNotifies);
       })
       .catch((error) => {
         console.error('Error fetching user notifies:', error);
@@ -33,20 +33,31 @@ export default function Notifies() {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md overflow-y-scroll h-[396px]">
+    <div className="bg-white p-4 rounded-lg shadow-md overflow-y-auto h-[396px]">
       <h2 className="mb-4 font-semibold text-lg">Notifications</h2>
       {notifies.length > 0 ? (
         notifies.map((notifyItem) => (
           <div
             key={notifyItem.notify._id}
-            className="flex justify-between items-center border-b border-gray-200 py-4 px-2 cursor-pointer"
+            className="flex justify-between  border-b border-gray-200 py-4 px-2 cursor-pointer items-start"
             onClick={() =>
               handleNotifyRead(notifyItem.notify._id, notifyItem.notify.link)
             }
           >
-            <div className="flex flex-col">
-              <span className="font-semibold">{notifyItem.notify.title}</span>
-              <span className="text-gray-500">{notifyItem.notify.content}</span>
+            <div className="flex flex-col max-w-[215px]">
+              <div className="flex items-start">
+                <p className="font-semibold text-blue-900">
+                  {notifyItem.notify.title}
+                </p>
+                {notifyItem.notify.title.split(' ').at(-1) === 'message' ? (
+                  <MessageSquare className="w-5 h-5 text-blue-600 mt-1" />
+                ) : (
+                  <Bell className=" text-blue-600" size={32} />
+                )}
+              </div>
+              <span className="text-gray-500 text-sm">
+                {notifyItem.notify.content}
+              </span>
             </div>
             <div className="text-gray-400 text-sm">
               {dateTimeConvert_2(notifyItem.notify.updatedAt)}
