@@ -32,6 +32,7 @@ export default function Dashboard() {
 	useEffect(() => {
 		getCourses();
 	}, []);
+	
 	useEffect(() => {
 		api
 			.get(`/classes-of-user/${user._id}`)
