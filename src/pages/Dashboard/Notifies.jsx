@@ -18,7 +18,7 @@ export default function Notifies() {
           (a, b) => new Date(b.notify.updatedAt) - new Date(a.notify.updatedAt)
         );
         setNotifies(sortedNotifies);
-        console.log(sortedNotifies);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error('Error fetching user notifies:', error);
