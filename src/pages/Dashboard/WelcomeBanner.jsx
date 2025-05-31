@@ -13,7 +13,7 @@ export default function WelcomeBanner({ user }) {
   }, []);
 
   return (
-    <div className="bg-[#0146ab] text-white rounded-2xl flex flex-col md:flex-row justify-between items-center">
+    <div className="bg-[#0146ab] text-white rounded-2xl flex flex-col md:flex-row justify-between items-center relative min-h-[176px]">
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-2 ">Welcome back, {user.name}</h1>
         <p className="max-w-[532px] text-base">
@@ -24,7 +24,11 @@ export default function WelcomeBanner({ user }) {
             : 'Hello, Teacher! Ready to guide, inspire, and evaluate your students? Dive into your classes and keep making a difference every day.'}
         </p>
       </div>
-      <img src="/images/image.png" alt="Welcome" className="h-[176px] block" />
+      <img
+        src="/images/image.png"
+        alt="Welcome"
+        className="h-[176px] absolute top-0 -right-3"
+      />
     </div>
   );
 }

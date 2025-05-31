@@ -112,7 +112,7 @@ export default function MonthlyAttendanceChart() {
   };
 
   return (
-    <Card className="p-4  ">
+    <Card className="p-4 col-span-2">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h2 className="text-lg font-semibold">Enrollment Overview</h2>

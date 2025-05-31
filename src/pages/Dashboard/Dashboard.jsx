@@ -15,6 +15,7 @@ import CourseRequest from './manage/CourseRequests';
 import { getAllCourse } from '@/services/api/courses.api';
 import FeedbackCourses from './manage/Feedback';
 import Payment from './manage/Payment';
+import Notifies from './Notifies';
 export default function Dashboard() {
   const { user } = useUserContext();
   const isManager = user?.role === 'manager';
@@ -48,8 +49,9 @@ export default function Dashboard() {
       <div className="p-6 space-y-6 bg-[#f5f9ff] min-h-screen ">
         <WelcomeBanner user={user} />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
-          {isManager && <Payment />}
+          <Notifies />
           {isManager && <MonthlyAttendance />}
+          {isManager && <Payment />}
           {isManager && courses && <CourseRequest courses={courses} />}
           {isManager && courses && <FeedbackCourses courses={courses} />}
           {isTeacher && <StudentStatsChart />}
@@ -60,7 +62,7 @@ export default function Dashboard() {
           {!isManager && <UpcomingActivities />}
           {isStudent && <CourseRegistered />}
           {!isManager && <MiniClassPost classes={classes} />}
-          <MiniChatRoom />
+          {/* <MiniChatRoom /> */}
         </div>
       </div>
     )

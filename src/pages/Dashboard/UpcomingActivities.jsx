@@ -3,13 +3,13 @@ import api from '@/services/api';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function UpcomingActivities() {
+  const navigate = useNavigate();
   const { user } = useUserContext();
   const [schedules, setSchedules] = useState();
   const currentTime = new Date();
-  console.log(currentTime);
   useEffect(() => {
     const fetchSchedules = async () => {
       if (!user) return;
@@ -32,7 +32,7 @@ export default function UpcomingActivities() {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md overflow-auto h-[396px]">
       <div className="flex justify-between mb-4">
-        <h2 className="font-semibold text-lg">Upcoming Activities</h2>
+        <h2 className="font-semibold text-lg">Activities</h2>
         <Link to="/calendar" className="text-blue-700 text-sm font-medium">
           See all
         </Link>
@@ -58,7 +58,8 @@ export default function UpcomingActivities() {
           return (
             <div
               key={i}
-              className="flex items-center gap-4 bg-blue-50 rounded-xl p-4 mb-3 shadow-sm"
+              className="flex items-center gap-4 bg-blue-50 rounded-xl p-4 mb-3 shadow-sm cursor-pointer hover:bg-blue-100 transition-colors"
+              onClick={() => navigate(`/class/${item.classId}`)}
             >
               <div className="bg-blue-800 text-white rounded-lg p-[14px] flex flex-col justify-center items-center font-medium">
                 <div className="text-lg leading-none">

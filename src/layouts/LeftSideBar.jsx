@@ -93,7 +93,7 @@ export function LeftSidebar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
-                <SidebarMenuItem className="mt-40">
+                <SidebarMenuItem className="mt-20">
                   <SidebarMenuButton
                     asChild
                     className="hover:text-red-400  p-2"
