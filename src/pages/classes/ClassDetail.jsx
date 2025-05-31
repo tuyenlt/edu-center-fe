@@ -94,7 +94,7 @@ export default function ClassDetail() {
 					<Settings className="w-5 h-5 mr-5" onClick={handleOpenSettings} />
 				)}
 			</div>
-			<div className="bg-white h-[calc(100vh-140px)]">
+			<div className="bg-gray-50 h-[calc(100vh-140px)]">
 				<TabsContent value="stream" className="w-4/5 mx-auto  py-10">
 					<Stream />
 				</TabsContent>
