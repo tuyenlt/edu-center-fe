@@ -98,14 +98,14 @@ export function ClassCard({ data }) {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
+        <div className="absolute right-2 bottom-2">
           <div className="flex gap-2 text-muted-foreground text-sm justify-end w-full mt-5">
             <Clock className="w-4 h-4" />
             <div className="">
               {dateTimeConvert_2(upcomingSession.start_time)}
             </div>
           </div>
-        </CardFooter>
+        </div>
       </Card>
     </Link>
   );
