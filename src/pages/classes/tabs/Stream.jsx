@@ -71,16 +71,20 @@ export default function Stream() {
 	}, [classId]);
 
 	useEffect(() => {
+		if (!socket) return;
+
 		joinClassUpdate(classId);
 
-		onClassPostCreate((newPost) => {
-			setData((prev) => ({
-				prev,
-				class_posts: [...prev.class_posts, newPost],
-			}));
+		const unsubscribePostCreate = onClassPostCreate((newPost) => {
+			console.log('New class post received:', newPost);
+			setData((prev) => {
+				const updatedPosts = [...prev.class_posts, newPost];
+				updatedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+				return { ...prev, class_posts: updatedPosts };
+			});
 		});
 
-		onClassPostComment((comment) => {
+		const unsubscribePostComment = onClassPostComment((comment) => {
 			setData((prev) => {
 				const updatedPosts = prev.class_posts.map((post) => {
 					if (post._id === comment.postId) {
@@ -95,7 +99,12 @@ export default function Stream() {
 			});
 		});
 
-	}, [classId]);
+		return () => {
+			unsubscribePostCreate();
+			unsubscribePostComment();
+		};
+	}, [socket, classId]);
+
 
 	if (!data)
 		return (
@@ -117,7 +126,7 @@ export default function Stream() {
 				title,
 				content: editorRef.current.getHTML(),
 				type: 'announcement',
-				attachments: file,
+				attachments: "",
 				links: link,
 			})
 			setTitle('');

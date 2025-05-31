@@ -34,7 +34,6 @@ export default function ChatRoom() {
 		if (!id || !socket) return;
 		joinChatRoom(id);
 		const handleChatMessage = (data) => {
-			console.log('Received chat message:', data);
 			const { author, message, createdAt } = data;
 			setMessages((prev) => [...prev, { author, content: message, createdAt }]);
 		};

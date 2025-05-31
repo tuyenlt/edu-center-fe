@@ -9,117 +9,122 @@ import api from '@/services/api';
 import MagicInput from '@/components/shared/MagicInput';
 
 export default function AddPeopleToClass({
-  type,
-  courseId,
-  classId,
-  onSubmit,
+	type,
+	courseId,
+	classId,
+	onSubmit,
+	prevTeachers = [],
 }) {
-  const [input, setInput] = useState('');
-  const [users, setUsers] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+	const [input, setInput] = useState('');
+	const [users, setUsers] = useState([]);
+	const [selectedUsers, setSelectedUsers] = useState([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        let response;
-        if (type === 'student') {
-          // response = await api.get(`/courses/${courseId}/requested-students`);
-          response = await api.get(`/students`);
-        } else if (type === 'teacher') {
-          response = await api.get(`/users/list?role=teacher`);
-        }
-        setUsers(response.data);
-      } catch (error) {
-        console.error(`Error fetching ${type}s:`, error);
-      }
-    };
+	useEffect(() => {
+		const fetchUsers = async () => {
+			try {
+				let response;
+				if (type === 'student') {
+					// response = await api.get(`/courses/${courseId}/requested-students`);
+					response = await api.get(`/students`);
+				} else if (type === 'teacher') {
+					response = await api.get(`/users/list?role=teacher`);
+					response.data = response.data.filter(
+						(teacher) => !prevTeachers.some((t) => t === teacher._id)
+					)
 
-    if (type === 'student' || type === 'teacher') {
-      fetchUsers();
-    }
-  }, [type, courseId]);
+				}
+				setUsers(response.data);
+			} catch (error) {
+				console.error(`Error fetching ${type}s:`, error);
+			}
+		};
 
-  const toggleSelect = (userId) => {
-    if (type === 'teacher') {
-      setSelectedUsers((prev) => (prev[0] === userId ? [] : [userId]));
-    } else {
-      // multi‐select logic for students
-      setSelectedUsers((prev) =>
-        prev.includes(userId)
-          ? prev.filter((id) => id !== userId)
-          : [...prev, userId]
-      );
-    }
-  };
+		if (type === 'student' || type === 'teacher') {
+			fetchUsers();
+		}
+	}, [type, courseId]);
 
-  const handleAddClick = () => {
-    const payload = {
-      userIds: selectedUsers,
-    }
-    const endpoint = `/classes/${classId}/add-users`
+	const toggleSelect = (userId) => {
+		if (type === 'teacher') {
+			setSelectedUsers((prev) => (prev[0] === userId ? [] : [userId]));
+		} else {
+			// multi‐select logic for students
+			setSelectedUsers((prev) =>
+				prev.includes(userId)
+					? prev.filter((id) => id !== userId)
+					: [...prev, userId]
+			);
+		}
+	};
 
-    api
-      .post(endpoint, payload)
-      .then(() => {
-        setSelectedUsers([]);
-        console.log(
-          `${type === 'student' ? 'Students' : 'Teacher'} added successfully`
-        );
-        if (onSubmit) {
-          onSubmit();
-        }
-      })
-      .catch(console.error);
-  };
+	const handleAddClick = () => {
+		const payload = {
+			userIds: selectedUsers,
+		}
+		const endpoint = `/classes/${classId}/add-users`
 
-  return (
-    <>
-      <h2 className="text-lg font-semibold">
-        {type === 'student' ? 'Add Students' : 'Add Teacher'}
-      </h2>
+		api
+			.post(endpoint, payload)
+			.then(() => {
+				setSelectedUsers([]);
+				console.log(
+					`${type === 'student' ? 'Students' : 'Teacher'} added successfully`
+				);
+				if (onSubmit) {
+					onSubmit();
+				}
+			})
+			.catch(console.error);
+	};
 
-      <MagicInput
-        placeholder="Enter name or email"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
+	return (
+		<>
+			<h2 className="text-lg font-semibold">
+				{type === 'student' ? 'Add Students' : 'Add Teacher'}
+			</h2>
 
-      <ScrollArea className="max-h-[200px] space-y-2 my-2">
-        {type === 'student' && (
-          <div className="text-center text-muted-foreground m-2">
-            Students requested for this course
-          </div>
-        )}
+			<MagicInput
+				placeholder="Enter name or email"
+				value={input}
+				onChange={(e) => setInput(e.target.value)}
+			/>
 
-        {users.map((user, idx) => (
-          <label
-            key={user._id ?? idx}
-            className="flex items-center gap-3 p-2 rounded hover:bg-gray-100 cursor-pointer"
-          >
-            <Checkbox
-              className="flex-shrink-0"
-              checked={selectedUsers.includes(user._id)}
-              onCheckedChange={() => toggleSelect(user._id)}
-            />
+			<ScrollArea className="max-h-[200px] space-y-2 my-2">
+				{type === 'student' && (
+					<div className="text-center text-muted-foreground m-2">
+						Students requested for this course
+					</div>
+				)}
 
-            <AvatarUser user={user} />
+				{users.map((user, idx) => (
+					<label
+						key={user._id ?? idx}
+						className="flex items-center gap-3 p-2 rounded hover:bg-gray-100 cursor-pointer"
+					>
+						<Checkbox
+							className="flex-shrink-0"
+							checked={selectedUsers.includes(user._id)}
+							onCheckedChange={() => toggleSelect(user._id)}
+						/>
 
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">{user.name}</span>
-              <span className="text-xs text-gray-500">{user.email}</span>
-            </div>
-          </label>
-        ))}
-      </ScrollArea>
+						<AvatarUser user={user} />
 
-      <div className="flex justify-end gap-2 mt-4">
-        <Button variant="ghost" onClick={() => setSelectedUsers([])}>
-          Deselect
-        </Button>
-        <DialogClose asChild>
-          <Button onClick={handleAddClick}>Add</Button>
-        </DialogClose>
-      </div>
-    </>
-  );
+						<div className="flex flex-col">
+							<span className="text-sm font-medium">{user.name}</span>
+							<span className="text-xs text-gray-500">{user.email}</span>
+						</div>
+					</label>
+				))}
+			</ScrollArea>
+
+			<div className="flex justify-end gap-2 mt-4">
+				<Button variant="ghost" onClick={() => setSelectedUsers([])}>
+					Deselect
+				</Button>
+				<DialogClose asChild>
+					<Button onClick={handleAddClick}>Add</Button>
+				</DialogClose>
+			</div>
+		</>
+	);
 }

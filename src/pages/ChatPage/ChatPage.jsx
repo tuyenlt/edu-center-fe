@@ -100,7 +100,7 @@ export default function ChatPage() {
 								key={room._id}
 								onClick={() => handleChangeRoom(room._id)}
 								className={`rounded-2xl flex items-center p-4 cursor-pointer  dark:hover:bg-gray-700 \
-                     ${room._id === chatRoomId
+                     ${room._id === roomId
 										? 'bg-blue-100 dark:bg-blue-900 text-blue-600 '
 										: 'text-gray-800 dark:text-gray-200 hover:bg-gray-100'
 									}`}

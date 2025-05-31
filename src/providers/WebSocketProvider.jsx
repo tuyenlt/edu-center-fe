@@ -2,10 +2,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useUserContext } from "./authContext";
 import { io } from "socket.io-client";
 import { toast } from "sonner";
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from "date-fns";
 
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export const WebSocketContext = createContext();
 
@@ -15,7 +14,6 @@ export function WebSocketProvider({ children }) {
 	const [socket, setSocket] = useState(null);
 	const { token } = useUserContext();
 
-
 	useEffect(() => {
 		if (!token) return;
 
@@ -23,24 +21,32 @@ export function WebSocketProvider({ children }) {
 			auth: { accessToken: token },
 		});
 
-		newSocket.on('connect', () => {
-			console.log('Connected', newSocket.id);
+		newSocket.on("connect", () => {
+			console.log("Connected to socket:", newSocket.id);
 		});
 
-		newSocket.on('notification', (notification) => {
-			console.log('Notification received:', notification);
+		newSocket.on("notification", (notification) => {
 			toast.success(
-				({ toast }) => (
+				(t) => (
 					<div className="flex flex-col space-y-1">
 						<span className="font-semibold text-base">{notification.title}</span>
-						{notification.content && <span className="text-sm text-gray-600">{notification.content}</span>}
+						{notification.content && (
+							<span className="text-sm text-gray-600">{notification.content}</span>
+						)}
 						<div className="flex items-center justify-between text-xs text-gray-400 mt-1">
-							<span>{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}</span>
+							<span>
+								{formatDistanceToNow(new Date(notification.createdAt), {
+									addSuffix: true,
+								})}
+							</span>
 							{notification.link && (
 								<a
 									href={notification.link}
 									className="text-blue-600 hover:underline"
-									onClick={() => toast.dismiss(toast.id)}
+									onClick={(e) => {
+										e.preventDefault();
+										t.dismiss();
+									}}
 								>
 									Xem chi tiết
 								</a>
@@ -50,46 +56,59 @@ export function WebSocketProvider({ children }) {
 				),
 				{
 					duration: 6000,
-					position: 'top-right',
+					position: "top-right",
 				}
 			);
 		});
 
 		setSocket(newSocket);
-		return () => newSocket.disconnect();
+		return () => {
+			newSocket.disconnect();
+			setSocket(null);
+		};
 	}, [token]);
 
-
 	const onChatMessage = (callback) => {
-		if (!socket) return;
-		socket.on('chatMessage', callback);
-	}
+		if (!socket) return () => { };
+		socket.on("chatMessage", callback);
+		return () => {
+			socket.off("chatMessage", callback);
+		};
+	};
 
 	const onClassPostCreate = (callback) => {
-		if (!socket) return;
-		socket.on('classPostCreate', callback);
-	}
+		if (!socket) return () => { };
+		socket.on("classPostCreate", callback);
+		return () => {
+			socket.off("classPostCreate", callback);
+		};
+	};
 
 	const onClassPostComment = (callback) => {
-		if (!socket) return;
-		socket.on('classPostComment', callback);
-	}
+		if (!socket) return () => { };
+		socket.on("classPostComment", callback);
+		return () => {
+			socket.off("classPostComment", callback);
+		};
+	};
 
 	const onNotification = (callback) => {
-		if (!socket) return;
-		socket.on('notification', callback);
-	}
+		if (!socket) return () => { };
+		socket.on("notification", callback);
+		return () => {
+			socket.off("notification", callback);
+		};
+	};
 
 	const joinChatRoom = (roomId) => {
 		if (!socket) return;
-		socket.emit('joinRoom', roomId);
-	}
+		socket.emit("joinRoom", roomId);
+	};
 
 	const joinClassUpdate = (classId) => {
 		if (!socket) return;
-		socket.emit('initClassUpdate', classId);
-	}
-
+		socket.emit("initClassUpdate", classId);
+	};
 
 	return (
 		<WebSocketContext.Provider
@@ -107,6 +126,3 @@ export function WebSocketProvider({ children }) {
 		</WebSocketContext.Provider>
 	);
 }
-
-
-

@@ -91,7 +91,7 @@ export default function Profile() {
 			/>
 			<section className="w-full h-[calc(100vh-100px)] space-y-4">
 				<div className="flex">
-					<AssignmentStatsCard user={userData} className="w-1/2" />
+					{(user.role === "teacher" || user.role === "student") && <AssignmentStatsCard user={userData} className="w-1/2" />}
 				</div>
 				<Card className="w-full">
 					<CardContent className="flex flex-col gap-6">

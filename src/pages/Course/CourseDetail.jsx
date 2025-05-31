@@ -267,7 +267,7 @@ export default function CourseDetail() {
 						</div>
 					</div>
 					{user &&
-						(user.role === 'manager' && user.role === 'staff') &&
+						(user.role === 'manager' || user.role === 'staff') &&
 						course.requested_students.length > 0 && (
 							<div className="flex flex-col p-5 bg-white shadow-sm">
 								<div className="mt-4 mb-4 text-center text-xl font-bold">
