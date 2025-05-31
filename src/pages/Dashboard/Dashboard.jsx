@@ -28,7 +28,6 @@ export default function Dashboard() {
     setCourses(result);
     console.log(courses);
   };
-
   useEffect(() => {
     getCourses();
   }, []);
