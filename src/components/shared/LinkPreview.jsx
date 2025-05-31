@@ -26,10 +26,10 @@ export default function LinkPreview({ url, className }) {
 
   return (
     <div
-      className={`flex w-[calc(50%-12px)] items-center border rounded-lg px-4 py-3 shadow-sm hover:shadow transition mb-1 ${className}`}
+      className={`flex w-[calc(50%-12px)] items-center border border-blue-300 rounded-lg px-4 py-3 shadow-sm hover:shadow transition mb-1 ${className}`}
     >
       {/* Stripe bên trái */}
-      <div className="w-1 h-12 bg-gray-200 rounded-l-md mr-4" />
+      <div className="w-1 h-12 bg-blue-400 rounded-l-md mr-4" />
 
       {/* Nội dung link */}
       <div className="flex-1 overflow-hidden">

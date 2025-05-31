@@ -12,14 +12,14 @@ export default function CourseRequest({ courses }) {
           course.requested_students.length > 0 && (
             <Link
               to={`/course/${course._id}`}
-              className="text-blue-700 text-sm font-medium"
+              className="text-blue-700 text-sm font-medium "
             >
-              <div key={course.id} className="p-4 rounded-2xl">
+              <div key={course.id} className="p-4 pt-2 rounded-2xl">
                 <h3 className="text-lg font-semibold text-blue-700 mb-2">
                   {course.name}
                 </h3>
                 {course.requested_students.map((student) => (
-                  <div className="flex items-center">
+                  <div className="flex items-center pb-2 pt-2 border-b last:border-none">
                     <img
                       src={student.avatar_url}
                       alt={student.name}
