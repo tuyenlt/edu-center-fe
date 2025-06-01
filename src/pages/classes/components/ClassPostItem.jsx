@@ -5,6 +5,7 @@ import { convertUTC, dateTimeConvert_2 } from "@/utils/dateTimeConvert"
 import CommentList from "./CommentList"
 import Comment from "./Comment"
 import { useNavigate } from "react-router-dom"
+import LinkPreview from "@/components/shared/LinkPreview"
 
 export default function ClassPostItem({ post, handleAddComment, user }) {
 	const navigate = useNavigate();
