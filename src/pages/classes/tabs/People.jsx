@@ -51,7 +51,9 @@ export default function People() {
 
 	const { user } = useUserContext();
 	const isManager = user?.role === 'manager';
+
 	const [isOpenRemove, setIsOpenRemove] = useState(false);
+
 	if (!data || Object.keys(data).length === 0) {
 		return <div>Loading...</div>;
 	}
@@ -104,7 +106,7 @@ export default function People() {
 									<p className="text-sm text-gray-500">{teacher.email}</p>
 								</div>
 							</div>
-							{isManager && <RemoveOrEdit user={teacher} />}
+							{isManager && <RemoveOrEdit user={teacher} onSuccess={() => fetchClassData()} />}
 						</li>
 					))}
 				</ul>
@@ -155,7 +157,7 @@ export default function People() {
 										</div>
 									</div>
 									{isManager && (
-										<RemoveOrEdit user={student} />
+										<RemoveOrEdit user={student} onSuccess={() => fetchClassData()} />
 									)}
 								</li>
 							);

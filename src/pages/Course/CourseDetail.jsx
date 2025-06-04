@@ -20,6 +20,7 @@ import api from '@/services/api';
 import { toast } from 'sonner';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import AvatarUser from '@/components/shared/AvatarUser';
 
 export default function CourseDetail() {
 	const { id } = useParams();
@@ -280,11 +281,7 @@ export default function CourseDetail() {
 										onClick={() => navigate(`/users/${student._id}`)}
 										className="flex items-center p-3 bg-white dark:bg-gray-800 border  hover:shadow-md transition-shadow duration-200 focus:outline-none"
 									>
-										<img
-											src={student.avatar_url}
-											alt={student.name}
-											className="w-10 h-10 rounded-full object-cover"
-										/>
+										<AvatarUser user={student} className="w-10 h-10" />
 										<span className="ml-3 text-gray-800 dark:text-gray-100 font-medium truncate">
 											{student.name}
 										</span>

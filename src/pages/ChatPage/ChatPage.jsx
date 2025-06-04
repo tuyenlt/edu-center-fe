@@ -2,10 +2,11 @@ import { useUserContext } from '@/providers/authContext';
 import api from '@/services/api';
 import { useEffect, useState } from 'react';
 import ChatRoom from './ChatRoom';
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { stringToColorClass } from '@/utils';
 import MagicInput from '@/components/shared/MagicInput';
+import { toast } from 'sonner';
 
 export default function ChatPage() {
 	const navigate = useNavigate();
@@ -16,7 +17,6 @@ export default function ChatPage() {
 	const [search, setSearch] = useState('');
 
 	useEffect(() => {
-		if (!user) return;
 		const fetchChatRoom = async () => {
 			try {
 				const response = await api.get('/chat-of-user');
@@ -34,8 +34,8 @@ export default function ChatPage() {
 					if (room.type === 'contact') {
 						if (user._id === room.owner._id) {
 							room.name = 'English Nest Staff';
-							room.avatar = './images/logo.png';
-							return room;
+							room.avatar = 'https://api.englishnest.click/uploads/images/logo.png';
+							toast(`This is a contact room with English Nest Staff ${room.avatar}`)
 						} else {
 							room.name = room.owner.name + ' (student) ';
 							room.avatar = room.owner.avatar_url;
